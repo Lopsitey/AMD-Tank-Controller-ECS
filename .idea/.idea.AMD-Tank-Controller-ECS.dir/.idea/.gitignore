@@ -3,9 +3,9 @@
 /workspace.xml
 # Rider ignored files
 /projectSettingsUpdater.xml
-/contentModel.xml
-/.idea.AMD-Tank-Controller-ECS.iml
 /modules.xml
+/.idea.AMD-Tank-Controller-ECS.iml
+/contentModel.xml
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
