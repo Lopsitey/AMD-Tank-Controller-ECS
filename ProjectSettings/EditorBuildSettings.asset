@@ -9,5 +9,6 @@ EditorBuildSettings:
     path: Assets/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
   m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 22da4e241cda5c84a953efa8a7904a1a, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: cfa8151c08817f8499e4e38d2ab93c9f, type: 3}
   m_UseUCBPForAssetBundles: 0

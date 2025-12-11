@@ -6,11 +6,12 @@ namespace _02_TankController.Scripts
 	public class InputHandler : MonoBehaviour
 	{
 		private AM_02Tank m_ActionMap; //input
-		[SerializeField] TankController m_Controller;
+	    private TankController m_Controller;
 		
 		private void Awake()
 		{
 			m_ActionMap = new AM_02Tank();
+			m_Controller = GetComponent<TankController>();
 		}
 
 		private void OnEnable()

@@ -17,7 +17,7 @@ namespace _02_TankController.Scripts
 			Zoomed
 		}
 		
-		[SerializeField] private float m_AimEndDelay;
+		[SerializeField] private float m_AimEndDelay = 0.25f;
 		private bool m_Aiming = false;
 		
 		private void Awake()

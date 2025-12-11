@@ -1,7 +1,6 @@
 #region
 
 using System.Collections;
-using Mono.Collections.Generic;
 using UnityEngine;
 
 #endregion
@@ -10,47 +9,44 @@ namespace _02_TankController.Scripts
 {
     public class SphereDebug : MonoBehaviour
     {
-        private Rigidbody m_RB;
-        private bool m_canWake = true;
-        Coroutine m_wakeOnce = null;
+        private Rigidbody m_Rb;
+        private bool m_CanWake = true;
+        private Coroutine m_WakeOnce;
 
         void Awake()
         {
-            m_RB = GetComponent<Rigidbody>();
-            m_RB.Sleep();
+            m_Rb = GetComponent<Rigidbody>();
+            m_Rb.Sleep();
         }
         
         void Update()
         {
-            if (m_canWake && Time.time > 1)
-                m_wakeOnce ??= StartCoroutine(Wake());
+            if (m_CanWake && Time.time > 1)
+                m_WakeOnce ??= StartCoroutine(Wake());//ensures the coroutine is only started once using the null-coalescing operator
         }
 
         private IEnumerator Wake()
         {
             print("woke");
-            m_RB.WakeUp();
+            m_Rb.WakeUp();
             yield return new WaitForEndOfFrame();
-            m_canWake = false;
+            m_CanWake = false;
         }
         private void OnCollisionEnter(Collision other)
         {
+            // ReSharper disable once GrammarMistakeInStringLiteral
             print(gameObject.name + " collided with: " + other.gameObject.name);
         }
 
         private void OnCollisionExit(Collision other)
         {
+            // ReSharper disable once GrammarMistakeInStringLiteral
             print(gameObject.name + " collided with: " + other.gameObject.name);
         }
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.blue;
-            if(m_RB.IsSleeping())
-                Gizmos.color = Color.red;
-            else
-                Gizmos.color = Color.green;
-            
+            Gizmos.color = m_Rb.IsSleeping() ? Color.red : Color.green;
             Gizmos.DrawLine(transform.position, transform.position + transform.up);
         }
     }
