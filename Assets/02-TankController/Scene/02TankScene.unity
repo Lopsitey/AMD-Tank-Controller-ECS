@@ -2326,6 +2326,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ce4453512adc8419b240fc35bde572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_TankSpeed: 10
+  m_TankWheels:
+  - {fileID: 1325602299}
+  - {fileID: 1282588305}
+  - {fileID: 1017359242}
+  - {fileID: 1803464509}
+  - {fileID: 604312206}
+  - {fileID: 388173715}
   m_AimEndDelay: 0.25
 --- !u!1 &934198954
 GameObject:

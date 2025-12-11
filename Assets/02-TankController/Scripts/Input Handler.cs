@@ -45,12 +45,13 @@ namespace _02_TankController.Scripts
 
 		private void Handle_AcceleratePerformed(InputAction.CallbackContext context)
 		{
-
+			//starts applying acceleration to the vehicle
+			m_Controller.Accelerate(context.ReadValue<float>());
 		}
 
 		private void Handle_AccelerateCanceled(InputAction.CallbackContext context)
 		{
-
+			m_Controller.Accelerate(0);//stops applying acceleration to the vehicle
 		}
 
 		private void Handle_SteerPerformed(InputAction.CallbackContext context)
