@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "02Tank",
     "maps": [
         {
@@ -130,9 +131,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "0746e14a-25c5-4d6c-9f83-862c16c93d31",
-                    "path": "<Keyboard>/s",
+                    "name": "positive",
+                    "id": "225a4aba-e9bd-4dd9-a389-14a1186c2965",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -141,9 +142,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "225a4aba-e9bd-4dd9-a389-14a1186c2965",
-                    "path": "<Keyboard>/w",
+                    "name": "negative",
+                    "id": "0746e14a-25c5-4d6c-9f83-862c16c93d31",
+                    "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

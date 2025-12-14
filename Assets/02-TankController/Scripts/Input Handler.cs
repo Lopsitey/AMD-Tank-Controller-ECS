@@ -6,12 +6,14 @@ namespace _02_TankController.Scripts
 	public class InputHandler : MonoBehaviour
 	{
 		private AM_02Tank m_ActionMap; //input
-	    private TankController m_Controller;
+	    private CameraController m_CameraController;
+	    private WheelManager m_WheelManager;
 		
 		private void Awake()
 		{
 			m_ActionMap = new AM_02Tank();
-			m_Controller = GetComponent<TankController>();
+			m_CameraController = GetComponentInChildren<CameraController>();
+			m_WheelManager = GetComponentInChildren<WheelManager>();
 		}
 
 		private void OnEnable()
@@ -46,12 +48,15 @@ namespace _02_TankController.Scripts
 		private void Handle_AcceleratePerformed(InputAction.CallbackContext context)
 		{
 			//starts applying acceleration to the vehicle
-			m_Controller.Accelerate(context.ReadValue<float>());
+			if(m_WheelManager)
+				m_WheelManager.StartAccelerate(context.ReadValue<float>());
 		}
 
 		private void Handle_AccelerateCanceled(InputAction.CallbackContext context)
 		{
-			m_Controller.Accelerate(0);//stops applying acceleration to the vehicle
+			//stops applying acceleration to the vehicle
+			if (m_WheelManager)
+				m_WheelManager.EndAccelerate();
 		}
 
 		private void Handle_SteerPerformed(InputAction.CallbackContext context)
@@ -76,18 +81,18 @@ namespace _02_TankController.Scripts
 
 		private void Handle_AimPerformed(InputAction.CallbackContext context)
 		{
-			Vector2 delta = context.ReadValue<Vector2>();
-			m_Controller.AimStart(delta);
+			Vector2 deltaPos = context.ReadValue<Vector2>();
+			m_CameraController.AimStart(deltaPos);
 		}
 
 		private void Handle_AimCanceled(InputAction.CallbackContext context)
 		{
-			m_Controller.AimEnd();
+			m_CameraController.AimEnd();
 		}
 		
 		private void Handle_ZoomPerformed(InputAction.CallbackContext context)
 		{
-
+			m_CameraController.OnZoom(context.ReadValue<float>());
 		}
 	}
 }
