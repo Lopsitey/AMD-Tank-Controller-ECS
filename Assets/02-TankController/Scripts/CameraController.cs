@@ -9,20 +9,14 @@ namespace _02_TankController.Scripts
 {
     public class CameraController : MonoBehaviour
     {
-        private enum ZoomState
-        {
-            UnZoomed,
-            Zoomed
-        }
-
         [Header("Camera")] [SerializeField] private float m_AimEndDelay = 0.25f;
         [SerializeField] private float m_MinXAngleDeg = 10;
         [SerializeField] private float m_MaxXAngleDeg = 60;
 
         [Header("Zoom")] [SerializeField] private float m_MinDistance = 5f; // Closest zoom
-        [SerializeField] private float m_MaxDistance = 20f; // Furthest zoom
-        [SerializeField] private float m_ZoomSpeed = 2f;
-        [SerializeField] private float m_ZoomSmoothTime = 0.2f;
+        [SerializeField] private float m_MaxDistance = 10f; // Furthest zoom
+        [SerializeField] private float m_ZoomSpeed = 1f;
+        [SerializeField] private float m_ZoomSmoothTime = 0.38f;
         
         private bool m_AutoAim = false;
         private Vector2 m_CamAngles;
