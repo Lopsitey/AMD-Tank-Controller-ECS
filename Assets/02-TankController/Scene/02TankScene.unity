@@ -1259,7 +1259,7 @@ Transform:
   m_GameObject: {fileID: 474134727}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalPosition: {x: -0.118709445, y: 0.95294046, z: -21.65478}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1277,13 +1277,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ce4453512adc8419b240fc35bde572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AimEndDelay: 0.25
-  m_MinXAngleDeg: 10
-  m_MaxXAngleDeg: 60
+  m_VirtualCamera: {fileID: 1503673857}
+  m_TankToFollow: {fileID: 928874463}
+  m_FollowSpeed: 0.1
+  m_FollowOffset: {x: 0, y: 2, z: 0}
+  m_MaxFollowDistance: 10
   m_MinDistance: 5
   m_MaxDistance: 10
   m_ZoomSpeed: 1
   m_ZoomSmoothTime: 0.38
+  m_LookSensitivity: 0.33
+  m_MinXAngleDeg: 10
+  m_MaxXAngleDeg: 60
+  m_AutoAimStartDelay: 1
+  m_AutoAimSpeed: 2
+  m_MovementThreshold: 0.1
+  m_AimThreshold: 0.1
 --- !u!1 &604312205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1830,7 +1839,7 @@ Transform:
   m_GameObject: {fileID: 880163265}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: -4}
+  m_LocalPosition: {x: 0.38129056, y: 0.95294046, z: -28.65478}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2451,6 +2460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb309721a3a5842b919a7b1496bc70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_CameraController: {fileID: 474134729}
 --- !u!4 &928874463
 Transform:
   m_ObjectHideFlags: 0
@@ -3804,7 +3814,7 @@ GameObject:
   - component: {fileID: 1503673854}
   - component: {fileID: 1503673857}
   - component: {fileID: 1503673856}
-  - component: {fileID: 1503673855}
+  - component: {fileID: 1503673858}
   m_Layer: 0
   m_Name: CM Camera
   m_TagString: MainCamera
@@ -3821,41 +3831,12 @@ Transform:
   m_GameObject: {fileID: 1503673853}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: -4}
+  m_LocalPosition: {x: 0.38129056, y: 0.95294046, z: -28.65478}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1201628647}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1503673855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1503673853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f38bda98361e1de48a4ca2bd86ea3c17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Composition:
-    ScreenPosition: {x: 0, y: 0}
-    DeadZone:
-      Enabled: 0
-      Size: {x: 0.2, y: 0.2}
-    HardLimits:
-      Enabled: 0
-      Size: {x: 0.8, y: 0.8}
-      Offset: {x: 0, y: 0}
-  CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0, z: 0}
-  Damping: {x: 0.5, y: 0.5}
-  Lookahead:
-    Enabled: 0
-    Time: 0
-    Smoothing: 0
-    IgnoreY: 0
 --- !u!114 &1503673856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3868,11 +3849,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
+  Damping: {x: 0.2, y: 1, z: 0.6}
   ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
   VerticalArmLength: 0.4
   CameraSide: 1
-  CameraDistance: 2
+  CameraDistance: 7
   AvoidObstacles:
     Enabled: 1
     CollisionFilter:
@@ -3925,6 +3906,19 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!114 &1503673858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1503673853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LookAtOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1566191697
 GameObject:
   m_ObjectHideFlags: 0
