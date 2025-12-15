@@ -6,16 +6,23 @@ namespace _02_TankController.Scripts
 	public class InputHandler : MonoBehaviour
 	{
 		private AM_02Tank m_ActionMap; //input
-	    private CameraController m_CameraController;
+	    [SerializeField] private CameraController m_CameraController;
 	    private WheelManager m_WheelManager;
+	    private bool m_Paused;
 		
 		private void Awake()
 		{
 			m_ActionMap = new AM_02Tank();
-			m_CameraController = GetComponentInChildren<CameraController>();
 			m_WheelManager = GetComponentInChildren<WheelManager>();
 		}
 
+		private void Start()
+		{
+			//Locks the cursor to the window and hides it by default
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+		}
+		
 		private void OnEnable()
 		{
 			m_ActionMap.Enable();
@@ -29,6 +36,7 @@ namespace _02_TankController.Scripts
 			m_ActionMap.Default.Aim.performed += Handle_AimPerformed;
 			m_ActionMap.Default.Aim.canceled += Handle_AimCanceled;
 			m_ActionMap.Default.Zoom.performed += Handle_ZoomPerformed;
+			m_ActionMap.Default.Pause.performed += Handle_PausePerformed;
 		}
 		private void OnDisable()
 		{
@@ -41,8 +49,29 @@ namespace _02_TankController.Scripts
 			m_ActionMap.Default.Fire.performed -= Handle_FirePerformed;
 			m_ActionMap.Default.Fire.canceled -= Handle_FireCanceled;
 			m_ActionMap.Default.Aim.performed -= Handle_AimPerformed;
-			m_ActionMap.Default.Aim.canceled += Handle_AimCanceled;
+			m_ActionMap.Default.Aim.canceled -= Handle_AimCanceled;
 			m_ActionMap.Default.Zoom.performed -= Handle_ZoomPerformed;
+			m_ActionMap.Default.Pause.performed -= Handle_PausePerformed;
+		}
+
+		/// <summary>
+		///Toggles hiding and unhiding the cursor with the pause menu.
+		/// </summary>
+		/// <param name="obj"></param>
+		private void Handle_PausePerformed(InputAction.CallbackContext obj)
+		{
+			m_Paused = !m_Paused;
+
+			if (m_Paused)
+			{
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
+			}
+			else
+			{
+				Cursor.lockState = CursorLockMode.Locked;
+				Cursor.visible = false;
+			}
 		}
 
 		private void Handle_AcceleratePerformed(InputAction.CallbackContext context)
