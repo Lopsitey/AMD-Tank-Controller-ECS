@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace _02_TankController.Scripts
 {
-    public class WheelController : MonoBehaviour
+    public class Wheel : MonoBehaviour
     {
         /// <summary>
         /// Applies drive force at this wheel's position.
