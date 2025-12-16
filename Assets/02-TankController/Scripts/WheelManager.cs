@@ -10,7 +10,7 @@ namespace _02_TankController.Scripts
         [SerializeField] private float m_BrakingForce = 2f;
         
         //Stores every wheel
-        private WheelController[] m_TankWheels; 
+        private Wheel[] m_TankWheels; 
         
         private Rigidbody m_Rb; 
         private Coroutine m_CMove;
@@ -20,11 +20,11 @@ namespace _02_TankController.Scripts
         {
             m_Rb = GetComponent<Rigidbody>();
 
-            m_TankWheels = GetComponentsInChildren<WheelController>();
+            m_TankWheels = GetComponentsInChildren<Wheel>();
 
             if (m_TankWheels.Length == 0)
             {
-                Debug.LogError("WheelManager could not find any 'WheelController' scripts in children!");
+                Debug.LogError("WheelManager could not find any 'Wheel' scripts in children!");
                 enabled = false;//turns off on error
             }
         }
@@ -51,7 +51,7 @@ namespace _02_TankController.Scripts
                 yield return new WaitForFixedUpdate();
                 
                 //applies force to the individual wheels
-                foreach (WheelController wheel in m_TankWheels)
+                foreach (Wheel wheel in m_TankWheels)
                 {
                     //The wheel uses its own script to apply the force
                     wheel.AddDriveForce(m_Rb, m_Acceleration * m_TankSpeed, forward);
@@ -67,7 +67,7 @@ namespace _02_TankController.Scripts
             {
                 yield return new WaitForFixedUpdate();
                 
-                foreach (WheelController wheel in m_TankWheels)
+                foreach (Wheel wheel in m_TankWheels)
                 {
                     wheel.AddBrakingForce(m_Rb, m_BrakingForce);
                 }

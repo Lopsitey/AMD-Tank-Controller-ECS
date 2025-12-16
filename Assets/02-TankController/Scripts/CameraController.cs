@@ -2,6 +2,8 @@
 
 using System.Collections;
 using UnityEngine;
+
+
 using Unity.Cinemachine;
 
 #endregion
@@ -31,8 +33,8 @@ namespace _02_TankController.Scripts
         [SerializeField] private float m_MaxXAngleDeg = 60;//for looking down
         
         [Header("Auto-Aim")]
-        [SerializeField] private float m_AutoAimStartDelay = 1f;//How long before auto-aim kicks in
-        [SerializeField] private float m_AutoAimSpeed = 2f;//How lazy the drift is (Higher = slower)
+        [SerializeField] private float m_AutoAimStartDelay = 0.25f;//How long before auto-aim kicks in
+        [SerializeField] private float m_AutoAimSpeed = 1f;//How lazy the drift is (Higher = slower)
         [SerializeField] private float m_MovementThreshold = 0.1f;//Only reset if moving faster than this
         //Only resets if you're moving the mouse outside of this threshold
         [SerializeField] private float m_AimThreshold = 0.1f;
