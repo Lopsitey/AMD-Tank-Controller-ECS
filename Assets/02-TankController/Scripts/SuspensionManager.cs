@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _02_TankController.Scripts
 {
-    public class Track : MonoBehaviour
+    public class SuspensionManager : MonoBehaviour
     {
         //This is serialised just for debug purposes. You probably want to
         //hide this in the inspector.
