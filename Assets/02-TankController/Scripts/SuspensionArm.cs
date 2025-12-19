@@ -16,7 +16,6 @@ namespace _02_TankController.Scripts
             if(Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, m_SuspensionArmLength, m_SuspensionLayerMask))
             {
                 //Hit something? This wheel is grounded
-                Debug.Log("Grounded!");
                 m_RaycastHitDist = hit.distance;
                 IsGrounded = true;
             }
