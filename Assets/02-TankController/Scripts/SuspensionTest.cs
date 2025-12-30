@@ -39,15 +39,6 @@ namespace _02_TankController.Scripts
 
         private void FixedUpdate()
         {
-            //A vector is just a location created from a direction (the values when normalised)
-            //and how far you are in that direction (magnitude - the values when not normalised)
-
-            //Hooke's law: F = -kx
-            //Where F is the force being calculated and K is the stiffness and X is the displacement
-
-            //To include damping it is: F = -kx - cv 
-            //Where c is a damping constant and v is the velocity of the spring 
-
             //from the parent's pos to the child's pos
             Debug.DrawLine(transform.parent.position, transform.position, Color.red);
             
@@ -57,13 +48,6 @@ namespace _02_TankController.Scripts
             //Local coordinates are mainly relevant when your object has a parent
             //when you rotate an object you are changing its coordinates relative to its parent
             //this means if it has no parent, they are essentially its world coordinates
-            //this is why rotating a child object and then checking its transform.up will return the transform of the parent
-            
-            //Whereas, something like transform.right would return world coordinates
-            //these are relative to the object's actual transform so will only match the local coordinates randomly
-            
-            //Vector3.right will always be in the right direction of the object it's called on
-            //this will always be local to the object unless used in conjunction with world coordinates 
             
             //the direction and distance (magnitude) from its original position
             Vector3 displacement = transform.localPosition - m_RestPos;

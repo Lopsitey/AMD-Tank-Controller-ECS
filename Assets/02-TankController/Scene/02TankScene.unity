@@ -279,6 +279,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 55085257}
+  - component: {fileID: 55085258}
   m_Layer: 6
   m_Name: TrackL
   m_TagString: Untagged
@@ -305,6 +306,22 @@ Transform:
   - {fileID: 693492377}
   m_Father: {fileID: 928874463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &55085258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 55085256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a60e3ff2aa3cad54e87283c806da5935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SuspensionArms:
+  - {fileID: 1208321947}
+  - {fileID: 1851593820}
+  - {fileID: 693492378}
 --- !u!1 &115009021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1017,7 +1034,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1207,7 +1224,7 @@ Transform:
   m_GameObject: {fileID: 388173714}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.049999952, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1288,7 +1305,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1415,7 +1432,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1557,7 +1574,7 @@ Transform:
   m_GameObject: {fileID: 604312205}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.049999952, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1638,7 +1655,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1909,7 +1926,7 @@ Transform:
   m_GameObject: {fileID: 693492376}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.14999996, z: -0.725}
+  m_LocalPosition: {x: 0, y: 0.25, z: -0.725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1929,8 +1946,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
-  m_SpringLength: 0.25
-  m_WheelRadius: 1
+  m_GroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_SpringLength: 0.8
+  m_WheelRadius: 0.3
 --- !u!1 &795188233
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,7 +2061,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -3400,7 +3420,7 @@ Transform:
   m_GameObject: {fileID: 1017359241}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.049999952, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3481,7 +3501,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -3670,7 +3690,7 @@ Transform:
   m_GameObject: {fileID: 1087929408}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.14999996, z: -0.725}
+  m_LocalPosition: {x: 0, y: 0.25, z: -0.725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3690,8 +3710,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
-  m_SpringLength: 0.25
-  m_WheelRadius: 1
+  m_GroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_SpringLength: 0.8
+  m_WheelRadius: 0.3
 --- !u!1 &1099216490
 GameObject:
   m_ObjectHideFlags: 0
@@ -4184,7 +4207,7 @@ Transform:
   m_GameObject: {fileID: 1208321945}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.14999999, z: 0.725}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0.725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4204,8 +4227,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
-  m_SpringLength: 0.25
-  m_WheelRadius: 1
+  m_GroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_SpringLength: 0.8
+  m_WheelRadius: 0.3
 --- !u!1 &1235931972
 GameObject:
   m_ObjectHideFlags: 0
@@ -4345,7 +4371,7 @@ Transform:
   m_GameObject: {fileID: 1282588304}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.049999952, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4426,7 +4452,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -4472,7 +4498,7 @@ Transform:
   m_GameObject: {fileID: 1325602299}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.05000007, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4553,7 +4579,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5283,7 +5309,7 @@ Transform:
   m_GameObject: {fileID: 1689150372}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.15000004, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5303,8 +5329,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
-  m_SpringLength: 0.25
-  m_WheelRadius: 1
+  m_GroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_SpringLength: 0.8
+  m_WheelRadius: 0.3
 --- !u!1 &1692009104
 GameObject:
   m_ObjectHideFlags: 0
@@ -5471,7 +5500,7 @@ Transform:
   m_GameObject: {fileID: 1749546095}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.14999999, z: 0.725}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0.725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5491,8 +5520,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
-  m_SpringLength: 0.25
-  m_WheelRadius: 1
+  m_GroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_SpringLength: 0.8
+  m_WheelRadius: 0.3
 --- !u!1 &1803464508
 GameObject:
   m_ObjectHideFlags: 0
@@ -5522,7 +5554,7 @@ Transform:
   m_GameObject: {fileID: 1803464508}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.05000007, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5603,7 +5635,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5646,7 +5678,7 @@ Transform:
   m_GameObject: {fileID: 1851593818}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.15000004, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5666,8 +5698,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
-  m_SpringLength: 0.25
-  m_WheelRadius: 1
+  m_GroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_SpringLength: 0.8
+  m_WheelRadius: 0.3
 --- !u!1 &1896376904
 GameObject:
   m_ObjectHideFlags: 0
@@ -5810,7 +5845,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0.125
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -6093,6 +6128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1937698541}
+  - component: {fileID: 1937698542}
   m_Layer: 6
   m_Name: TrackR
   m_TagString: Untagged
@@ -6119,6 +6155,22 @@ Transform:
   - {fileID: 1087929409}
   m_Father: {fileID: 928874463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1937698542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937698540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a60e3ff2aa3cad54e87283c806da5935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SuspensionArms:
+  - {fileID: 1749546097}
+  - {fileID: 1689150374}
+  - {fileID: 1087929410}
 --- !u!1 &1958296451
 GameObject:
   m_ObjectHideFlags: 0
