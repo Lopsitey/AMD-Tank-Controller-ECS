@@ -1,6 +1,5 @@
 #region
 
-using System;
 using _02_TankController.Resources;
 using UnityEngine;
 
@@ -31,16 +30,7 @@ namespace _02_TankController.Scripts
         private float m_WheelOffset;
         private float m_RaycastHitDist;
 
-        public event Action Grounded;
-        public event Action Airborne;
-
-        private enum State
-        {
-            Grounded,
-            Airborne
-        }
-
-        private State m_GroundState;
+        public bool IsGrounded { get; private set; }
 
         private void Awake()
         {
@@ -85,7 +75,6 @@ namespace _02_TankController.Scripts
             //this is because rotating a child object and then checking its transform.up will return the transform of the parent
 
             //Uncompressed by default
-            //When grounded, the length should be compressed by the hit distance towards the spring origin
             float currentLen = m_SpringLength;
 
             //a local position would start the ray in completely the wrong place since the function requires world coordinates
@@ -95,23 +84,16 @@ namespace _02_TankController.Scripts
             {
                 //Hit something? This wheel is grounded
                 m_RaycastHitDist = hit.distance; //this var is for the debug
+                //When grounded, the length should be compressed by the hit distance towards the spring origin
                 currentLen = hit.distance;
-                //ensures the event is only fired once, upon state change
-                if (m_GroundState == State.Airborne)
-                {
-                    Grounded?.Invoke();
-                    m_GroundState = State.Grounded;
-                }
+                IsGrounded = true;
+
             }
             else
             {
                 //Not hit something? This wheel is not grounded
                 m_RaycastHitDist = 0;
-                if (m_GroundState == State.Grounded)
-                {
-                    Airborne?.Invoke();
-                    m_GroundState = State.Airborne;
-                }
+                IsGrounded = false;
             }
 
             //How compressed (out of 1) the spring would be.

@@ -12,8 +12,12 @@ namespace _02_TankController.Scripts
         [Header("Movement")] [SerializeField] private float m_TankSpeed = 3.5f;
         [SerializeField] private float m_BrakingForce = 2f;
 
-        //Stores every wheel
-        private Wheel[] m_TankWheels;
+
+        private Track[] m_Tracks;
+
+        //Stores all wheels on the left
+        private Wheel[] m_LeftWheels;
+        private Wheel[] m_RightWheels;
 
         private Rigidbody m_Rb;
         private Coroutine m_CMove;
@@ -23,12 +27,21 @@ namespace _02_TankController.Scripts
         {
             m_Rb = GetComponent<Rigidbody>();
 
-            m_TankWheels = GetComponentsInChildren<Wheel>();
+            m_Tracks = GetComponentsInChildren<Track>();
 
-            if (m_TankWheels.Length == 0)
+            if (m_Tracks.Length == 0)
             {
-                Debug.LogError("WheelManager could not find any 'Wheel' scripts in children!");
+                Debug.LogError("WheelManager could not find any 'Track' scripts in children!");
                 enabled = false; //turns off on error
+            }
+
+            m_LeftWheels = m_Tracks[0].GetComponentsInChildren<Wheel>();
+            m_RightWheels = m_Tracks[1].GetComponentsInChildren<Wheel>();
+
+            if (m_LeftWheels.Length == 0 || m_RightWheels.Length == 0)
+            {
+                Debug.LogError("WheelManager could not find 'Wheel' scripts in children!");
+                enabled = false;
             }
         }
 
@@ -53,11 +66,18 @@ namespace _02_TankController.Scripts
             {
                 yield return new WaitForFixedUpdate();
 
-                //applies force to the individual wheels
-                foreach (Wheel wheel in m_TankWheels)
+                for (int i = 0; i < 2; ++i)
                 {
-                    //The wheel uses its own script to apply the force
-                    wheel.AddDriveForce(m_Rb, m_Acceleration * m_TankSpeed, forward);
+                    //swaps the wheel side when i == 1
+                    Wheel[] wheels = i == 0 ? m_LeftWheels : m_RightWheels;
+                    //gets the traction for the correct side of the vehicle
+                    float currentTraction = m_Tracks[i].TractionPercent;
+                    //applies force to the individual wheels
+                    foreach (var wheel in wheels)
+                    {
+                        //The wheel uses its own script to apply the force
+                        wheel.AddDriveForce(m_Rb, m_Acceleration * m_TankSpeed, currentTraction, forward);
+                    }
                 }
             }
 
@@ -67,13 +87,18 @@ namespace _02_TankController.Scripts
             //you're not forced to wait for the tank to come to a full stop
             //only starts braking when there is no input (acceleration == 0)
             while (m_Acceleration == 0 &&
-                   m_Rb.linearVelocity.sqrMagnitude > 0.05f) //sqrMagnitude checks the overall speed
+                   m_Rb.linearVelocity.sqrMagnitude > 0.05f) //sqrMagnitude checks the overall speed 
             {
                 yield return new WaitForFixedUpdate();
 
-                foreach (Wheel wheel in m_TankWheels)
+                for (int i = 0; i < 2; ++i)
                 {
-                    wheel.AddBrakingForce(m_Rb, m_BrakingForce);
+                    Wheel[] wheels = i == 0 ? m_LeftWheels : m_RightWheels;
+                    float currentTraction = m_Tracks[i].TractionPercent;
+                    foreach (var wheel in wheels)
+                    {
+                        wheel.AddBrakingForce(m_Rb, m_BrakingForce, currentTraction);
+                    }
                 }
             }
         }
