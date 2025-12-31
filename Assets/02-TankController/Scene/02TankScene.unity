@@ -304,6 +304,7 @@ Transform:
   - {fileID: 1208321946}
   - {fileID: 1851593819}
   - {fileID: 693492377}
+  - {fileID: 1903849211}
   m_Father: {fileID: 928874463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &55085258
@@ -318,10 +319,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60e3ff2aa3cad54e87283c806da5935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SuspensionArms:
-  - {fileID: 1208321947}
-  - {fileID: 1851593820}
-  - {fileID: 693492378}
 --- !u!1 &115009021
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,12 +949,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 299509303}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000111262665, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2, y: 0.81300026, z: -1.422}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.06299989, z: -1.422}
   m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 928874463}
+  m_Father: {fileID: 1937698541}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &299509305
 MeshRenderer:
@@ -2912,9 +2909,7 @@ Transform:
   - {fileID: 2525816904378909889}
   - {fileID: 1013742092}
   - {fileID: 55085257}
-  - {fileID: 1903849211}
   - {fileID: 1937698541}
-  - {fileID: 299509304}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &928874466
@@ -5763,12 +5758,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903849210}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000111262665, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.2, y: 0.81300026, z: -1.422}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.06299989, z: -1.422}
   m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 928874463}
+  m_Father: {fileID: 55085257}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1903849212
 MeshRenderer:
@@ -6153,6 +6148,7 @@ Transform:
   - {fileID: 1749546096}
   - {fileID: 1689150373}
   - {fileID: 1087929409}
+  - {fileID: 299509304}
   m_Father: {fileID: 928874463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1937698542
@@ -6167,10 +6163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60e3ff2aa3cad54e87283c806da5935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SuspensionArms:
-  - {fileID: 1749546097}
-  - {fileID: 1689150374}
-  - {fileID: 1087929410}
 --- !u!1 &1958296451
 GameObject:
   m_ObjectHideFlags: 0
