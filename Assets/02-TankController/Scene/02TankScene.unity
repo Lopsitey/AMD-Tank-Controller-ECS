@@ -1944,12 +1944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
-  m_GroundLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  m_SpringLength: 0.2
-  m_WheelRadius: 0.3
+  m_ArmProfile: {fileID: 11400000, guid: 78f360f59b0f4e24e8b5a54f33c4e3a2, type: 2}
 --- !u!1 &795188233
 GameObject:
   m_ObjectHideFlags: 0
@@ -3708,12 +3703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
-  m_GroundLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  m_SpringLength: 0.2
-  m_WheelRadius: 0.3
+  m_ArmProfile: {fileID: 11400000, guid: 78f360f59b0f4e24e8b5a54f33c4e3a2, type: 2}
 --- !u!1 &1099216490
 GameObject:
   m_ObjectHideFlags: 0
@@ -4225,12 +4215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
-  m_GroundLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  m_SpringLength: 0.2
-  m_WheelRadius: 0.3
+  m_ArmProfile: {fileID: 11400000, guid: 78f360f59b0f4e24e8b5a54f33c4e3a2, type: 2}
 --- !u!1 &1235931972
 GameObject:
   m_ObjectHideFlags: 0
@@ -5327,12 +5312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
-  m_GroundLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  m_SpringLength: 0.2
-  m_WheelRadius: 0.3
+  m_ArmProfile: {fileID: 11400000, guid: 78f360f59b0f4e24e8b5a54f33c4e3a2, type: 2}
 --- !u!1 &1692009104
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,12 +5498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
-  m_GroundLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  m_SpringLength: 0.2
-  m_WheelRadius: 0.3
+  m_ArmProfile: {fileID: 11400000, guid: 78f360f59b0f4e24e8b5a54f33c4e3a2, type: 2}
 --- !u!1 &1803464508
 GameObject:
   m_ObjectHideFlags: 0
@@ -5696,12 +5671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
-  m_GroundLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  m_SpringLength: 0.2
-  m_WheelRadius: 0.3
+  m_ArmProfile: {fileID: 11400000, guid: 78f360f59b0f4e24e8b5a54f33c4e3a2, type: 2}
 --- !u!1 &1896376904
 GameObject:
   m_ObjectHideFlags: 0
