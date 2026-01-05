@@ -10,8 +10,12 @@ namespace _02_TankController.Scripts
     public class WheelManager : MonoBehaviour
     {
         [Header("Movement")] [SerializeField] private float m_TankSpeed = 3.5f;
+        [SerializeField] private float m_MaxSpeed = 15f;
+
         [SerializeField] private float m_BrakingForce = 2f;
 
+        //how fast long it should take for the max acceleration to be applied
+        [SerializeField] private float m_RevSpeed = 0.5f;
 
         private Track[] m_Tracks;
 
@@ -21,12 +25,16 @@ namespace _02_TankController.Scripts
 
         private Rigidbody m_Rb;
         private Coroutine m_CMove;
-        private float m_Acceleration;
+
+        private float m_RawInput;
+
+        //current amount of acceleration being applied
+        private float m_CurrentRevs;
+
 
         void Awake()
         {
             m_Rb = GetComponent<Rigidbody>();
-
             m_Tracks = GetComponentsInChildren<Track>();
 
             if (m_Tracks.Length == 0)
@@ -45,12 +53,12 @@ namespace _02_TankController.Scripts
             }
         }
 
-        public void StartAccelerate(float acceleration)
+        public void StartAccelerate(float input)
         {
             //If input is negative, clamp speed to -0.75, else use input.
-            m_Acceleration = acceleration < 0 ? -0.75f : acceleration; //reversing is 15% slower
+            m_RawInput = input < 0 ? -0.75f : input; //reversing is 15% slower
 
-            if (m_Acceleration != 0f)
+            if (m_RawInput != 0f)
             {
                 //if no coroutine was running, initialise it
                 //ensures only one instance can be started
@@ -60,11 +68,20 @@ namespace _02_TankController.Scripts
 
         IEnumerator C_MoveUpdate()
         {
-            Vector3 forward = transform.forward;
+            Vector3 moveAxis = transform.forward;
+            Vector3 spinAxis = Vector3.right;
 
-            while (m_Acceleration != 0)
+            //if there is input - || ensures the loop doesn't end whilst there is throttle remaining
+            while (m_RawInput != 0 || Mathf.Abs(m_CurrentRevs) > 0.01f)
             {
                 yield return new WaitForFixedUpdate();
+
+                //the velocity in the forward direction
+                float forwardSpeed = Vector3.Dot(m_Rb.linearVelocity, transform.forward);
+
+                //Smoothly moves from the current throttle to the current input, incrementing by the rev speed
+                //Can increment by less than the rev speed if the numbers don't line up perfectly on the final incrementation
+                m_CurrentRevs = Mathf.MoveTowards(m_CurrentRevs, m_RawInput, m_RevSpeed * Time.fixedDeltaTime);
 
                 for (int i = 0; i < 2; ++i)
                 {
@@ -75,20 +92,29 @@ namespace _02_TankController.Scripts
                     //applies force to the individual wheels
                     foreach (var wheel in wheels)
                     {
-                        //The wheel uses its own script to apply the force
-                        wheel.AddDriveForce(m_Rb, m_Acceleration * m_TankSpeed, currentTraction, forward);
+                        //only adds force when below the max speed
+                        if (Mathf.Abs(forwardSpeed) < m_MaxSpeed) //math.abs limits the reversing velocity as well
+                        {
+                            //The wheel uses its own script to apply the force
+                            wheel.AddDriveForce(m_Rb, m_CurrentRevs * m_TankSpeed, currentTraction, moveAxis);
+                        }
+
+                        //Raw input makes the wheel spin more responsive
+                        wheel.AddTorqueForce(m_RawInput * m_TankSpeed, currentTraction, spinAxis);
                     }
                 }
             }
 
             m_CMove = null; //so it can be started again
+            m_CurrentRevs = 0f; //Clears any unused revs for next cycle (the 0.01f)
 
             //below the null assignment so can start moving earlier
             //you're not forced to wait for the tank to come to a full stop
             //only starts braking when there is no input (acceleration == 0)
-            while (m_Acceleration == 0 &&
+            while (m_RawInput == 0 &&
                    m_Rb.linearVelocity.sqrMagnitude > 0.05f) //sqrMagnitude checks the overall speed 
             {
+                
                 yield return new WaitForFixedUpdate();
 
                 for (int i = 0; i < 2; ++i)
@@ -105,7 +131,7 @@ namespace _02_TankController.Scripts
 
         public void EndAccelerate()
         {
-            m_Acceleration = 0;
+            m_RawInput = 0;
         }
     }
 }

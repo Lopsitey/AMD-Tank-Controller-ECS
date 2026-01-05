@@ -1031,7 +1031,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1046,7 +1046,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &346302997
 GameObject:
@@ -1302,7 +1302,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1317,7 +1317,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &394274512
 GameObject:
@@ -1429,7 +1429,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1444,7 +1444,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &414424483
 GameObject:
@@ -1652,7 +1652,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1667,7 +1667,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &616172344
 GameObject:
@@ -1923,7 +1923,7 @@ Transform:
   m_GameObject: {fileID: 693492376}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: -0.725}
+  m_LocalPosition: {x: 0, y: 0, z: -0.725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1942,11 +1942,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
+  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
   m_GroundLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  m_SpringLength: 0.8
+  m_SpringLength: 0.2
   m_WheelRadius: 0.3
 --- !u!1 &795188233
 GameObject:
@@ -2058,7 +2058,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2073,7 +2073,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &856807790
 GameObject:
@@ -2921,8 +2921,8 @@ Rigidbody:
   m_GameObject: {fileID: 928874459}
   serializedVersion: 5
   m_Mass: 57020
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_LinearDamping: 0.6
+  m_AngularDamping: 10
   m_CenterOfMass: {x: 0, y: 0.7, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -2936,7 +2936,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &928874468
@@ -2951,8 +2951,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a932edad9e7715e44bc2425a17d0ba93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TankSpeed: 2
-  m_BrakingForce: 2
+  m_TankSpeed: 0.75
+  m_MaxSpeed: 15
+  m_BrakingForce: 1.5
+  m_RevSpeed: 0.5
 --- !u!114 &928874469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3496,7 +3498,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -3511,7 +3513,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &1022310675
 GameObject:
@@ -3685,7 +3687,7 @@ Transform:
   m_GameObject: {fileID: 1087929408}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: -0.725}
+  m_LocalPosition: {x: 0, y: 0, z: -0.725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3704,11 +3706,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
+  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
   m_GroundLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  m_SpringLength: 0.8
+  m_SpringLength: 0.2
   m_WheelRadius: 0.3
 --- !u!1 &1099216490
 GameObject:
@@ -4202,7 +4204,7 @@ Transform:
   m_GameObject: {fileID: 1208321945}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0.725}
+  m_LocalPosition: {x: 0, y: 0, z: 0.725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4221,11 +4223,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
+  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
   m_GroundLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  m_SpringLength: 0.8
+  m_SpringLength: 0.2
   m_WheelRadius: 0.3
 --- !u!1 &1235931972
 GameObject:
@@ -4447,7 +4449,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -4462,7 +4464,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &1325602299
 GameObject:
@@ -4574,7 +4576,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -4589,7 +4591,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &1503673853
 GameObject:
@@ -5304,7 +5306,7 @@ Transform:
   m_GameObject: {fileID: 1689150372}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5323,11 +5325,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
+  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
   m_GroundLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  m_SpringLength: 0.8
+  m_SpringLength: 0.2
   m_WheelRadius: 0.3
 --- !u!1 &1692009104
 GameObject:
@@ -5495,7 +5497,7 @@ Transform:
   m_GameObject: {fileID: 1749546095}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0.725}
+  m_LocalPosition: {x: 0, y: 0, z: 0.725}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5514,11 +5516,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
+  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
   m_GroundLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  m_SpringLength: 0.8
+  m_SpringLength: 0.2
   m_WheelRadius: 0.3
 --- !u!1 &1803464508
 GameObject:
@@ -5630,7 +5632,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5645,7 +5647,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &1851593818
 GameObject:
@@ -5673,7 +5675,7 @@ Transform:
   m_GameObject: {fileID: 1851593818}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5692,11 +5694,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200cdd5d598f02f44abc81a0ad00629d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpringProfile: {fileID: 11400000, guid: 218c0c22b34556449a84510be0d0e174, type: 2}
+  m_SpringProfile: {fileID: 11400000, guid: bde4955e38faa9d4db602afd2ab4c6f8, type: 2}
   m_GroundLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  m_SpringLength: 0.8
+  m_SpringLength: 0.2
   m_WheelRadius: 0.3
 --- !u!1 &1896376904
 GameObject:
@@ -5840,7 +5842,7 @@ Rigidbody:
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.125
+  m_AngularDamping: 0.38
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5855,7 +5857,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 110
+  m_Constraints: 14
   m_CollisionDetection: 0
 --- !u!1 &1914501598
 GameObject:
