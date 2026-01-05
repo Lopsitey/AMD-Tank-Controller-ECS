@@ -27,7 +27,7 @@ namespace _02_TankController.Scripts
 
         private float m_Stiffness;
         private float m_Damping;
-        private float m_WheelOffset;
+        private float m_TotalRayLength;
         private float m_RaycastHitDist;
 
         public bool IsGrounded { get; private set; }
@@ -76,57 +76,59 @@ namespace _02_TankController.Scripts
 
             //Uncompressed by default
             float currentLen = m_SpringLength;
+            m_TotalRayLength = m_SpringLength + m_WheelRadius;
+            Vector3 displacementDir = Vector3.zero;
 
             //a local position would start the ray in completely the wrong place since the function requires world coordinates
             //the ray uses world rotation so the suspension works properly when the tank is upside down
-            Vector3 offsetPos = transform.position - new Vector3(0, m_WheelRadius, 0);
-            if (Physics.Raycast(offsetPos, -transform.up, out RaycastHit hit, m_SpringLength, m_GroundLayerMask))
+            if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, m_TotalRayLength, m_GroundLayerMask))
             {
-                //Hit something? This wheel is grounded
+                //only checks suspension if grounded
                 m_RaycastHitDist = hit.distance; //this var is for the debug
-                //When grounded, the length should be compressed by the hit distance towards the spring origin
-                currentLen = hit.distance;
                 IsGrounded = true;
+                //When grounded, the length should be compressed by the hit distance towards the spring origin
+                currentLen = hit.distance - m_WheelRadius;
 
+                //How compressed (out of 1) the spring would be.
+                //Calculated using the current length / (total length - wheel size)
+                float percentOfSpringLen = Mathf.Clamp01(currentLen / m_SpringLength);
+
+                //Compression percent is just (1 - that)
+                float compressionPercent = 1 - percentOfSpringLen;
+
+                //how far it has been displaced - converts the percentage into a usable value - will be like 0.1 * 0.8 (0.08) for instance
+                float displacementAmount = compressionPercent * m_SpringLength;
+
+                //needs to use world coordinates because the wheel spins so the local down won't always be the same
+                //how much of the wheel's velocity is in the downwards vector
+                float velocityDown = Vector3.Dot(-transform.up, m_Rb.GetPointVelocity(m_Wheel.transform.position));
+
+                //stores the quantity of force to be applied along that vector
+                float forceMag = (m_Stiffness * displacementAmount) + (m_Damping * velocityDown); // -k * x - c * v
+                //the final part of the equation damps the velocity - no minuses needed at the start as we're applying the force upwards
+                //prevents the force from being negative and sucking you down when midair
+                float clampedForce = Mathf.Max(0, forceMag);
+                //stores and applies force (in the down direction) using how far it's moved (displacement)
+                Vector3 force = transform.up * clampedForce; //uses world coords here for the same reason as above
+                //Acceleration so it's not an instant force
+                m_Rb.AddForceAtPosition(force, m_Wheel.position, ForceMode.Acceleration);
+                //creates a location from the displacement axis and the magnitude of displacement along that axis 
+                displacementDir = Vector3.down * currentLen;
             }
             else
             {
-                //Not hit something? This wheel is not grounded
+                //if not grounded don't check the suspension
                 m_RaycastHitDist = 0;
                 IsGrounded = false;
+                //shrinks the default by the wheel
+                displacementDir = Vector3.down * currentLen;//(currentLen-m_WheelRadius);
             }
-
-            //How compressed (out of 1) the spring would be.
-            //Calculated using the current length / (total length - wheel size)
-            float percentOfSpringLen = Mathf.Clamp01(currentLen / (m_SpringLength - m_WheelRadius));
-
-            //Compression percent is just (1 - that)
-            float compressionPercent = 1 - percentOfSpringLen;
-
-            //how far it has been displaced
-            float displacement = compressionPercent * m_SpringLength;
-
-            //needs to use world coordinates because the wheel spins so the local down won't always be the same
-            //how much of the wheel's velocity is in the downwards vector
-            float velocityDown = Vector3.Dot(-transform.up, m_Rb.GetPointVelocity(m_Wheel.transform.position));
-
-            //stores the quantity of force to be applied along that vector
-            float forceMag = (-m_Stiffness * displacement) - (m_Damping * velocityDown); // -k * x - c * v
-            //the final part of the equation damps the velocity
-            //stores and applies force (in the down direction) using how far it's moved (displacement)
-            Vector3 force = -transform.up * forceMag; //uses world coords here for the same reason as above
-            //Acceleration so it's not an instant force
-            m_Rb.AddForceAtPosition(force, m_Wheel.position, ForceMode.Acceleration);
-
-            //creates a location from the displacement axis and the magnitude of displacement along that axis 
-            Vector3 displacementDir = Vector3.down * currentLen;
             //displacementDir will only ever be on one axis so this locks the object to that axis
             m_Wheel.localPosition = m_StartPos + displacementDir;
             //where m_StartPos is the origin and the displacement is the dir and magnitude
             //essentially just a less hard-coded version of: transform.localPosition = transform.localPosition.Scale(Vector3.right)
-            //locks the rotation
+            //locks rotation
             transform.localRotation = m_StartRot;
-            //todo tank wheels can rotate weirdly atm, not sure if that is bcs tank rotation is not fully implemented yet
         }
 
         private void OnDrawGizmosSelected()
@@ -136,20 +138,24 @@ namespace _02_TankController.Scripts
                 return;
 
             Vector3 pos = transform.position;
-
+            Vector3 dir = -transform.up;
+            
             //Draws the base detection line
             //This is purely the current suspension compression
             Gizmos.color = Color.blueViolet;
-            Vector3 endPoint = pos + -transform.up * m_RaycastHitDist;
-            pos -= new Vector3(0, m_WheelOffset, 0);
+            Vector3 endPoint = pos + dir * m_RaycastHitDist;
             Gizmos.DrawLine(pos, endPoint);
-
+            
             //Draws the remainder of the line
-            //This is the potential suspension decompression 
+            //This is the potential suspension decompression
             Gizmos.color = Color.blue;
-            pos = endPoint;
-            endPoint = pos + -transform.up * (m_SpringLength - m_RaycastHitDist);
-            Gizmos.DrawLine(pos, endPoint);
+            Vector3 endPoint1 = endPoint + dir * (m_SpringLength - m_RaycastHitDist);
+            Gizmos.DrawLine(endPoint, endPoint1);
+            
+            //The rest of the ray cast line
+            Gizmos.color = Color.deepPink;
+            Vector3 endPoint2 = endPoint1 + dir * (m_TotalRayLength - m_RaycastHitDist);
+            Gizmos.DrawLine(endPoint1, endPoint2);
         }
     }
 }
