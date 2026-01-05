@@ -9,21 +9,15 @@ namespace _02_TankController.Scripts
 {
     public class Suspension : MonoBehaviour
     {
-        [Header("Profile & Mask")] [SerializeField]
-        private SpringProfile m_SpringProfile;
-
-        [SerializeField] private LayerMask m_GroundLayerMask;
-
-        [Header("Spring and Wheel")] [SerializeField]
-        float m_SpringLength = 0.25f;
-
-        [SerializeField] [Range(0, 0.5f)] private float m_WheelRadius = 0.3f;
+        [Header("Profile")] [SerializeField] private ArmProfile m_ArmProfile;
 
         private Rigidbody m_Rb;
         private Transform m_Wheel;
-
+        private LayerMask m_GroundLayerMask;
         private Vector3 m_StartPos;
 
+        private float m_SpringLength = 0.2f;
+        private float m_WheelRadius = 0.3f;
         private float m_Stiffness;
         private float m_Damping;
         private float m_TotalRayLength;
@@ -37,10 +31,17 @@ namespace _02_TankController.Scripts
             m_Wheel = transform.GetChild(0);
 
             m_StartPos = m_Wheel.localPosition;
-            if (m_SpringProfile)
+            if (m_ArmProfile)
             {
-                m_Stiffness = m_SpringProfile.m_Stiffness;
-                m_Damping = m_SpringProfile.m_Damping;
+                m_GroundLayerMask = m_ArmProfile.m_GroundLayerMask;
+                m_SpringLength = m_ArmProfile.m_SpringLength;
+                m_WheelRadius = m_ArmProfile.m_WheelRadius;
+                if (m_ArmProfile.m_SpringProfile)
+                {
+                    var spring = m_ArmProfile.m_SpringProfile;
+                    m_Stiffness = spring.m_Stiffness;
+                    m_Damping = spring.m_Damping;
+                }
             }
             else
             {
@@ -79,12 +80,13 @@ namespace _02_TankController.Scripts
 
             //a local position would start the ray in completely the wrong place since the function requires world coordinates
             //the ray uses world rotation so the suspension works properly when the tank is upside down
-            if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, m_TotalRayLength, m_GroundLayerMask))
+            if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, m_TotalRayLength,
+                    m_GroundLayerMask))
             {
                 //only checks suspension if grounded
                 m_RaycastHitDist = hit.distance; //this var is for the debug
                 IsGrounded = true;
-                
+
                 //When grounded, the length should be compressed by the hit distance towards the spring origin
                 currentLen = hit.distance - m_WheelRadius;
 
@@ -101,7 +103,7 @@ namespace _02_TankController.Scripts
                 //needs to use world coordinates because the wheel spins so the local down won't always be the same
                 //how much of the wheel's velocity is in the downwards vector
                 float velocityDown = Vector3.Dot(-transform.up, m_Rb.GetPointVelocity(m_Wheel.transform.position));
-                
+
                 //stores the quantity of force to be applied along that vector
                 float forceMag = (m_Stiffness * displacementAmount) + (m_Damping * velocityDown); // -k * x - c * v
                 //the final part of the equation damps the velocity - no minuses needed at the start as we're applying the force upwards
@@ -120,13 +122,13 @@ namespace _02_TankController.Scripts
                 m_RaycastHitDist = 0;
                 IsGrounded = false;
                 //shrinks the default by the wheel
-                displacementDir = Vector3.down * currentLen;//(currentLen-m_WheelRadius);
+                displacementDir = Vector3.down * currentLen; //(currentLen-m_WheelRadius);
             }
+
             //displacementDir will only ever be on one axis so this locks the object to that axis
             m_Wheel.localPosition = m_StartPos + displacementDir;
             //where m_StartPos is the origin and the displacement is the dir and magnitude
             //essentially just a less hard-coded version of: transform.localPosition = transform.localPosition.Scale(Vector3.right)
-            
         }
 
         private void OnDrawGizmosSelected()
@@ -137,19 +139,19 @@ namespace _02_TankController.Scripts
 
             Vector3 pos = transform.position;
             Vector3 dir = -transform.up;
-            
+
             //Draws the base detection line
             //This is purely the current suspension compression
             Gizmos.color = Color.blueViolet;
             Vector3 endPoint = pos + dir * m_RaycastHitDist;
             Gizmos.DrawLine(pos, endPoint);
-            
+
             //Draws the remainder of the line
             //This is the potential suspension decompression
             Gizmos.color = Color.blue;
             Vector3 endPoint1 = endPoint + dir * (m_SpringLength - m_RaycastHitDist);
             Gizmos.DrawLine(endPoint, endPoint1);
-            
+
             //The rest of the ray cast line
             Gizmos.color = Color.deepPink;
             Vector3 endPoint2 = endPoint1 + dir * (m_TotalRayLength - m_RaycastHitDist);
