@@ -319,6 +319,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60e3ff2aa3cad54e87283c806da5935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SideFriction: 10
+  m_RollingFriction: 0.1
 --- !u!1 &115009021
 GameObject:
   m_ObjectHideFlags: 0
@@ -2921,8 +2923,8 @@ Rigidbody:
   m_GameObject: {fileID: 928874459}
   serializedVersion: 5
   m_Mass: 57020
-  m_LinearDamping: 0.6
-  m_AngularDamping: 10
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0.7, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -6165,6 +6167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60e3ff2aa3cad54e87283c806da5935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SideFriction: 10
+  m_RollingFriction: 0.1
 --- !u!1 &1958296451
 GameObject:
   m_ObjectHideFlags: 0

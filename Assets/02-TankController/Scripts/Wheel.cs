@@ -37,7 +37,6 @@ namespace _02_TankController.Scripts
         {
             float totalForce = rawForce * traction;
             m_Rb.AddRelativeTorque(direction * (totalForce * TorqueFactor), ForceMode.Acceleration);
-            
         }
 
         /// <summary>

@@ -84,6 +84,7 @@ namespace _02_TankController.Scripts
                 //only checks suspension if grounded
                 m_RaycastHitDist = hit.distance; //this var is for the debug
                 IsGrounded = true;
+                
                 //When grounded, the length should be compressed by the hit distance towards the spring origin
                 currentLen = hit.distance - m_WheelRadius;
 
@@ -100,7 +101,7 @@ namespace _02_TankController.Scripts
                 //needs to use world coordinates because the wheel spins so the local down won't always be the same
                 //how much of the wheel's velocity is in the downwards vector
                 float velocityDown = Vector3.Dot(-transform.up, m_Rb.GetPointVelocity(m_Wheel.transform.position));
-
+                
                 //stores the quantity of force to be applied along that vector
                 float forceMag = (m_Stiffness * displacementAmount) + (m_Damping * velocityDown); // -k * x - c * v
                 //the final part of the equation damps the velocity - no minuses needed at the start as we're applying the force upwards
@@ -125,6 +126,7 @@ namespace _02_TankController.Scripts
             m_Wheel.localPosition = m_StartPos + displacementDir;
             //where m_StartPos is the origin and the displacement is the dir and magnitude
             //essentially just a less hard-coded version of: transform.localPosition = transform.localPosition.Scale(Vector3.right)
+            
         }
 
         private void OnDrawGizmosSelected()
