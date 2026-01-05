@@ -26,7 +26,8 @@ namespace _02_TankController.Scripts
         private Rigidbody m_Rb;
         private Coroutine m_CMove;
 
-        private float m_RawInput;
+        private float m_ForwardInput;
+        private float m_TurnInput;
 
         //current amount of acceleration being applied
         private float m_CurrentRevs;
@@ -56,9 +57,9 @@ namespace _02_TankController.Scripts
         public void StartAccelerate(float input)
         {
             //If input is negative, clamp speed to -0.75, else use input.
-            m_RawInput = input < 0 ? -0.75f : input; //reversing is 15% slower
+            m_ForwardInput = input < 0 ? -0.75f : input; //reversing is 25% slower
 
-            if (m_RawInput != 0f)
+            if (m_ForwardInput != 0f || m_TurnInput != 0f)
             {
                 //if no coroutine was running, initialise it
                 //ensures only one instance can be started
@@ -68,39 +69,72 @@ namespace _02_TankController.Scripts
 
         IEnumerator C_MoveUpdate()
         {
-            Vector3 moveAxis = transform.forward;
             Vector3 spinAxis = Vector3.right;
 
             //if there is input - || ensures the loop doesn't end whilst there is throttle remaining
-            while (m_RawInput != 0 || Mathf.Abs(m_CurrentRevs) > 0.01f)
+            while (m_ForwardInput != 0 || (Mathf.Abs(m_CurrentRevs) > 0.01f || Mathf.Abs(m_TurnInput) > 0.01f))
             {
                 yield return new WaitForFixedUpdate();
-
-                //the velocity in the forward direction
+                
+                //Clamped because holding w and a would make you move twice as fast
+                //The throttle applies the direction to both tracks and is needed to make the left +1 and the right -1 or vice versa
+                float leftInput = Mathf.Clamp(m_CurrentRevs + m_TurnInput, -1f, 1f);
+                float rightInput = Mathf.Clamp(m_CurrentRevs - m_TurnInput, -1f, 1f);
+        
+                //The direction of the track's movement - left going backwards and right going forwards means left and vice versa     
+                Vector3 leftDir = leftInput >= 0 ? transform.forward : -transform.forward;
+                //If the track has power 
+                float leftPower = Mathf.Abs(leftInput);
+        
+                Vector3 rightDir = rightInput >= 0 ? transform.forward : -transform.forward;
+                float rightPower = Mathf.Abs(rightInput);
+                
+                //the amount of velocity in the forward direction
                 float forwardSpeed = Vector3.Dot(m_Rb.linearVelocity, transform.forward);
 
                 //Smoothly moves from the current throttle to the current input, incrementing by the rev speed
                 //Can increment by less than the rev speed if the numbers don't line up perfectly on the final incrementation
-                m_CurrentRevs = Mathf.MoveTowards(m_CurrentRevs, m_RawInput, m_RevSpeed * Time.fixedDeltaTime);
+                m_CurrentRevs = Mathf.MoveTowards(m_CurrentRevs, m_ForwardInput, m_RevSpeed * Time.fixedDeltaTime);
 
                 for (int i = 0; i < 2; ++i)
                 {
                     //swaps the wheel side when i == 1
-                    Wheel[] wheels = i == 0 ? m_LeftWheels : m_RightWheels;
+                    Wheel[] wheels;
+                    Vector3 moveAxis;
+                    float wheelPower;
+                    if (i == 0)
+                    {
+                        wheels = m_LeftWheels;
+                        moveAxis = leftDir;
+                        wheelPower = leftPower;
+                    }
+                    else
+                    {
+                        wheels = m_RightWheels;
+                        moveAxis = rightDir;
+                        wheelPower = rightPower;
+                    }
                     //gets the traction for the correct side of the vehicle
                     float currentTraction = m_Tracks[i].TractionPercent;
                     //applies force to the individual wheels
                     foreach (var wheel in wheels)
                     {
-                        //only adds force when below the max speed
-                        if (Mathf.Abs(forwardSpeed) < m_MaxSpeed) //math.abs limits the reversing velocity as well
+                        float driveForce = m_ForwardInput == 0 ? 0 : wheelPower * m_TankSpeed;
+                        //math.abs limits the reversing velocity as well
+                        bool belowLimit = Mathf.Abs(forwardSpeed) < m_MaxSpeed;
+                        //only adds force when below the max speed or if turning 
+                        if (belowLimit || m_TurnInput != 0)
                         {
-                            //The wheel uses its own script to apply the force
-                            wheel.AddDriveForce(m_Rb, m_CurrentRevs * m_TankSpeed, currentTraction, moveAxis);
+                            //If there is force to add
+                            if (driveForce != 0)
+                            {
+                                //The wheel uses its own script to apply the force
+                                wheel.AddDriveForce(m_Rb, driveForce, currentTraction, moveAxis);
+                            }
                         }
-
+                        
                         //Raw input makes the wheel spin more responsive
-                        wheel.AddTorqueForce(m_RawInput * m_TankSpeed, currentTraction, spinAxis);
+                        wheel.AddTorqueForce(driveForce, currentTraction, spinAxis);
                     }
                 }
             }
@@ -111,7 +145,7 @@ namespace _02_TankController.Scripts
             //below the null assignment so can start moving earlier
             //you're not forced to wait for the tank to come to a full stop
             //only starts braking when there is no input (acceleration == 0)
-            while (m_RawInput == 0 &&
+            while (m_ForwardInput == 0 &&
                    m_Rb.linearVelocity.sqrMagnitude > 0.05f) //sqrMagnitude checks the overall speed 
             {
                 
@@ -131,7 +165,17 @@ namespace _02_TankController.Scripts
 
         public void EndAccelerate()
         {
-            m_RawInput = 0;
+            m_ForwardInput = 0;
+        }
+
+        public void StartTurn(float input)
+        {
+            m_TurnInput = input;
+        }
+
+        public void EndTurn()
+        {
+            m_TurnInput = 0;
         }
     }
 }

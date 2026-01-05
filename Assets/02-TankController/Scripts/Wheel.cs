@@ -11,6 +11,9 @@ namespace _02_TankController.Scripts
         private Rigidbody m_Rb;
         private const float TorqueFactor = 1.33f;
         private Quaternion m_StartRot;
+        
+        private float m_AlignmentDamping = 3f; // The Damper (Resistance)
+        private float m_AlignmentSpeed = 1f; // Strength of the "Magnet" todo - move to manager?
 
         private void Awake()
         {
@@ -60,15 +63,31 @@ namespace _02_TankController.Scripts
 
         private void FixedUpdate()
         {
-            //This stops the physics engine from making the wheel jitter
-            //Converts world ang vel to local 
-            Vector3 localAngVel = transform.InverseTransformDirection(m_Rb.angularVelocity);
-            //changes the velocity using the local axis
-            localAngVel.y = 0;
-            localAngVel.z = 0;
+            // 1. Get Current Alignment (Angles)
+            Vector3 localEuler = transform.localEulerAngles;
+            
+            // Fix the 0-360 wrapping so we get clear + / - errors (e.g., -5 degrees instead of 355)
+            float yAngle = localEuler.y > 180 ? localEuler.y - 360 : localEuler.y;
+            float zAngle = localEuler.z > 180 ? localEuler.z - 360 : localEuler.z;
+
             //Applies the local data back to world
             //Can't change the world directly since it wouldn't be relative to the world as opposed to the object
-            m_Rb.angularVelocity = transform.TransformDirection(localAngVel);
+            Vector3 localVel = transform.InverseTransformDirection(m_Rb.angularVelocity);
+
+            // 3. Calculate Correction Torque (PID: Spring - Damper)
+            // Spring: "Go to 0!" (-Angle * Speed)
+            // Damper: "Don't overshoot!" (-Velocity * Damping)
+    
+            // Y-Axis (Steering Alignment)
+            float yTorque = (-yAngle * m_AlignmentSpeed) - (localVel.y * m_AlignmentDamping);
+    
+            // Z-Axis (Camber/Roll Alignment)
+            float zTorque = (-zAngle * m_AlignmentSpeed) - (localVel.z * m_AlignmentDamping);
+
+            // 4. Apply (Leave X alone! That is your wheel spin)
+            Vector3 stabilizeTorque = new Vector3(0f, yTorque, zTorque);
+    
+            m_Rb.AddRelativeTorque(stabilizeTorque, ForceMode.Acceleration);
         }
     }
 }

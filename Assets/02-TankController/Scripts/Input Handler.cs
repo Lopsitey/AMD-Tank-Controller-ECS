@@ -90,12 +90,16 @@ namespace _02_TankController.Scripts
 
 		private void Handle_SteerPerformed(InputAction.CallbackContext context)
 		{
-
+			//starts applying turning to the vehicle
+			if(m_WheelManager)
+				m_WheelManager.StartTurn(context.ReadValue<float>());
 		}
 
 		private void Handle_SteerCanceled(InputAction.CallbackContext context)
 		{
-
+			//stops applying turning to the vehicle
+			if (m_WheelManager)
+				m_WheelManager.EndTurn();
 		}
 
 		private void Handle_FirePerformed(InputAction.CallbackContext context)

@@ -105,7 +105,7 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
                     ""name"": ""Steer"",
                     ""type"": ""Button"",
                     ""id"": ""15d60fdb-2abe-47e0-8bfd-a4b142cce6fe"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
