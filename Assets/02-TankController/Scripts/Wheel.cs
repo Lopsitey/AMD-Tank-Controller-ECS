@@ -1,5 +1,6 @@
 #region
 
+using _02_TankController.Resources;
 using UnityEngine;
 
 #endregion
@@ -8,18 +9,27 @@ namespace _02_TankController.Scripts
 {
     public class Wheel : MonoBehaviour
     {
-        private Rigidbody m_Rb;
-        private const float TorqueFactor = 1.33f;
-        private Quaternion m_StartRot;
+        [SerializeField]private WheelProfile m_WheelProfile;
         
-        private float m_AlignmentDamping = 6f; // The Damper (Resistance)
-        private float m_AlignmentSpeed = 1f; // Strength of the "Magnet" todo - move to manager?
+        private const float TorqueFactor = -5f;
+        private SpringProfile m_HorizontalSpring;
+        private float m_AlignmentDamping = 6f;//Resistance
+        private float m_AlignmentStrength = 75f;
+        
+        private Rigidbody m_Rb;
+        private Quaternion m_StartRot;
 
         private void Awake()
         {
             m_Rb = GetComponent<Rigidbody>();
             m_Rb.inertiaTensorRotation = Quaternion.identity;
             m_Rb.inertiaTensor = new Vector3(1f, 10f, 10f);
+
+            if (m_WheelProfile)
+            {
+                //Negative ensures it spins in reverse to the direction of travel
+                TorqueFactor = -WheelProfile.torquefactor;
+            }
         }
 
         /// <summary>
@@ -85,8 +95,11 @@ namespace _02_TankController.Scripts
             Vector3 wobbleComponent = globalAngularVel - spinComponent;
             
             // (Error * Spring) - (Wobble * Damping)
-            float springStrength = m_AlignmentSpeed * 50f;//todo double check the multiplier and line below
+            float springStrength = m_AlignmentStrength;
     
+            //Follows hooke's law to make a spring in the direction of the error, F = -kx - cv
+            //Since this is a horizontal spring the negative kx is just kx for the force to be applied in the correct direction
+            //- CV is just the amount (velocity) of wobble * the damping 
             Vector3 stabilizeTorque = (alignmentError * springStrength) - (wobbleComponent * m_AlignmentDamping);
     
             // Apply in World Space (Vectors are already World Space)

@@ -9,13 +9,20 @@ namespace _02_TankController.Scripts
 {
     public class WheelManager : MonoBehaviour
     {
-        [Header("Movement")] [SerializeField] private float m_TankSpeed = 3.5f;
+        [Header("Movement")] [SerializeField] private float m_TankSpeed = 0.75f;
         [SerializeField] private float m_MaxSpeed = 15f;
 
-        [SerializeField] private float m_BrakingForce = 2f;
+        [SerializeField] private float m_BrakingForce = 1.5f;
 
-        //how fast long it should take for the max acceleration to be applied
-        [SerializeField] private float m_RevSpeed = 0.5f;
+        [Tooltip("How fast long it should take for the max acceleration to be applied, when starting to move.")]
+        [SerializeField]
+        private float m_RevSpeed = 0.5f;
+
+        [Tooltip("The fastest the turning track can spin when turning. " +
+                 "E.g., when turning right overdrive would be applied to the left track.")]
+        [SerializeField]
+        [Range(1.5f, 2f)]
+        private float m_OverdriveLimit = 1.5f;
 
         private Track[] m_Tracks;
 
@@ -75,11 +82,30 @@ namespace _02_TankController.Scripts
             while (m_ForwardInput != 0 || (Mathf.Abs(m_CurrentRevs) > 0.01f || Mathf.Abs(m_TurnInput) > 0.01f))
             {
                 yield return new WaitForFixedUpdate();
+                
+                //the amount of velocity in the forward direction
+                float forwardSpeed = Vector3.Dot(m_Rb.linearVelocity, transform.forward);
+                
+                //Speed relative to the max speed
+                //Can't just check throttle as it increases quickly and can be released on a hill 
+                float speedPercent = Mathf.Clamp01(Mathf.Abs(forwardSpeed) / m_MaxSpeed); 
+                
+                //At a lower speed the lerp increments by less so it will be closer to 1
+                //At a higher speed the lerp will increment more so it will most likely be 0.5
+                float turnAmount = Mathf.Lerp(1f, 0.5f, speedPercent);
+                //Turns fast when moving slow - realistic, like you would in a car
+                //Slower turning when moving fast prevents the tank from spinning out of control
+
+                //Used to limit the actual input so you can't go crazy and spin out
+                float restrictedTurnInput = Mathf.Clamp(m_TurnInput, -turnAmount, turnAmount);
+                
+                //Flips the turn input when reversing 
+                float effectiveTurn = m_ForwardInput < 0 ? -restrictedTurnInput : restrictedTurnInput;
 
                 //Clamped because holding w and a would make you move twice as fast
                 //The throttle applies the direction to both tracks and is needed to make the left +1 and the right -1 or vice versa
-                float leftInput = Mathf.Clamp(m_CurrentRevs + m_TurnInput, -1f, 1f);
-                float rightInput = Mathf.Clamp(m_CurrentRevs - m_TurnInput, -1f, 1f);
+                float leftInput = Mathf.Clamp(m_CurrentRevs + effectiveTurn, -m_OverdriveLimit, m_OverdriveLimit);
+                float rightInput = Mathf.Clamp(m_CurrentRevs - effectiveTurn, -m_OverdriveLimit, m_OverdriveLimit);
 
                 //The direction of the track's movement - left going backwards and right going forwards means left and vice versa     
                 Vector3 leftDir = leftInput >= 0 ? transform.forward : -transform.forward;
@@ -88,10 +114,7 @@ namespace _02_TankController.Scripts
 
                 Vector3 rightDir = rightInput >= 0 ? transform.forward : -transform.forward;
                 float rightPower = Mathf.Abs(rightInput);
-
-                //the amount of velocity in the forward direction
-                float forwardSpeed = Vector3.Dot(m_Rb.linearVelocity, transform.forward);
-
+                
                 //Smoothly moves from the current throttle to the current input, incrementing by the rev speed
                 //Can increment by less than the rev speed if the numbers don't line up perfectly on the final incrementation
                 m_CurrentRevs = Mathf.MoveTowards(m_CurrentRevs, m_ForwardInput, m_RevSpeed * Time.fixedDeltaTime);
