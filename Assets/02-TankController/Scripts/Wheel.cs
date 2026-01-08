@@ -12,12 +12,14 @@ namespace _02_TankController.Scripts
         private const float TorqueFactor = 1.33f;
         private Quaternion m_StartRot;
         
-        private float m_AlignmentDamping = 3f; // The Damper (Resistance)
+        private float m_AlignmentDamping = 6f; // The Damper (Resistance)
         private float m_AlignmentSpeed = 1f; // Strength of the "Magnet" todo - move to manager?
 
         private void Awake()
         {
             m_Rb = GetComponent<Rigidbody>();
+            m_Rb.inertiaTensorRotation = Quaternion.identity;
+            m_Rb.inertiaTensor = new Vector3(1f, 10f, 10f);
         }
 
         /// <summary>
@@ -63,31 +65,32 @@ namespace _02_TankController.Scripts
 
         private void FixedUpdate()
         {
-            // 1. Get Current Alignment (Angles)
-            Vector3 localEuler = transform.localEulerAngles;
+            //The wheel's axel
+            Vector3 currentAxle = transform.right;
+            //The suspension or tank axel
+            Vector3 targetAxle = transform.parent.right;
             
-            // Fix the 0-360 wrapping so we get clear + / - errors (e.g., -5 degrees instead of 355)
-            float yAngle = localEuler.y > 180 ? localEuler.y - 360 : localEuler.y;
-            float zAngle = localEuler.z > 180 ? localEuler.z - 360 : localEuler.z;
-
-            //Applies the local data back to world
-            //Can't change the world directly since it wouldn't be relative to the world as opposed to the object
-            Vector3 localVel = transform.InverseTransformDirection(m_Rb.angularVelocity);
-
-            // 3. Calculate Correction Torque (PID: Spring - Damper)
-            // Spring: "Go to 0!" (-Angle * Speed)
-            // Damper: "Don't overshoot!" (-Velocity * Damping)
+            // The Cross Product finds the vector difference between two directions
+            // This vector will point along the axis between the other two
+            // This is perfect to use for realigning wheels
+            Vector3 alignmentError = Vector3.Cross(currentAxle, targetAxle);
+            
+            // Gets all rotation
+            Vector3 globalAngularVel = m_Rb.angularVelocity;
+            
+            // Returns the spin along the Axle vector
+            Vector3 spinComponent = Vector3.Project(globalAngularVel, currentAxle);
+            
+            // Anything else is bad wobble along the wrong axis
+            Vector3 wobbleComponent = globalAngularVel - spinComponent;
+            
+            // (Error * Spring) - (Wobble * Damping)
+            float springStrength = m_AlignmentSpeed * 50f;//todo double check the multiplier and line below
     
-            // Y-Axis (Steering Alignment)
-            float yTorque = (-yAngle * m_AlignmentSpeed) - (localVel.y * m_AlignmentDamping);
+            Vector3 stabilizeTorque = (alignmentError * springStrength) - (wobbleComponent * m_AlignmentDamping);
     
-            // Z-Axis (Camber/Roll Alignment)
-            float zTorque = (-zAngle * m_AlignmentSpeed) - (localVel.z * m_AlignmentDamping);
-
-            // 4. Apply (Leave X alone! That is your wheel spin)
-            Vector3 stabilizeTorque = new Vector3(0f, yTorque, zTorque);
-    
-            m_Rb.AddRelativeTorque(stabilizeTorque, ForceMode.Acceleration);
+            // Apply in World Space (Vectors are already World Space)
+            m_Rb.AddTorque(stabilizeTorque, ForceMode.Acceleration);
         }
     }
 }

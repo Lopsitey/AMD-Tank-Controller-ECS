@@ -75,20 +75,20 @@ namespace _02_TankController.Scripts
             while (m_ForwardInput != 0 || (Mathf.Abs(m_CurrentRevs) > 0.01f || Mathf.Abs(m_TurnInput) > 0.01f))
             {
                 yield return new WaitForFixedUpdate();
-                
+
                 //Clamped because holding w and a would make you move twice as fast
                 //The throttle applies the direction to both tracks and is needed to make the left +1 and the right -1 or vice versa
                 float leftInput = Mathf.Clamp(m_CurrentRevs + m_TurnInput, -1f, 1f);
                 float rightInput = Mathf.Clamp(m_CurrentRevs - m_TurnInput, -1f, 1f);
-        
+
                 //The direction of the track's movement - left going backwards and right going forwards means left and vice versa     
                 Vector3 leftDir = leftInput >= 0 ? transform.forward : -transform.forward;
                 //If the track has power 
                 float leftPower = Mathf.Abs(leftInput);
-        
+
                 Vector3 rightDir = rightInput >= 0 ? transform.forward : -transform.forward;
                 float rightPower = Mathf.Abs(rightInput);
-                
+
                 //the amount of velocity in the forward direction
                 float forwardSpeed = Vector3.Dot(m_Rb.linearVelocity, transform.forward);
 
@@ -114,6 +114,7 @@ namespace _02_TankController.Scripts
                         moveAxis = rightDir;
                         wheelPower = rightPower;
                     }
+
                     //gets the traction for the correct side of the vehicle
                     float currentTraction = m_Tracks[i].TractionPercent;
                     //applies force to the individual wheels
@@ -132,7 +133,7 @@ namespace _02_TankController.Scripts
                                 wheel.AddDriveForce(m_Rb, driveForce, currentTraction, moveAxis);
                             }
                         }
-                        
+
                         //Raw input makes the wheel spin more responsive
                         wheel.AddTorqueForce(driveForce, currentTraction, spinAxis);
                     }
@@ -148,7 +149,6 @@ namespace _02_TankController.Scripts
             while (m_ForwardInput == 0 &&
                    m_Rb.linearVelocity.sqrMagnitude > 0.05f) //sqrMagnitude checks the overall speed 
             {
-                
                 yield return new WaitForFixedUpdate();
 
                 for (int i = 0; i < 2; ++i)
