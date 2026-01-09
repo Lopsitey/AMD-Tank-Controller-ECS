@@ -76,8 +76,6 @@ namespace _02_TankController.Scripts
 
         IEnumerator C_MoveUpdate()
         {
-            Vector3 spinAxis = Vector3.right;
-
             //if there is input - || ensures the loop doesn't end whilst there is throttle remaining
             while (m_ForwardInput != 0 || (Mathf.Abs(m_CurrentRevs) > 0.01f || Mathf.Abs(m_TurnInput) > 0.01f))
             {
@@ -137,7 +135,8 @@ namespace _02_TankController.Scripts
                         moveAxis = rightDir;
                         wheelPower = rightPower;
                     }
-
+                    //Compared to the movement axis to change the wheel spin direction
+                    Vector3 spinAxis = moveAxis == transform.forward ? Vector3.right : Vector3.left;
                     //gets the traction for the correct side of the vehicle
                     float currentTraction = m_Tracks[i].TractionPercent;
                     //applies force to the individual wheels
@@ -154,10 +153,9 @@ namespace _02_TankController.Scripts
                             {
                                 //The wheel uses its own script to apply the force
                                 wheel.AddDriveForce(m_Rb, driveForce, currentTraction, moveAxis);
+                                spinAxis = -spinAxis;
                             }
                         }
-
-                        //Raw input makes the wheel spin more responsive
                         wheel.AddTorqueForce(driveForce, currentTraction, spinAxis);
                     }
                 }
