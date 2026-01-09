@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2bedf0655e9eb4047abad26adf9cf7be, type: 3}
-  m_Name: StiffestSpring
+  m_Script: {fileID: 11500000, guid: a5ddd25211fb4e8f94abad42bf52ef87, type: 3}
+  m_Name: NormalWheel
   m_EditorClassIdentifier: 
-  m_Stiffness: 75
-  m_Damping: 6
+  m_TorqueFactor: 5
+  m_HorizontalSpring: {fileID: 11400000, guid: 06e49a37a055e554c99f3e716eb66827, type: 2}

@@ -156,8 +156,7 @@ namespace _02_TankController.Scripts
                                 wheel.AddDriveForce(m_Rb, driveForce, currentTraction, moveAxis);
                             }
                         }
-
-                        //Raw input makes the wheel spin more responsive
+                        
                         wheel.AddTorqueForce(driveForce, currentTraction, spinAxis);
                     }
                 }
