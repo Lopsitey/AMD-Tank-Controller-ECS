@@ -2871,9 +2871,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 928874463}
-  - component: {fileID: 928874461}
-  - component: {fileID: 928874468}
-  - component: {fileID: 928874469}
+  - component: {fileID: 928874473}
+  - component: {fileID: 928874471}
+  - component: {fileID: 928874472}
   - component: {fileID: 928874466}
   m_Layer: 6
   m_Name: Tank
@@ -2882,19 +2882,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &928874461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 928874459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3eb309721a3a5842b919a7b1496bc70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_CameraController: {fileID: 474134729}
 --- !u!4 &928874463
 Transform:
   m_ObjectHideFlags: 0
@@ -2941,7 +2928,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &928874468
+--- !u!114 &928874471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2958,7 +2945,7 @@ MonoBehaviour:
   m_BrakingForce: 1.5
   m_RevSpeed: 0.5
   m_OverdriveLimit: 1.5
---- !u!114 &928874469
+--- !u!114 &928874472
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2967,9 +2954,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 928874459}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cea41ee551d3b894bb64003526840d1a, type: 3}
+  m_Script: {fileID: 11500000, guid: d74298dc0a6c443e8808d755372756a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_TurretMesh: {fileID: 1013742092}
+  m_BarrelMesh: {fileID: 357494962}
+  m_MainCamera: {fileID: 880163267}
+  m_TurretRotateSpeed: 50
+  m_BarrelPitchSpeed: 40
+  m_MaxElevation: 50
+  m_MaxDepression: 10
+--- !u!114 &928874473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928874459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3eb309721a3a5842b919a7b1496bc70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CameraController: {fileID: 474134729}
 --- !u!1 &934198954
 GameObject:
   m_ObjectHideFlags: 0

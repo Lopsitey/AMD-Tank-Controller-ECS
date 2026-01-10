@@ -1,18 +1,17 @@
 using UnityEngine;
 
-namespace _02_TankController.Scripts
+namespace _02_TankController.Scripts.Testing
 {
     public class RayCastSuspensionTest : MonoBehaviour
     {
         [SerializeField] float m_SpringLength = 1f;
         [SerializeField] float m_WheelRadius = 1f;
-        
-        private Rigidbody m_Rb;
+
         private Transform m_Wheel;
         private bool m_HitGround;
         private void Awake()
         {
-            m_Rb = GetComponent<Rigidbody>();
+            GetComponent<Rigidbody>();
             m_Wheel = transform.GetChild(0);
         }
         

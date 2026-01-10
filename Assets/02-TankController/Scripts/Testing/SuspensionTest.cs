@@ -2,11 +2,10 @@
 
 using _02_TankController.Resources;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 #endregion
 
-namespace _02_TankController.Scripts
+namespace _02_TankController.Scripts.Testing
 {
     public class SuspensionTest : MonoBehaviour
     {

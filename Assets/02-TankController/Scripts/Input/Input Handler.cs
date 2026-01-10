@@ -1,7 +1,9 @@
+using _02_TankController.Scripts.Camera_Aim;
+using _02_TankController.Scripts.Wheel;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace _02_TankController.Scripts
+namespace _02_TankController.Scripts.Input
 {
 	public class InputHandler : MonoBehaviour
 	{

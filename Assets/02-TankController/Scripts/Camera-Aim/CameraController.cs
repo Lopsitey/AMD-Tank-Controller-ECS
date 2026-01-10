@@ -1,14 +1,12 @@
 #region
 
 using System.Collections;
-using UnityEngine;
-
-
 using Unity.Cinemachine;
+using UnityEngine;
 
 #endregion
 
-namespace _02_TankController.Scripts
+namespace _02_TankController.Scripts.Camera_Aim
 {
     public class CameraController : MonoBehaviour
     {
@@ -22,13 +20,13 @@ namespace _02_TankController.Scripts
         //the max distance before the camera just snaps to the tank
         [SerializeField] private float m_MaxFollowDistance = 10f;
 
-        [Header("Zoom")] [SerializeField] private float m_MinDistance = 5f;//Closest zoom
-        [SerializeField] private float m_MaxDistance = 10f;//Furthest zoom
+        [Header("Zoom")] [SerializeField] private float m_MinDistance = 8f;//Closest zoom
+        [SerializeField] private float m_MaxDistance = 15f;//Furthest zoom
         [SerializeField] private float m_ZoomSpeed = 1f;
         [SerializeField] private float m_ZoomSmoothTime = 0.38f;
         
         [Header("Aim / Orbit")] 
-        [SerializeField] private float m_LookSensitivity = 0.5f;
+        [SerializeField] private float m_LookSensitivity = 0.33f;
         [SerializeField] private float m_MinXAngleDeg = 10;//could use -10 for looking up
         [SerializeField] private float m_MaxXAngleDeg = 60;//for looking down
         

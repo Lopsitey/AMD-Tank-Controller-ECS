@@ -5,7 +5,7 @@ using UnityEngine;
 
 #endregion
 
-namespace _02_TankController.Scripts
+namespace _02_TankController.Scripts.Wheel
 {
     public class Suspension : MonoBehaviour
     {
@@ -60,14 +60,20 @@ namespace _02_TankController.Scripts
             //To include damping it is: F = -kx - cv 
             //Where c is a damping constant and v is the velocity of the spring 
 
-            //Transform.up or.down etc is always your transform in relation to the centre of the world's axis
-            //So if you are upside down then you are facing away from the centre of the world and so transform.up will return vector3.down
-
-            //If used in a world context like transform.rotation = Quaternion.LookRotation(Vector3.down),
-            //Then pointing up left or right, whatever, vector3.up will always be physically above you, even when facing the floor
-            //However, if used in a local context like transform,localRotation = Quaternion.LookRotation(Vector3.down)
-            //Then Vector3.down will be down in relation to the parent object if assigned to local coordinates
-            //This is why transform. Is classed as world coords and vector3. Can be used for local or world coords
+            //Transform.up or.down etc is always the alignment of your transform's direction in relation to the direction of the world's axis
+            //So if you are upside down then you are facing opposite to the world's up direction and so transform.up will return vector3.down
+            //If aligned with the world's up axis then transform.up would return Vector3.up
+            
+            //Pointing up left or right, whatever, Vector3.up will always be physically above you, even with a parent rotated sideways
+            //Imagine a top hat on someone's head, if they are upside down, the hat is still pointing above their head, it is just oriented differently
+            
+            //If used in a world context like transform.rotation = Quaternion.LookRotation(Vector3.down)
+            //Then Vector3.down will be down in relation to the parent object
+            //This "world context" is still relevant to the rotation of the object though, flipped upside down, transform.up still points to the floor
+            
+            //However, if used in a local context like transform.localRotation = Quaternion.LookRotation(Vector3.down)
+            //Sets the objects rotation, separate to the parent
+            //This is why transform and Vector3. Can both be used for local or world coords
 
             //transform.localPosition/localRotation are your relative to the object's parent so if the object has no parent then it is relative to the world
             //these would be good for getting a turret to rotate on a tank

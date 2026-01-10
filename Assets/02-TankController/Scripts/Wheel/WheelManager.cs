@@ -5,7 +5,7 @@ using UnityEngine;
 
 #endregion
 
-namespace _02_TankController.Scripts
+namespace _02_TankController.Scripts.Wheel
 {
     public class WheelManager : MonoBehaviour
     {

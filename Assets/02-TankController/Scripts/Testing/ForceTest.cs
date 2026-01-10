@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _02_TankController.Scripts
+namespace _02_TankController.Scripts.Testing
 {
     public class ForceTest : MonoBehaviour
     {
