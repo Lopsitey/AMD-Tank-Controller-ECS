@@ -136,7 +136,7 @@ namespace _02_TankController.Scripts
                         wheelPower = rightPower;
                     }
                     //Compared to the movement axis to change the wheel spin direction
-                    Vector3 spinAxis = moveAxis == transform.forward ? Vector3.right : Vector3.left;
+                    Vector3 spinAxis = moveAxis == transform.forward ? Vector3.left : Vector3.right;
                     //gets the traction for the correct side of the vehicle
                     float currentTraction = m_Tracks[i].TractionPercent;
                     //applies force to the individual wheels
@@ -153,7 +153,6 @@ namespace _02_TankController.Scripts
                             {
                                 //The wheel uses its own script to apply the force
                                 wheel.AddDriveForce(m_Rb, driveForce, currentTraction, moveAxis);
-                                spinAxis = -spinAxis;
                             }
                         }
                         wheel.AddTorqueForce(driveForce, currentTraction, spinAxis);
