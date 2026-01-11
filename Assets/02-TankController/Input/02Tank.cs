@@ -99,7 +99,7 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Steer"",
@@ -114,7 +114,7 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
                     ""name"": ""Fire"",
                     ""type"": ""Button"",
                     ""id"": ""04d4d109-e500-44ed-8e0b-4704fbe16769"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -141,6 +141,24 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
                     ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""490d1a2e-a898-463a-b418-f76bfc589cde"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Advanced Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""8e74c2fb-b34d-4c0c-b011-d166548c7f40"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Camera Mode"",
+                    ""type"": ""Button"",
+                    ""id"": ""c03a422c-a5e5-4f97-8b03-1fb0bb975537"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -257,6 +275,28 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bfadb916-beed-4f73-99c9-3583de966730"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Advanced Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e9aff0a-d592-4036-b2b6-f4bdb8b81057"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Camera Mode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -271,6 +311,8 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
         m_Default_Aim = m_Default.FindAction("Aim", throwIfNotFound: true);
         m_Default_Zoom = m_Default.FindAction("Zoom", throwIfNotFound: true);
         m_Default_Pause = m_Default.FindAction("Pause", throwIfNotFound: true);
+        m_Default_AdvancedAim = m_Default.FindAction("Advanced Aim", throwIfNotFound: true);
+        m_Default_CameraMode = m_Default.FindAction("Camera Mode", throwIfNotFound: true);
     }
 
     ~@AM_02Tank()
@@ -357,6 +399,8 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_Aim;
     private readonly InputAction m_Default_Zoom;
     private readonly InputAction m_Default_Pause;
+    private readonly InputAction m_Default_AdvancedAim;
+    private readonly InputAction m_Default_CameraMode;
     /// <summary>
     /// Provides access to input actions defined in input action map "Default".
     /// </summary>
@@ -392,6 +436,14 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Default/Pause".
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_Default_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action "Default/AdvancedAim".
+        /// </summary>
+        public InputAction @AdvancedAim => m_Wrapper.m_Default_AdvancedAim;
+        /// <summary>
+        /// Provides access to the underlying input action "Default/CameraMode".
+        /// </summary>
+        public InputAction @CameraMode => m_Wrapper.m_Default_CameraMode;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -436,6 +488,12 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @AdvancedAim.started += instance.OnAdvancedAim;
+            @AdvancedAim.performed += instance.OnAdvancedAim;
+            @AdvancedAim.canceled += instance.OnAdvancedAim;
+            @CameraMode.started += instance.OnCameraMode;
+            @CameraMode.performed += instance.OnCameraMode;
+            @CameraMode.canceled += instance.OnCameraMode;
         }
 
         /// <summary>
@@ -465,6 +523,12 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @AdvancedAim.started -= instance.OnAdvancedAim;
+            @AdvancedAim.performed -= instance.OnAdvancedAim;
+            @AdvancedAim.canceled -= instance.OnAdvancedAim;
+            @CameraMode.started -= instance.OnCameraMode;
+            @CameraMode.performed -= instance.OnCameraMode;
+            @CameraMode.canceled -= instance.OnCameraMode;
         }
 
         /// <summary>
@@ -547,5 +611,19 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Advanced Aim" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAdvancedAim(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Camera Mode" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCameraMode(InputAction.CallbackContext context);
     }
 }

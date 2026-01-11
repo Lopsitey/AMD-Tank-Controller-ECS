@@ -2,6 +2,7 @@ using _02_TankController.Scripts.Camera_Aim;
 using _02_TankController.Scripts.Wheel;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.VirtualTexturing;
 
 namespace _02_TankController.Scripts.Input
 {
@@ -39,7 +40,10 @@ namespace _02_TankController.Scripts.Input
 			m_ActionMap.Default.Aim.canceled += Handle_AimCanceled;
 			m_ActionMap.Default.Zoom.performed += Handle_ZoomPerformed;
 			m_ActionMap.Default.Pause.performed += Handle_PausePerformed;
+			m_ActionMap.Default.AdvancedAim.started += Handle_AdvancedAimStarted;
+			m_ActionMap.Default.AdvancedAim.canceled += Handle_AdvancedAimCanceled;
 		}
+
 		private void OnDisable()
 		{
 			m_ActionMap.Disable();
@@ -54,6 +58,8 @@ namespace _02_TankController.Scripts.Input
 			m_ActionMap.Default.Aim.canceled -= Handle_AimCanceled;
 			m_ActionMap.Default.Zoom.performed -= Handle_ZoomPerformed;
 			m_ActionMap.Default.Pause.performed -= Handle_PausePerformed;
+			m_ActionMap.Default.AdvancedAim.started -= Handle_AdvancedAimStarted;
+			m_ActionMap.Default.AdvancedAim.canceled -= Handle_AdvancedAimCanceled;
 		}
 
 		/// <summary>
@@ -128,6 +134,16 @@ namespace _02_TankController.Scripts.Input
 		private void Handle_ZoomPerformed(InputAction.CallbackContext context)
 		{
 			m_CameraController.OnZoom(context.ReadValue<float>());
+		}
+		
+		private void Handle_AdvancedAimStarted(InputAction.CallbackContext obj)
+		{
+			m_CameraController.OnAdvancedAim();
+		}
+
+		private void Handle_AdvancedAimCanceled(InputAction.CallbackContext obj)
+		{
+			m_CameraController.OnAdvancedAimEnd();
 		}
 	}
 }
