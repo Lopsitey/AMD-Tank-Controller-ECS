@@ -7,8 +7,10 @@ namespace _02_TankController.Scripts.Input
 {
 	public class InputHandler : MonoBehaviour
 	{
-		private AM_02Tank m_ActionMap; //input
+		[Header("Camera")]
 	    [SerializeField] private CameraController m_CameraController;
+	    
+	    private AM_02Tank m_ActionMap; //input
 	    private WheelManager m_WheelManager;
 	    private bool m_Paused;
 		
@@ -41,6 +43,7 @@ namespace _02_TankController.Scripts.Input
 			m_ActionMap.Default.Pause.performed += Handle_PausePerformed;
 			m_ActionMap.Default.AdvancedAim.started += Handle_AdvancedAimStarted;
 			m_ActionMap.Default.AdvancedAim.canceled += Handle_AdvancedAimCanceled;
+			m_ActionMap.Default.CameraMode.performed += Handle_CameraModePerformed;
 		}
 
 		private void OnDisable()
@@ -59,6 +62,7 @@ namespace _02_TankController.Scripts.Input
 			m_ActionMap.Default.Pause.performed -= Handle_PausePerformed;
 			m_ActionMap.Default.AdvancedAim.started -= Handle_AdvancedAimStarted;
 			m_ActionMap.Default.AdvancedAim.canceled -= Handle_AdvancedAimCanceled;
+			m_ActionMap.Default.CameraMode.performed -= Handle_CameraModePerformed;
 		}
 
 		/// <summary>
@@ -143,6 +147,11 @@ namespace _02_TankController.Scripts.Input
 		private void Handle_AdvancedAimCanceled(InputAction.CallbackContext obj)
 		{
 			m_CameraController.OnAdvancedAimEnd();
+		}
+		
+		private void Handle_CameraModePerformed(InputAction.CallbackContext obj)
+		{
+			m_CameraController.ToggleCamera();
 		}
 	}
 }

@@ -11,7 +11,8 @@ namespace _02_TankController.Scripts.Camera_Aim
     public class CameraController : MonoBehaviour
     {
         [Header("Cinemachine")] [SerializeField]
-        private CinemachineCamera m_VirtualCamera;
+        private CinemachineCamera m_ThirdPersonCam;
+        [SerializeField] private CinemachineCamera m_FirstPersonCam;
 
         [Header("Follow")] [SerializeField] private Transform m_TankToFollow;
 
@@ -69,6 +70,7 @@ namespace _02_TankController.Scripts.Camera_Aim
         //values for the advanced aim to iterate between
         private float m_OldXAngle;
         private float m_OldLookSens;
+        private bool m_IsFirstPerson = false;
 
         private void Awake()
         {
@@ -79,10 +81,10 @@ namespace _02_TankController.Scripts.Camera_Aim
             }
 
             m_TankRb = m_TankToFollow.gameObject.GetComponent<Rigidbody>();
-            if (m_VirtualCamera)
+            if (m_ThirdPersonCam)
             {
                 //Grabs the component that handles distance
-                m_ThirdPersonComponent = m_VirtualCamera.GetComponent<CinemachineThirdPersonFollow>();
+                m_ThirdPersonComponent = m_ThirdPersonCam.GetComponent<CinemachineThirdPersonFollow>();
 
                 //Initialises the target distance based on where the camera currently is
                 if (m_ThirdPersonComponent)
@@ -229,6 +231,26 @@ namespace _02_TankController.Scripts.Camera_Aim
         {
             m_MinXAngleDeg = m_OldXAngle;
             m_LookSensitivity = m_OldLookSens;
+        }
+
+        /// <summary>
+        /// Toggles between the first and third person cameras
+        /// </summary>
+        public void ToggleCamera()
+        {
+            m_IsFirstPerson = !m_IsFirstPerson;
+
+            if (m_IsFirstPerson)
+            {
+                //Makes the priority higher so it's the current active camera
+                m_FirstPersonCam.Priority = 20;
+                m_ThirdPersonCam.Priority = 10;
+            }
+            else
+            {
+                m_FirstPersonCam.Priority = 10;
+                m_ThirdPersonCam.Priority = 20;
+            }
         }
     }
 }
