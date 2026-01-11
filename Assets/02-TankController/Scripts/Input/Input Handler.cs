@@ -2,6 +2,7 @@ using _02_TankController.Scripts.Camera_Aim;
 using _02_TankController.Scripts.Wheel;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.VirtualTexturing;
 
 namespace _02_TankController.Scripts.Input
 {
