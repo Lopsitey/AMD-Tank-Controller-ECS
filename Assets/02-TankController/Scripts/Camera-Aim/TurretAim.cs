@@ -21,6 +21,9 @@ namespace _02_TankController.Scripts.Camera_Aim
         private float m_MaxElevation = 25f; // Up
 
         [Range(0, 180)] [SerializeField] private float m_MaxDepression = 10f; // Down
+        
+        //The Y rotation of the turret (0 to 360)
+        [SerializeField, HideInInspector] public float OrientAngle => m_TurretMesh.localEulerAngles.y;
 
         private void Update()
         {
@@ -42,7 +45,7 @@ namespace _02_TankController.Scripts.Camera_Aim
             Vector3 flattenedDir = Vector3.ProjectOnPlane(targetDir, transform.up);
 
             // Avoid errors if direction is zero (e.g. looking straight up)
-            if (flattenedDir.sqrMagnitude < 0.001f) return; //todo can i use math.epsilon here
+            if (flattenedDir.sqrMagnitude < 0.001f) return;
 
             // Creates a rotation looking at the projected point, keeping up the same
             Quaternion targetRotation = Quaternion.LookRotation(flattenedDir, transform.up);

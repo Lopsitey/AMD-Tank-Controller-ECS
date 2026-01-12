@@ -10,7 +10,7 @@ namespace _02_TankController.Scripts.Wheel
     public class WheelManager : MonoBehaviour
     {
         [Header("Movement")] [SerializeField] private float m_TankSpeed = 0.75f;
-        [SerializeField] private float m_MaxSpeed = 15f;
+        [SerializeField] public float m_MaxSpeed = 15f;
 
         [SerializeField] private float m_BrakingForce = 1.5f;
 
@@ -35,9 +35,10 @@ namespace _02_TankController.Scripts.Wheel
 
         private float m_ForwardInput;
         private float m_TurnInput;
+        public float ForwardSpeed {get; private set;} 
 
         //current amount of acceleration being applied
-        private float m_CurrentRevs;
+        public float CurrentRevs { get; private set; }
 
 
         void Awake()
@@ -77,17 +78,17 @@ namespace _02_TankController.Scripts.Wheel
         IEnumerator C_MoveUpdate()
         {
             //if there is input - || ensures the loop doesn't end whilst there is throttle remaining
-            while (m_ForwardInput != 0 || (Mathf.Abs(m_CurrentRevs) > 0.01f || Mathf.Abs(m_TurnInput) > 0.01f))
+            while (m_ForwardInput != 0 || (Mathf.Abs(CurrentRevs) > 0.01f || Mathf.Abs(m_TurnInput) > 0.01f))
             {
                 yield return new WaitForFixedUpdate();
-                
+
                 //the amount of velocity in the forward direction
-                float forwardSpeed = Vector3.Dot(m_Rb.linearVelocity, transform.forward);
-                
+                ForwardSpeed = Vector3.Dot(m_Rb.linearVelocity, transform.forward);
+
                 //Speed relative to the max speed
                 //Can't just check throttle as it increases quickly and can be released on a hill 
-                float speedPercent = Mathf.Clamp01(Mathf.Abs(forwardSpeed) / m_MaxSpeed); 
-                
+                float speedPercent = Mathf.Clamp01(Mathf.Abs(ForwardSpeed) / m_MaxSpeed);
+
                 //At a lower speed the lerp increments by less so it will be closer to 1
                 //At a higher speed the lerp will increment more so it will most likely be 0.5
                 float turnAmount = Mathf.Lerp(1f, 0.5f, speedPercent);
@@ -96,24 +97,24 @@ namespace _02_TankController.Scripts.Wheel
 
                 //Used to limit the actual input so you can't go crazy and spin out
                 float restrictedTurnInput = Mathf.Clamp(m_TurnInput, -turnAmount, turnAmount);
-                
+
                 //Flips the turn input when reversing 
                 float effectiveTurn = m_ForwardInput < 0 ? -restrictedTurnInput : restrictedTurnInput;
-                
+
                 //Smoothly moves from the current throttle to the current input, incrementing by the rev speed
                 //Can increment by less than the rev speed if the numbers don't line up perfectly on the final incrementation
-                m_CurrentRevs = Mathf.MoveTowards(m_CurrentRevs, m_ForwardInput, m_RevSpeed * Time.fixedDeltaTime);
-                
+                CurrentRevs = Mathf.MoveTowards(CurrentRevs, m_ForwardInput, m_RevSpeed * Time.fixedDeltaTime);
+
                 //Clamped because holding w and a would make you move twice as fast
                 //The throttle applies the direction to both tracks and is needed to make the left +1 and the right -1 or vice versa
-                float leftInput = Mathf.Clamp(m_CurrentRevs + effectiveTurn, -m_OverdriveLimit, m_OverdriveLimit);
-                float rightInput = Mathf.Clamp(m_CurrentRevs - effectiveTurn, -m_OverdriveLimit, m_OverdriveLimit);
+                float leftInput = Mathf.Clamp(CurrentRevs + effectiveTurn, -m_OverdriveLimit, m_OverdriveLimit);
+                float rightInput = Mathf.Clamp(CurrentRevs - effectiveTurn, -m_OverdriveLimit, m_OverdriveLimit);
 
                 //The direction of the track's movement - left going backwards and right going forwards means left and vice versa     
                 Vector3 leftDir = leftInput >= 0 ? transform.forward : -transform.forward;
                 //If the track has power 
                 float leftPower = Mathf.Abs(leftInput);
-                
+
                 Vector3 rightDir = rightInput >= 0 ? transform.forward : -transform.forward;
                 float rightPower = Mathf.Abs(rightInput);
 
@@ -136,7 +137,7 @@ namespace _02_TankController.Scripts.Wheel
                         moveAxis = leftDir;
                         wheelPower = leftPower;
                         //if turning left reverse the spin direction
-                        if(wheelPower < rightPower)
+                        if (wheelPower < rightPower)
                             spinAxis = Vector3.left;
                     }
                     else
@@ -144,7 +145,7 @@ namespace _02_TankController.Scripts.Wheel
                         wheels = m_RightWheels;
                         moveAxis = rightDir;
                         wheelPower = rightPower;
-                        if(wheelPower < leftPower)
+                        if (wheelPower < leftPower)
                             spinAxis = Vector3.left;
                     }
 
@@ -152,7 +153,7 @@ namespace _02_TankController.Scripts.Wheel
                     //Set the spin direction of the wheels using the tank's movement direction
                     if (spinAxis == Vector3.zero)
                         spinAxis = moveAxis == transform.forward ? Vector3.right : Vector3.left;
-                    
+
                     //gets the traction for the correct side of the vehicle
                     float currentTraction = m_Tracks[i].TractionPercent;
                     //applies force to the individual wheels
@@ -160,7 +161,7 @@ namespace _02_TankController.Scripts.Wheel
                     {
                         float driveForce = m_ForwardInput == 0 ? 0 : wheelPower * m_TankSpeed;
                         //math.abs limits the reversing velocity as well
-                        bool belowLimit = Mathf.Abs(forwardSpeed) < m_MaxSpeed;
+                        bool belowLimit = Mathf.Abs(ForwardSpeed) < m_MaxSpeed;
                         //only adds force when below the max speed or if turning 
                         if (belowLimit || m_TurnInput != 0)
                         {
@@ -171,13 +172,14 @@ namespace _02_TankController.Scripts.Wheel
                                 wheel.AddDriveForce(m_Rb, driveForce, currentTraction, moveAxis);
                             }
                         }
+
                         wheel.AddTorqueForce(driveForce, currentTraction, spinAxis);
                     }
                 }
             }
 
             m_CMove = null; //so it can be started again
-            m_CurrentRevs = 0f; //Clears any unused revs for next cycle (the 0.01f)
+            CurrentRevs = 0f; //Clears any unused revs for next cycle (the 0.01f)
 
             //below the null assignment so can start moving earlier
             //you're not forced to wait for the tank to come to a full stop

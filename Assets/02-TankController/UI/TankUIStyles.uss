@@ -1,0 +1,73 @@
+:root {
+}
+
+.ammo-label {
+    color: rgb(255, 255, 255);
+}
+
+.top {
+    flex-grow: 1;
+}
+
+.bottom {
+    flex-shrink: 0;
+    min-height: 30%;
+    flex-direction: row;
+}
+
+.left {
+    flex-grow: 1;
+    min-width: 50%;
+}
+
+.right {
+    flex-grow: 1;
+    flex-direction: column;
+    min-width: 5%;
+    min-height: auto;
+    width: auto;
+}
+
+.rev-bar {
+    color: rgb(255, 255, 255);
+    width: 50%;
+    opacity: 0.8;
+}
+
+.rev-bar .unity-progress-bar__progress {
+    background-color: coral;
+}
+
+.rev-bar .unity-progress-bar__background {
+    background-color: chocolate;
+    border-radius: 5px;
+    border-color: transparent;
+}
+
+.speed-bar {
+    color: rgb(255, 255, 255);
+    opacity: 0.8;
+}
+
+.speed-bar .unity-progress-bar__progress {
+    background-color: crimson;
+}
+
+.speed-bar .unity-progress-bar__background{
+    background-color: firebrick;
+    border-radius: 5px;
+    border-color: transparent;
+}
+
+.tank-icon {
+    background-image: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=6936960519852013934&guid=a02e05388065f4d4a8fe61f0a41eff00&type=3#arrow-up@2x");
+    width: 40%;
+    align-self: flex-end;
+    min-height: auto;
+    height: auto;
+    background-size: 100% 100%;
+    -unity-background-scale-mode: scale-and-crop;
+    flex-grow: 1;
+    flex-shrink: 0;
+    opacity: 0.8;
+}
