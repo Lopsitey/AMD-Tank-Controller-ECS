@@ -99,7 +99,11 @@ namespace _02_TankController.Scripts.Wheel
                 
                 //Flips the turn input when reversing 
                 float effectiveTurn = m_ForwardInput < 0 ? -restrictedTurnInput : restrictedTurnInput;
-
+                
+                //Smoothly moves from the current throttle to the current input, incrementing by the rev speed
+                //Can increment by less than the rev speed if the numbers don't line up perfectly on the final incrementation
+                m_CurrentRevs = Mathf.MoveTowards(m_CurrentRevs, m_ForwardInput, m_RevSpeed * Time.fixedDeltaTime);
+                
                 //Clamped because holding w and a would make you move twice as fast
                 //The throttle applies the direction to both tracks and is needed to make the left +1 and the right -1 or vice versa
                 float leftInput = Mathf.Clamp(m_CurrentRevs + effectiveTurn, -m_OverdriveLimit, m_OverdriveLimit);
@@ -109,34 +113,46 @@ namespace _02_TankController.Scripts.Wheel
                 Vector3 leftDir = leftInput >= 0 ? transform.forward : -transform.forward;
                 //If the track has power 
                 float leftPower = Mathf.Abs(leftInput);
-
+                
                 Vector3 rightDir = rightInput >= 0 ? transform.forward : -transform.forward;
                 float rightPower = Mathf.Abs(rightInput);
-                
-                //Smoothly moves from the current throttle to the current input, incrementing by the rev speed
-                //Can increment by less than the rev speed if the numbers don't line up perfectly on the final incrementation
-                m_CurrentRevs = Mathf.MoveTowards(m_CurrentRevs, m_ForwardInput, m_RevSpeed * Time.fixedDeltaTime);
+
+                //reverse the track opposite to the turn direction 
+                if (leftInput >= 0 && rightInput <= 0)
+                    rightDir = -transform.forward;
+                if (rightInput >= 0 && leftInput <= 0)
+                    leftDir = -transform.forward;
 
                 for (int i = 0; i < 2; ++i)
                 {
                     //swaps the wheel side when i == 1
                     Wheel[] wheels;
                     Vector3 moveAxis;
+                    Vector3 spinAxis = Vector3.zero;
                     float wheelPower;
                     if (i == 0)
                     {
                         wheels = m_LeftWheels;
                         moveAxis = leftDir;
                         wheelPower = leftPower;
+                        //if turning left reverse the spin direction
+                        if(wheelPower < rightPower)
+                            spinAxis = Vector3.left;
                     }
                     else
                     {
                         wheels = m_RightWheels;
                         moveAxis = rightDir;
                         wheelPower = rightPower;
+                        if(wheelPower < leftPower)
+                            spinAxis = Vector3.left;
                     }
-                    //Compared to the movement axis to change the wheel spin direction
-                    Vector3 spinAxis = moveAxis == transform.forward ? Vector3.right : Vector3.left;
+
+                    //If not turning then
+                    //Set the spin direction of the wheels using the tank's movement direction
+                    if (spinAxis == Vector3.zero)
+                        spinAxis = moveAxis == transform.forward ? Vector3.right : Vector3.left;
+                    
                     //gets the traction for the correct side of the vehicle
                     float currentTraction = m_Tracks[i].TractionPercent;
                     //applies force to the individual wheels
