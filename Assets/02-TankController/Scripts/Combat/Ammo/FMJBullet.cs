@@ -1,8 +1,5 @@
-﻿using UnityEngine;
-
-namespace _02_TankController.Scripts.Ammo
+﻿namespace _02_TankController.Scripts.Combat.Ammo
 {
-    // ReSharper disable once InconsistentNaming
     public class FMJBullet : BaseBullet 
     {
         public override void Awake()

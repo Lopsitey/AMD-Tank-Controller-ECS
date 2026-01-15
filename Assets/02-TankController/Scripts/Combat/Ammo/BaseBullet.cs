@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-namespace _02_TankController.Scripts.Ammo
+namespace _02_TankController.Scripts.Combat.Ammo
 {
-    public enum BulletType { Basic, Double, FMJ }
+    public enum BulletType { Basic, FMJ, Double }
 
-    //Abstrart means it cannot be put on a prefab or instantiated directly, it must be inherited form
+    //Abstract means it cannot be put on a prefab or instantiated directly, it must be inherited form
     [RequireComponent(typeof(Rigidbody))]
     public abstract class BaseBullet : MonoBehaviour
     {
@@ -47,7 +47,7 @@ namespace _02_TankController.Scripts.Ammo
         protected virtual void DisableSelf()
         {
             gameObject.SetActive(false);
-            // The Pool will detect this disable automatically if we set it up right
+            /// The Pool will detect this disable automatically if set up correctly
         }
         
         private void OnCollisionEnter(Collision other)

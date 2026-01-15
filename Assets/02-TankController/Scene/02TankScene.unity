@@ -1548,7 +1548,7 @@ Transform:
   m_GameObject: {fileID: 474134727}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.15, y: 1.45, z: -18.65}
+  m_LocalPosition: {x: -0.15, y: 1.45, z: -17.973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2400,7 +2400,7 @@ Transform:
   m_GameObject: {fileID: 880163265}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.35000002, y: 1.45, z: -28.65}
+  m_LocalPosition: {x: 0.35000002, y: 1.45, z: -27.973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3001,6 +3001,8 @@ GameObject:
   - component: {fileID: 928874473}
   - component: {fileID: 928874471}
   - component: {fileID: 928874472}
+  - component: {fileID: 928874474}
+  - component: {fileID: 928874475}
   - component: {fileID: 928874466}
   m_Layer: 6
   m_Name: Tank
@@ -3104,6 +3106,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CameraController: {fileID: 474134729}
+--- !u!114 &928874474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928874459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 399f787ea035425d95ae1d4708467a88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirePoint: {fileID: 474134728}
+  m_BaseCooldown: 0.5
+  m_FMJCooldown: 1.5
+  m_DoubleBurstDelay: 0.1
+--- !u!114 &928874475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928874459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cd6c80236da43098e410e20a079d004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PoolSetup:
+  - Type: 0
+    Prefab: {fileID: 0}
+    DefaultSize: 20
+  - Type: 2
+    Prefab: {fileID: 0}
+    DefaultSize: 10
+  - Type: 1
+    Prefab: {fileID: 0}
+    DefaultSize: 10
 --- !u!1 &934198954
 GameObject:
   m_ObjectHideFlags: 0
@@ -4802,7 +4842,7 @@ Transform:
   m_GameObject: {fileID: 1503673853}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.35000002, y: 1.45, z: -28.65}
+  m_LocalPosition: {x: 0.35000002, y: 1.45, z: -27.973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

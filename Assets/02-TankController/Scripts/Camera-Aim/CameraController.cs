@@ -12,6 +12,7 @@ namespace _02_TankController.Scripts.Camera_Aim
     {
         [Header("Cinemachine")] [SerializeField]
         private CinemachineCamera m_ThirdPersonCam;
+
         [SerializeField] private CinemachineCamera m_FirstPersonCam;
 
         [Header("Follow")] [SerializeField] private Transform m_TankToFollow;
@@ -47,11 +48,11 @@ namespace _02_TankController.Scripts.Camera_Aim
 
         [Header("Advanced-Aim")]
         [Tooltip("The pitch of the camera during advanced aim.")]
-        [SerializeField] [Range(-10, 0)]
+        [SerializeField]
+        [Range(-10, 0)]
         private float m_AdvMinXAngle = 0f;
-        
-        [Tooltip("How responsive the camera is to mouse input during advanced aim.")]
-        [SerializeField] [Range(0, 0.5f)]
+
+        [Tooltip("How responsive the camera is to mouse input during advanced aim.")] [SerializeField] [Range(0, 0.5f)]
         private float m_AdvLookSensitivity = 0.165f;
 
         private CinemachineThirdPersonFollow m_ThirdPersonComponent;
@@ -71,6 +72,7 @@ namespace _02_TankController.Scripts.Camera_Aim
         private float m_OldXAngle;
         private float m_OldLookSens;
         private bool m_IsFirstPerson = false;
+        private bool m_IsAdvancedAiming;
 
         private void Awake()
         {
@@ -181,11 +183,13 @@ namespace _02_TankController.Scripts.Camera_Aim
 
         public void AimEnd()
         {
-            if (m_CAutoAim != null) StopCoroutine(m_CAutoAim); //kill the existing timer
-            m_CAutoAim =
-                StartCoroutine(
-                    C_AimEndDelay(
-                        m_AutoAimStartDelay)); //can't use ??= here because I stop the timer dynamically instead
+            //won't start the auto-aim timer if in advanced aim mode
+            if (m_IsAdvancedAiming) return;
+
+            //kills any existing timer
+            if (m_CAutoAim != null) StopCoroutine(m_CAutoAim);
+            //can't use ??= here because I stop the timer dynamically instead
+            m_CAutoAim = StartCoroutine(C_AimEndDelay(m_AutoAimStartDelay));
         }
 
         IEnumerator C_AimEndDelay(float delay)
@@ -225,12 +229,20 @@ namespace _02_TankController.Scripts.Camera_Aim
         {
             m_MinXAngleDeg = m_AdvMinXAngle;
             m_LookSensitivity = m_AdvLookSensitivity;
+            //prevents auto-aim activation while in advanced aim
+            m_IsAdvancedAiming = true;
+            //kills any existing timer
+            if (m_CAutoAim != null) StopCoroutine(m_CAutoAim);
         }
 
         public void OnAdvancedAimEnd()
         {
             m_MinXAngleDeg = m_OldXAngle;
             m_LookSensitivity = m_OldLookSens;
+            m_IsAdvancedAiming = false;
+            //starts the timer immediately
+            //this means the player doesn't have to move the mouse for auto-aim to start working again 
+            m_CAutoAim = StartCoroutine(C_AimEndDelay(m_AutoAimStartDelay));
         }
 
         /// <summary>

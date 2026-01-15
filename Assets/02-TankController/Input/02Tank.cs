@@ -163,6 +163,15 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Swap Ammo"",
+                    ""type"": ""Button"",
+                    ""id"": ""b6acb5d6-2dfb-4b36-85fa-6e9a2fcc0dc8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -290,13 +299,46 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1e9aff0a-d592-4036-b2b6-f4bdb8b81057"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Camera Mode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""f4314721-74cd-45fc-96a7-cd095a819c32"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Swap Ammo"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""c360a13b-aac5-4359-9622-fedcab0c6d31"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Swap Ammo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""baa4a75d-06f8-4bd5-90c2-8baac2d03f42"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Swap Ammo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -313,6 +355,7 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
         m_Default_Pause = m_Default.FindAction("Pause", throwIfNotFound: true);
         m_Default_AdvancedAim = m_Default.FindAction("Advanced Aim", throwIfNotFound: true);
         m_Default_CameraMode = m_Default.FindAction("Camera Mode", throwIfNotFound: true);
+        m_Default_SwapAmmo = m_Default.FindAction("Swap Ammo", throwIfNotFound: true);
     }
 
     ~@AM_02Tank()
@@ -401,6 +444,7 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_Pause;
     private readonly InputAction m_Default_AdvancedAim;
     private readonly InputAction m_Default_CameraMode;
+    private readonly InputAction m_Default_SwapAmmo;
     /// <summary>
     /// Provides access to input actions defined in input action map "Default".
     /// </summary>
@@ -444,6 +488,10 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Default/CameraMode".
         /// </summary>
         public InputAction @CameraMode => m_Wrapper.m_Default_CameraMode;
+        /// <summary>
+        /// Provides access to the underlying input action "Default/SwapAmmo".
+        /// </summary>
+        public InputAction @SwapAmmo => m_Wrapper.m_Default_SwapAmmo;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -494,6 +542,9 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
             @CameraMode.started += instance.OnCameraMode;
             @CameraMode.performed += instance.OnCameraMode;
             @CameraMode.canceled += instance.OnCameraMode;
+            @SwapAmmo.started += instance.OnSwapAmmo;
+            @SwapAmmo.performed += instance.OnSwapAmmo;
+            @SwapAmmo.canceled += instance.OnSwapAmmo;
         }
 
         /// <summary>
@@ -529,6 +580,9 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
             @CameraMode.started -= instance.OnCameraMode;
             @CameraMode.performed -= instance.OnCameraMode;
             @CameraMode.canceled -= instance.OnCameraMode;
+            @SwapAmmo.started -= instance.OnSwapAmmo;
+            @SwapAmmo.performed -= instance.OnSwapAmmo;
+            @SwapAmmo.canceled -= instance.OnSwapAmmo;
         }
 
         /// <summary>
@@ -625,5 +679,12 @@ public partial class @AM_02Tank: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCameraMode(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Swap Ammo" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwapAmmo(InputAction.CallbackContext context);
     }
 }

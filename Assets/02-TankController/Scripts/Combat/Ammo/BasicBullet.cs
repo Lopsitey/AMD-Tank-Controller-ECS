@@ -1,4 +1,4 @@
-﻿namespace _02_TankController.Scripts.Ammo
+﻿namespace _02_TankController.Scripts.Combat.Ammo
 {
     public class BasicBullet : BaseBullet
     {
