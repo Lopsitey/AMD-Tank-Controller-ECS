@@ -11,7 +11,7 @@
 
 .bottom {
     flex-shrink: 0;
-    min-height: 30%;
+    min-height: 35%;
     flex-direction: row;
 }
 
@@ -32,6 +32,7 @@
     color: rgb(255, 255, 255);
     width: 50%;
     opacity: 0.8;
+    margin-bottom: 3%;
 }
 
 .rev-bar .unity-progress-bar__progress {
@@ -53,21 +54,47 @@
     background-color: crimson;
 }
 
-.speed-bar .unity-progress-bar__background{
+.speed-bar .unity-progress-bar__background {
     background-color: firebrick;
     border-radius: 5px;
     border-color: transparent;
 }
 
 .tank-icon {
-    background-image: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=6936960519852013934&guid=a02e05388065f4d4a8fe61f0a41eff00&type=3#arrow-up@2x");
-    width: 40%;
-    align-self: flex-end;
+    background-image: url("project://database/Assets/02-TankController/Images/Topdown-Tank-Icon-No-BG.png?fileID=-748738963&guid=3aaab1dd9d759e343805bdf4a5a021c8&type=3#Topdown-Tank-Icon-No-BG_0");
+    width: auto;
+    align-self: center;
     min-height: auto;
     height: auto;
     background-size: 100% 100%;
-    -unity-background-scale-mode: scale-and-crop;
+    -unity-background-scale-mode: scale-to-fit;
     flex-grow: 1;
     flex-shrink: 0;
-    opacity: 0.8;
+    min-width: 55%;
+    max-height: 88%;
+    transform-origin: center 33%;
+    rotate: 180deg;
+}
+
+.tank-icon-BG {
+    background-image: url("project://database/Assets/02-TankController/Images/Topdown-Tank-Icon-No-BG.png?fileID=569413347&guid=3aaab1dd9d759e343805bdf4a5a021c8&type=3#Topdown-Tank-Icon-No-BG_1");
+    width: 40%;
+    align-self: flex-end;
+    min-height: 150px;
+    height: auto;
+    background-size: 100% 100%;
+    -unity-background-scale-mode: scale-to-fit;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: flex-end;
+    min-width: 40%;
+    max-height: 200px;
+}
+
+.container {
+    flex-grow: 1;
+    margin-top: 2%;
+    margin-right: 2.5%;
+    margin-bottom: 2%;
+    margin-left: 2%;
 }

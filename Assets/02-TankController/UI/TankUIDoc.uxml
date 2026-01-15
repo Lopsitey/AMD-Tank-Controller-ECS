@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/02-TankController/UI/TankUIStyles.uss?fileID=7433441132597879392&amp;guid=537f0f608d1e7bd41b396cef5a4021df&amp;type=3#TankUIStyles" />
-    <ui:VisualElement name="Container" style="flex-grow: 1;">
+    <ui:VisualElement name="Container" class="container">
         <ui:VisualElement name="Top" class="top" />
         <ui:VisualElement name="Bottom" class="bottom">
             <ui:VisualElement name="Left" class="left" />
@@ -8,7 +8,9 @@
                 <ui:Label text="0/0" name="Ammo-Label" class="ammo-label" />
                 <ui:ProgressBar value="22" title="Speed" name="Speed-Bar" class="speed-bar" />
                 <ui:ProgressBar value="22" name="Rev-Bar" title="Throttle" class="unity-progress-bar rev-bar" />
-                <ui:VisualElement name="Tank-Icon" class="tank-icon" />
+                <ui:VisualElement name="Tank-Icon-BG" class="tank-icon-BG">
+                    <ui:VisualElement name="Tank-Icon" class="tank-icon" />
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

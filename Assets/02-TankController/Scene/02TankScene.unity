@@ -3091,7 +3091,6 @@ MonoBehaviour:
   m_BarrelPitchSpeed: 40
   m_MaxElevation: 20
   m_MaxDepression: 5
-  m_OrientAngle: 0
 --- !u!114 &928874473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3701,6 +3700,7 @@ MonoBehaviour:
   m_UIDoc: {fileID: 2127687268}
   m_TankWheelManager: {fileID: 928874471}
   m_TurretAim: {fileID: 928874472}
+  m_IconStartRotation: 180
   m_TankSpeed: 0
   m_TankRevs: 0
   m_AmmoTotal: 

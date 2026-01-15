@@ -19,10 +19,12 @@ namespace _02_TankController.Scripts.UI
         [Header("Tank")] [SerializeField] private WheelManager m_TankWheelManager;
 
         [Header("Turret")] [SerializeField] private TurretAim m_TurretAim;
-
+        [SerializeField] private float m_IconStartRotation = 180f;
+        
         [SerializeField, HideInInspector] private float m_TankSpeed;
         [SerializeField, HideInInspector] private float m_TankRevs;
         [SerializeField, HideInInspector] private string m_AmmoTotal;
+        
 
         private VisualElement m_UIRoot;
         private ProgressBar m_SpeedBar;
@@ -49,7 +51,7 @@ namespace _02_TankController.Scripts.UI
                 Debug.LogError("No wheel manager found on the UI manager");
                 return;
             }
-            
+
             if (!m_TurretAim)
             {
                 Debug.LogError("No turret manager found on the UI manager");
@@ -60,7 +62,7 @@ namespace _02_TankController.Scripts.UI
             m_RevBar = m_UIRoot.Q<ProgressBar>("Rev-Bar");
             m_AmmoLabel = m_UIRoot.Q<Label>("Ammo-Label");
             m_TankIcon = m_UIRoot.Q<VisualElement>("Tank-Icon");
-            
+
             DataBinding speedBinding = new DataBinding
             {
                 dataSource = this,
@@ -106,8 +108,8 @@ namespace _02_TankController.Scripts.UI
             revBinding.sourceToUiConverters.AddConverter((ref float revValue) =>
                 Mathf.Abs(revValue) * 100f);
 
-            m_RevBar.SetBinding("value", revBinding); 
-            
+            m_RevBar.SetBinding("value", revBinding);
+
             m_AmmoLabel.SetBinding("text", new DataBinding
             {
                 dataSource = this,
@@ -115,7 +117,6 @@ namespace _02_TankController.Scripts.UI
                 bindingMode = BindingMode.ToTarget,
                 updateTrigger = BindingUpdateTrigger.OnSourceChanged
             });
-            
         }
 
         private void FixedUpdate()
@@ -130,9 +131,12 @@ namespace _02_TankController.Scripts.UI
                 m_OldAmmoCount = m_CurrentAmmoCount;
                 m_AmmoTotal = $"{m_CurrentAmmoCount} / {m_ClipSize}";
             }
+
+            //creates a new angle from the starting angle's degrees plus the turret's current orientation degrees
+            Angle newAngle = new Angle(m_IconStartRotation + m_TurretAim.OrientAngle, AngleUnit.Degree);
             
             //rotates using the current angle (in euler degrees - could use radians if converted)
-            m_TankIcon.style.rotate = new Rotate(new Angle(m_TurretAim.OrientAngle, AngleUnit.Degree));
+            m_TankIcon.style.rotate =  new Rotate(newAngle);
             //rotate represents the css rotate function here
         }
     }
