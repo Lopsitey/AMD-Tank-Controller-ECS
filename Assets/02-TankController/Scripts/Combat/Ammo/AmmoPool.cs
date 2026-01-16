@@ -57,6 +57,7 @@ namespace _02_TankController.Scripts.Combat.Ammo
             }
         }
         
+        // ReSharper disable Unity.PerformanceAnalysis
         /// <summary>
         /// Instantiates the physical bullet and sets it to inactive
         /// </summary>
@@ -67,7 +68,7 @@ namespace _02_TankController.Scripts.Combat.Ammo
             //spawns the bullet in the world as inactive
             BaseBullet b = Instantiate(prefab, transform);
             b.gameObject.SetActive(false);
-            //todo double check what this could return (presumably instantiation success or failure)
+            if(!b) Debug.LogError("AmmoPool: Bullet instantiation failed!");
             return b;
         }
 
@@ -82,11 +83,6 @@ namespace _02_TankController.Scripts.Combat.Ammo
             if (!m_Pools.ContainsKey(type)) return null;
 
             Queue<BaseBullet> queue = m_Pools[type];
-
-            //todo
-            //would it be better to cache the type in a member var by copying the final element in the queue
-            //then it could be referenced when dynamic extension is required without using linq
-            //this would need to be overwritten when ammo is swapped or smthn
             
             // If there are bullets in the pool 
             if (queue.Count > 0)
@@ -112,7 +108,8 @@ namespace _02_TankController.Scripts.Combat.Ammo
             //Given directly to the player
             return newBullet;
         }
-
+        
+        // ReSharper disable Unity.PerformanceAnalysis
         /// <summary>
         /// Stores bullets - destroys any excess
         /// </summary>
@@ -130,8 +127,13 @@ namespace _02_TankController.Scripts.Combat.Ammo
                 Destroy(bullet.gameObject);
             }
             else
-            {//Deactivates and stores any which don't exceed the limit
-                bullet.gameObject.SetActive(false);
+            {
+                if (bullet.gameObject.activeSelf)
+                {
+                    Debug.LogWarning("Bullet being returned to pool is still active. Deactivating now.");
+                    bullet.gameObject.SetActive(false);
+                }
+                //Stores any which don't exceed the limit
                 queue.Enqueue(bullet);
             }
         }

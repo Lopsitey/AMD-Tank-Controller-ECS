@@ -1,23 +1,26 @@
-﻿using System.Collections;
+﻿#region
+
+using System.Collections;
 using _02_TankController.Scripts.Combat.Ammo;
 using UnityEngine;
+
+#endregion
 
 namespace _02_TankController.Scripts.Combat
 {
     public class TankShooting : MonoBehaviour
     {
-        [Header("Fire Point")]
-        [SerializeField] private Transform m_FirePoint;
-        
-        [Header("Settings")]
-        [SerializeField] private float m_BaseCooldown = 0.5f;
-        
+        [Header("Fire Point")] [SerializeField]
+        private Transform m_FirePoint;
+
+        [Header("Settings")] [SerializeField] private float m_BaseCooldown = 0.5f;
+
         [SerializeField] private float m_FMJCooldown = 1.5f;
         [SerializeField] private float m_DoubleBurstDelay = 0.1f; // Time between the 2 shots
 
         private AmmoPool m_Pool;
         private BulletType m_CurrentType = BulletType.Basic;
-        private int m_TypeIndex = 0;
+        private int m_TypeIndex;
         private float m_NextFireTime;
 
         private void Awake()
@@ -52,23 +55,29 @@ namespace _02_TankController.Scripts.Combat
         }
 
         /// <summary>
-        /// 
+        /// Spawns the bullet and starts the relevant cooldown
         /// </summary>
         public void Fire()
         {
+            //can't fire if the cooldown is still active
+            if (Time.time < m_NextFireTime)
+                return;
+
+            //gets the cooldown based on bullet type
             float cooldown = m_CurrentType == BulletType.FMJ ? m_FMJCooldown : m_BaseCooldown;
+            //The exact moment it will next fire 
             m_NextFireTime = Time.time + cooldown;
+            //no cooldown coroutine needed as this is more efficient
 
             if (m_CurrentType == BulletType.Double)
-            {
                 StartCoroutine(FireDoubleBurst());
-            }
             else
-            {
                 SpawnBullet();
-            }
         }
 
+        /// <summary>
+        /// Sets the position of the bullet using the fire-point and launches it
+        /// </summary>
         private void SpawnBullet()
         {
             BaseBullet bullet = m_Pool.GetBullet(m_CurrentType);
@@ -77,13 +86,17 @@ namespace _02_TankController.Scripts.Combat
                 bullet.transform.position = m_FirePoint.position;
                 bullet.transform.rotation = m_FirePoint.rotation;
                 bullet.Launch(m_FirePoint.forward);
-                
+
                 // IMPORTANT: We must teach the bullet how to return home
                 // We can use a simple component or event, but for now:
                 StartCoroutine(MonitorBullet(bullet, m_CurrentType));
             }
         }
 
+        /// <summary>
+        /// Spawns a second bullet after the burst delay
+        /// </summary>
+        /// <returns></returns>
         IEnumerator FireDoubleBurst()
         {
             SpawnBullet();
@@ -91,15 +104,24 @@ namespace _02_TankController.Scripts.Combat
             SpawnBullet();
         }
 
-        // A simple way to handle the return without modifying the Bullet class too much
+        /// <summary>
+        /// Calls the pool to return the bullet when it deactivates
+        /// </summary>
+        /// <param name="b">The bullet to return to the pool</param>
+        /// <param name="type">The type of pool for the bullet to return to</param>
+        /// <returns></returns>
         IEnumerator MonitorBullet(BaseBullet b, BulletType type)
         {
-            // Wait until it disables itself (from lifetime or collision)
+            //The bullet doesn't need to know about the pool because that would be tight coupling
+            //That's why this helper function exists, because this manager class does know about the pool
+            
+            // Waits until the bullet deactivates
             while (b.gameObject.activeSelf)
             {
                 yield return null;
             }
-            // Send it back to the pool manager
+
+            //Sends back to the pool
             m_Pool.ReturnBullet(b, type);
         }
     }
