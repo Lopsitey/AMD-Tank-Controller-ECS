@@ -2,6 +2,8 @@
 
 using System;
 using _02_TankController.Scripts.Camera_Aim;
+using _02_TankController.Scripts.Combat;
+using _02_TankController.Scripts.Combat.Ammo;
 using _02_TankController.Scripts.Wheel;
 using Unity.Properties;
 using UnityEngine;
@@ -17,6 +19,8 @@ namespace _02_TankController.Scripts.UI
         private UIDocument m_UIDoc;
 
         [Header("Tank")] [SerializeField] private WheelManager m_TankWheelManager;
+        [SerializeField] private TankShooting m_TankShooting;
+        [SerializeField] private AmmoPool m_AmmoPool;
 
         [Header("Turret")] [SerializeField] private TurretAim m_TurretAim;
         [SerializeField] private float m_IconStartRotation = 180f;
@@ -24,6 +28,7 @@ namespace _02_TankController.Scripts.UI
         [SerializeField, HideInInspector] private float m_TankSpeed;
         [SerializeField, HideInInspector] private float m_TankRevs;
         [SerializeField, HideInInspector] private string m_AmmoTotal;
+        [SerializeField, HideInInspector] private int m_BulletType;
         
 
         private VisualElement m_UIRoot;
@@ -55,6 +60,12 @@ namespace _02_TankController.Scripts.UI
             if (!m_TurretAim)
             {
                 Debug.LogError("No turret manager found on the UI manager");
+                return;
+            }
+
+            if (!m_TankShooting)
+            {
+                Debug.LogError("No tank shooting manager found on the UI manager");
                 return;
             }
 
@@ -113,7 +124,7 @@ namespace _02_TankController.Scripts.UI
             m_AmmoLabel.SetBinding("text", new DataBinding
             {
                 dataSource = this,
-                dataSourcePath = new PropertyPath("m_CurrentAmmoCount"),
+                dataSourcePath = new PropertyPath(nameof(m_AmmoTotal)),
                 bindingMode = BindingMode.ToTarget,
                 updateTrigger = BindingUpdateTrigger.OnSourceChanged
             });
@@ -126,6 +137,11 @@ namespace _02_TankController.Scripts.UI
 
             m_TankRevs = (float)Math.Round(m_TankWheelManager.CurrentRevs, 2);
 
+            BulletType bt = m_TankShooting.CurrentType;
+            m_BulletType = (int)bt;
+            m_CurrentAmmoCount = m_AmmoPool.Pools[bt].Count;
+            m_ClipSize = m_AmmoPool.PoolLimits[bt];
+            
             if (m_CurrentAmmoCount != m_OldAmmoCount)
             {
                 m_OldAmmoCount = m_CurrentAmmoCount;
@@ -137,7 +153,7 @@ namespace _02_TankController.Scripts.UI
             
             //rotates using the current angle (in euler degrees - could use radians if converted)
             m_TankIcon.style.rotate =  new Rotate(newAngle);
-            //rotate represents the css rotate function here
+            //rotate represents the CSS rotate function here
         }
     }
 }

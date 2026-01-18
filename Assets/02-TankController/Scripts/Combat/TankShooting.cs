@@ -2,6 +2,7 @@
 
 using System.Collections;
 using _02_TankController.Scripts.Combat.Ammo;
+using Unity.Cinemachine;
 using UnityEngine;
 
 #endregion
@@ -13,13 +14,15 @@ namespace _02_TankController.Scripts.Combat
         [Header("Fire Point")] [SerializeField]
         private Transform m_FirePoint;
 
+        [SerializeField] private CinemachineImpulseSource m_RecoilSource;
+
         [Header("Settings")] [SerializeField] private float m_BaseCooldown = 0.5f;
 
         [SerializeField] private float m_FMJCooldown = 1.5f;
         [SerializeField] private float m_DoubleBurstDelay = 0.1f; // Time between the 2 shots
 
         private AmmoPool m_Pool;
-        private BulletType m_CurrentType = BulletType.Basic;
+        public BulletType CurrentType { get; private set; } = BulletType.Basic;
         private int m_TypeIndex;
         private float m_NextFireTime;
 
@@ -42,13 +45,13 @@ namespace _02_TankController.Scripts.Combat
             switch (targetIndex)
             {
                 case 0:
-                    m_CurrentType = BulletType.Basic;
+                    CurrentType = BulletType.Basic;
                     break;
                 case 1:
-                    m_CurrentType = BulletType.FMJ;
+                    CurrentType = BulletType.FMJ;
                     break;
                 case 2:
-                    m_CurrentType = BulletType.Double;
+                    CurrentType = BulletType.Double;
                     break;
             }
             // TODO: Call UIManager.UpdateAmmoType(newType);
@@ -64,12 +67,12 @@ namespace _02_TankController.Scripts.Combat
                 return;
 
             //gets the cooldown based on bullet type
-            float cooldown = m_CurrentType == BulletType.FMJ ? m_FMJCooldown : m_BaseCooldown;
+            float cooldown = CurrentType == BulletType.FMJ ? m_FMJCooldown : m_BaseCooldown;
             //The exact moment it will next fire 
             m_NextFireTime = Time.time + cooldown;
             //no cooldown coroutine needed as this is more efficient
 
-            if (m_CurrentType == BulletType.Double)
+            if (CurrentType == BulletType.Double)
                 StartCoroutine(FireDoubleBurst());
             else
                 SpawnBullet();
@@ -80,16 +83,19 @@ namespace _02_TankController.Scripts.Combat
         /// </summary>
         private void SpawnBullet()
         {
-            BaseBullet bullet = m_Pool.GetBullet(m_CurrentType);
+            BaseBullet bullet = m_Pool.GetBullet(CurrentType);
             if (bullet)
             {
                 bullet.transform.position = m_FirePoint.position;
                 bullet.transform.rotation = m_FirePoint.rotation;
                 bullet.Launch(m_FirePoint.forward);
 
-                // IMPORTANT: We must teach the bullet how to return home
-                // We can use a simple component or event, but for now:
-                StartCoroutine(MonitorBullet(bullet, m_CurrentType));
+                //shakes using the default screen-shake
+                if (m_RecoilSource)
+                    m_RecoilSource.GenerateImpulse(); 
+
+                //Returns the bullet to the pool when it deactivates
+                StartCoroutine(MonitorBullet(bullet, CurrentType));
             }
         }
 
@@ -114,7 +120,7 @@ namespace _02_TankController.Scripts.Combat
         {
             //The bullet doesn't need to know about the pool because that would be tight coupling
             //That's why this helper function exists, because this manager class does know about the pool
-            
+
             // Waits until the bullet deactivates
             while (b.gameObject.activeSelf)
             {

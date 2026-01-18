@@ -12,10 +12,11 @@ namespace _02_TankController.Scripts.Camera_Aim
         private Transform m_TurretMesh; // The part that spins Y
 
         [SerializeField] private Transform m_BarrelMesh; // The part that pitches X (Child of Turret)
-        [SerializeField] private Camera m_MainCamera; // Or reference your CinemachineBrain
+        [SerializeField] private Camera m_MainCamera;
 
         [Header("Settings")] [SerializeField] private float m_TurretRotateSpeed = 50f;
         [SerializeField] private float m_BarrelPitchSpeed = 40f;
+        [SerializeField] private float m_PitchOffset = 10f;//permanently offsets the pitch angle (for aiming down sights, etc)
 
         [Header("Constraints")] [Range(0, 180)] [SerializeField]
         private float m_MaxElevation = 25f; // Up
@@ -92,7 +93,10 @@ namespace _02_TankController.Scripts.Camera_Aim
 
             // Ensures the angle stays below 180
             if (angle > 180) angle -= 360;
-
+            
+            // Applies the pitch offset
+            angle -= m_PitchOffset;
+            
             // Ensures the angle is always on the right axis, by flipping any negative (left axis) angles
             // Left and right axis means X axis
             if (axis.x < 0) angle = -angle;
