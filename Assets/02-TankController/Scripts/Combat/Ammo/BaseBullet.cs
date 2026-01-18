@@ -24,7 +24,6 @@ namespace _02_TankController.Scripts.Combat.Ammo
         [Header("Bullet Profile")] [SerializeField]
         protected BulletProfile m_BulletProfile;
         [SerializeField] protected GameObject m_ExplosionPrefab;
-        [SerializeField] protected int m_ExplosionTime = 5;//how long the VFX is played for
 
         protected float m_Speed = 50f;
         protected float m_Damage = 10f;
@@ -81,8 +80,10 @@ namespace _02_TankController.Scripts.Combat.Ammo
 
         private void OnCollisionEnter(Collision other)
         {
+            //spawn explosion VFX
             Instantiate(m_ExplosionPrefab, transform.position, Quaternion.identity);
             CinemachineImpulseSource explosionSource = GetComponentInChildren<CinemachineImpulseSource>();
+            //generates a screen shake on collision
             if(explosionSource)
                 explosionSource.GenerateImpulse();
             DisableSelf();
