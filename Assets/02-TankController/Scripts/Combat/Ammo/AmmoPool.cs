@@ -24,11 +24,11 @@ namespace _02_TankController.Scripts.Combat.Ammo
         // Dictionary used to essentially give the object pool a type label
         // This uses the bullet type as the key and the queue of the bullets as the value
         // This means any derived class of BaseBullet can be stored here e.g. FMJ
-        private Dictionary<BulletType, Queue<BaseBullet>> m_Pools = new Dictionary<BulletType, Queue<BaseBullet>>();
+        public Dictionary<BulletType, Queue<BaseBullet>> Pools { get; private set; } = new Dictionary<BulletType, Queue<BaseBullet>>();
 
         // Dictionary to remember the default size limit for the shrinking logic
         // Not just a float because it will hold references to multiple pools using the types as a label
-        private Dictionary<BulletType, int> m_PoolLimits = new Dictionary<BulletType, int>();
+        public Dictionary<BulletType, int> PoolLimits { get; private set; } = new Dictionary<BulletType, int>();
 
         private void Awake() => InitializePools();
 
@@ -52,8 +52,8 @@ namespace _02_TankController.Scripts.Combat.Ammo
                 }
 
                 //Once created - Saves the entire pool to the pool dict
-                m_Pools.Add(def.Type, newQueue);
-                m_PoolLimits.Add(def.Type, def.DefaultSize);
+                Pools.Add(def.Type, newQueue);
+                PoolLimits.Add(def.Type, def.DefaultSize);
             }
         }
         
@@ -80,9 +80,9 @@ namespace _02_TankController.Scripts.Combat.Ammo
         public BaseBullet GetBullet(BulletType type)
         {
             // Won't run if no pools exist
-            if (!m_Pools.ContainsKey(type)) return null;
+            if (!Pools.ContainsKey(type)) return null;
 
-            Queue<BaseBullet> queue = m_Pools[type];
+            Queue<BaseBullet> queue = Pools[type];
             
             // If there are bullets in the pool 
             if (queue.Count > 0)
@@ -104,7 +104,6 @@ namespace _02_TankController.Scripts.Combat.Ammo
             //This would have to be checked whenever any bullets are returned - if size >= default then usedExcess=true else usedExcess=false; notUsedExcess++; 
             BaseBullet newBullet = CreateBullet(def.Prefab);
             newBullet.gameObject.SetActive(true);
-
             //Given directly to the player
             return newBullet;
         }
@@ -118,8 +117,8 @@ namespace _02_TankController.Scripts.Combat.Ammo
         public void ReturnBullet(BaseBullet bullet, BulletType type)
         {
             //Finds the correct queue and capacity for that bullet type
-            Queue<BaseBullet> queue = m_Pools[type];
-            int limit = m_PoolLimits[type];
+            Queue<BaseBullet> queue = Pools[type];
+            int limit = PoolLimits[type];
 
             //Destroys any bullets being returned which exceed the limit
             if (queue.Count >= limit)
@@ -130,7 +129,6 @@ namespace _02_TankController.Scripts.Combat.Ammo
             {
                 if (bullet.gameObject.activeSelf)
                 {
-                    Debug.LogWarning("Bullet being returned to pool is still active. Deactivating now.");
                     bullet.gameObject.SetActive(false);
                 }
                 //Stores any which don't exceed the limit
