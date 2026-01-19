@@ -54,7 +54,6 @@ namespace _02_TankController.Scripts.Combat
                     CurrentType = BulletType.Double;
                     break;
             }
-            // TODO: Call UIManager.UpdateAmmoType(newType);
         }
 
         /// <summary>

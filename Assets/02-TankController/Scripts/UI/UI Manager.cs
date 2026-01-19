@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Linq;
 using _02_TankController.Scripts.Camera_Aim;
 using _02_TankController.Scripts.Combat;
 using _02_TankController.Scripts.Combat.Ammo;
@@ -24,18 +25,19 @@ namespace _02_TankController.Scripts.UI
 
         [Header("Turret")] [SerializeField] private TurretAim m_TurretAim;
         [SerializeField] private float m_IconStartRotation = 180f;
-        
+
         [SerializeField, HideInInspector] private float m_TankSpeed;
         [SerializeField, HideInInspector] private float m_TankRevs;
         [SerializeField, HideInInspector] private string m_AmmoTotal;
         [SerializeField, HideInInspector] private int m_BulletType;
-        
+
 
         private VisualElement m_UIRoot;
         private ProgressBar m_SpeedBar;
         private ProgressBar m_RevBar;
         private Label m_AmmoLabel;
         private VisualElement m_TankIcon;
+        private VisualElement[] m_AmmoTypes;
 
         private int m_CurrentAmmoCount;
         private int m_ClipSize;
@@ -73,6 +75,7 @@ namespace _02_TankController.Scripts.UI
             m_RevBar = m_UIRoot.Q<ProgressBar>("Rev-Bar");
             m_AmmoLabel = m_UIRoot.Q<Label>("Ammo-Label");
             m_TankIcon = m_UIRoot.Q<VisualElement>("Tank-Icon");
+            m_AmmoTypes = m_UIRoot.Q<VisualElement>("Ammo-Types-Container").Children().ToArray();
 
             DataBinding speedBinding = new DataBinding
             {
@@ -128,6 +131,39 @@ namespace _02_TankController.Scripts.UI
                 bindingMode = BindingMode.ToTarget,
                 updateTrigger = BindingUpdateTrigger.OnSourceChanged
             });
+
+            //iterates through each ammo type icon to set up individual bindings
+            for (int i = 0; i < m_AmmoTypes.Length; i++)
+            {
+                int index = i; //counters loop closure issues
+                //without the local copy, all bindings would reference the final value of i after the loop ends 
+                var typeIcon = m_AmmoTypes[i];
+
+                var binding = new DataBinding
+                {
+                    dataSource = this,
+                    dataSourcePath = new PropertyPath(nameof(m_BulletType)),
+                    bindingMode = BindingMode.ToTarget,
+                };
+
+                //source to UI converter is the only reason this binding exists
+                //it doesn't actually bind any data, just uses the selected ammo type to toggle the selection class
+                binding.sourceToUiConverters.AddConverter((ref int selectedType) =>
+                {
+                    //if the index of the icon is the same as the bullet type passed into the binding
+                    bool isSelected = (selectedType == index);
+
+                    //toggles selection on the iterated icon, when selected
+                    typeIcon.EnableInClassList("ammo-type-selected", isSelected);
+                    typeIcon.EnableInClassList("ammo-type", !isSelected);
+
+                    //returns a string to make the bogus binding happy
+                    return isSelected ? "Selected" : "";
+                });
+
+                //Binds to a dummy property to make the converter work
+                typeIcon.SetBinding("tooltip", binding);
+            }
         }
 
         private void FixedUpdate()
@@ -141,7 +177,7 @@ namespace _02_TankController.Scripts.UI
             m_BulletType = (int)bt;
             m_CurrentAmmoCount = m_AmmoPool.Pools[bt].Count;
             m_ClipSize = m_AmmoPool.PoolLimits[bt];
-            
+
             if (m_CurrentAmmoCount != m_OldAmmoCount)
             {
                 m_OldAmmoCount = m_CurrentAmmoCount;
@@ -150,9 +186,9 @@ namespace _02_TankController.Scripts.UI
 
             //creates a new angle from the starting angle's degrees plus the turret's current orientation degrees
             Angle newAngle = new Angle(m_IconStartRotation + m_TurretAim.OrientAngle, AngleUnit.Degree);
-            
+
             //rotates using the current angle (in euler degrees - could use radians if converted)
-            m_TankIcon.style.rotate =  new Rotate(newAngle);
+            m_TankIcon.style.rotate = new Rotate(newAngle);
             //rotate represents the CSS rotate function here
         }
     }

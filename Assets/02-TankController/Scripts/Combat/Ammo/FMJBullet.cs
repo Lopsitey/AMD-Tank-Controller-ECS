@@ -2,6 +2,6 @@
 {
     public class FMJBullet : BaseBullet 
     {
-        //Todo change logic for a bullet child class
+        //Could have additional penetration logic here
     }
 }

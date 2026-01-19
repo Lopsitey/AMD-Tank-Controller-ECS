@@ -98,3 +98,73 @@
     margin-bottom: 1.5%;
     margin-left: 2%;
 }
+
+.ammo-types-container {
+    flex-grow: 1;
+    flex-direction: row;
+    width: 50%;
+    height: auto;
+    min-height: 40px;
+    max-height: 55px;
+    justify-content: space-between;
+    margin-left: 5px;
+    align-items: stretch;
+    max-width: 230px;
+}
+
+.ammo-type {
+    -unity-background-scale-mode: scale-to-fit;
+    flex-grow: 0;
+    width: 25%;
+    min-width: 25%;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: contain;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-self: auto;
+    align-content: center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 2.5px;
+    padding-right: 2.5px;
+    padding-bottom: 2.5px;
+    padding-left: 2.5px;
+    max-height: none;
+}
+
+.ammo-type-selected {
+    -unity-background-scale-mode: scale-to-fit;
+    flex-grow: 0;
+    width: 25%;
+    min-width: 25%;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: contain;
+    flex-shrink: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    align-self: auto;
+    align-content: center;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    border-top-width: 2.5px;
+    border-right-width: 2.5px;
+    border-bottom-width: 2.5px;
+    border-left-width: 2.5px;
+    border-left-color: rgb(255, 180, 97);
+    border-right-color: rgb(255, 180, 97);
+    border-top-color: rgb(255, 180, 97);
+    border-bottom-color: rgb(255, 180, 97);
+}
