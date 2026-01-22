@@ -1,11 +1,11 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace _02_TankController.ECS.Controllers
+namespace ECS.Controllers
 {
     public struct ObstacleComponent : IComponentData
     {
-        public float3 position;
-        public float3 size;
+        public float3 m_Position;
+        public float3 m_Size;
     }
 }
