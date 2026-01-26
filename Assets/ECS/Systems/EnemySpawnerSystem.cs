@@ -9,6 +9,10 @@ namespace ECS.Systems
     // This is needed because the ISystem interface has extra code added by Roslyn and source generators
     public partial struct EnemySpawnerSystem : ISystem
     {
+        //In Unity Entities, a type that implements `ISystem` is treated as an ECS system.
+        //The Entities framework will create it and call its lifecycle methods automatically, including `OnUpdate` every frame (when enabled).
+        //It runs because the Entities system discovery picks it up and schedules it in the player loop for the `World` it belongs to.
+        
         // System state is passed in automatically by the ECS framework
         public void OnUpdate(ref SystemState state)
         {
@@ -53,6 +57,10 @@ namespace ECS.Systems
             
             // Sets the position of the spawned enemy to the spawner's spawn position
             state.EntityManager.SetComponentData(spawnedEnemy, lt);
+            // Sets the name of the enemy
+            state.EntityManager.SetName(spawnedEnemy, $"enemy-{spawner.ValueRO.spawnCount} from {spawner.ValueRO.name}");
+            //Increment the spawn count
+            spawner.ValueRW.spawnCount++;
         }
     }
 }

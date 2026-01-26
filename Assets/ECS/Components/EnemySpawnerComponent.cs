@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Collections;
 
 namespace ECS.Components
 {
@@ -9,5 +10,8 @@ namespace ECS.Components
         public Entity entityToSpawn;
         public float timer;        
         public float spawnDelay;
+        
+        public FixedString32Bytes name;
+        public int spawnCount;
     }
 }
