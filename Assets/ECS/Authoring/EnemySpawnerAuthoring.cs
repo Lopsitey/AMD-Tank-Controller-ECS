@@ -14,8 +14,8 @@ namespace ECS.Authoring
             public override void Bake(EnemySpawnerAuthoring authoring)
             {
                 // Gets the spawner entity itself (primary entity)
-                // TransformUsageFlags.None means the spawner is static and won't move
-                Entity spawnerEntity = GetEntity(TransformUsageFlags.None);
+                // If this was TransformUsageFlags.None the spawner would be static and wouldn't move
+                Entity spawnerEntity = GetEntity(TransformUsageFlags.Dynamic);
                 
                 // Creates a fresh spawner component to add to the spawner entity 
                 // This just fills out the component data - nothing spawned yet
