@@ -3,6 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Collections;
+using Unity.Jobs;
 
 namespace ECS.Systems
 {
@@ -80,6 +81,48 @@ namespace ECS.Systems
         {
             // This is unmanaged memory. To manually manage the data use Allocator.Persistent or Allocator.TempJob to make the data persist for longer.
             return new EntityCommandBuffer(Allocator.Temp);
+        }
+
+        public partial struct ProcessArrayTestJob : IJobParallelFor
+        {
+            // This job type runs in parallel across multiple threads but only requires a single thread to schedule
+            // The amount of times this job runs is determined when scheduling
+            
+            public NativeArray<int> array;
+            
+            // Here the index param is the current index being processed in the array
+            public void Execute(int index)
+            {
+                //Sets the value at the current index to index * 20
+                array[index] = index * 20;
+            }
+        }
+        
+        public partial struct ProcessArrayTestSystem : ISystem
+        {
+            public void OnUpdate(ref SystemState state)
+            {
+                using NativeArray<int> testArray = new NativeArray<int>(10, Allocator.TempJob);
+                // Instantiating the above job using the struct data
+                ProcessArrayTestJob job = new ProcessArrayTestJob
+                {
+                    array = testArray
+                };
+                
+                //Just using Schedule runs the job on a single thread however, this job runs in parallel once scheduled
+                JobHandle jobHandle = job.Schedule(10,2);
+                //This means the job will run 10 times with 2 iterations (items processed) per thread/batch
+                
+                // Assigning to the system dependency chain means other jobs that depend on this one will wait for it to finish
+                // Essentially tells the system: “any later scheduled work that uses the ECS safety/dependency chain and touches the same component data must wait for this handle when needed”.
+                state.Dependency = jobHandle;
+                
+                // Immediately halts the OnUpdate on this thread until the job is done
+                jobHandle.Complete();
+                
+                for (int i = 0; i < testArray.Length; i++)
+                    UnityEngine.Debug.Log($"Index {i} has value {testArray[i]}");
+            }
         }
     }
 }
