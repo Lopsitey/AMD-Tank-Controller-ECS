@@ -3120,7 +3120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirePoint: {fileID: 1217353688}
-  m_RecoilSource: {fileID: 0}
+  m_RecoilSource: {fileID: 1217353689}
   m_BaseCooldown: 0.5
   m_FMJCooldown: 1.5
   m_DoubleBurstDelay: 0.1

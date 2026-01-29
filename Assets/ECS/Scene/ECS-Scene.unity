@@ -3029,7 +3029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirePoint: {fileID: 1217353688}
-  m_RecoilSource: {fileID: 0}
+  m_RecoilSource: {fileID: 1217353689}
   m_BaseCooldown: 0.5
   m_FMJCooldown: 1.5
   m_DoubleBurstDelay: 0.1
@@ -4148,7 +4148,7 @@ MonoBehaviour:
     ImpulseDuration: 0.2
     ImpulseType: 0
     DissipationRate: 0.25
-    RawSignal: {fileID: 11400000, guid: 74e491e431277f044ad758ad4b0d4a96, type: 2}
+    RawSignal: {fileID: 0}
     AmplitudeGain: 1
     FrequencyGain: 1
     RepeatMode: 0
