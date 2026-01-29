@@ -2,6 +2,7 @@ using ECS.Components;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using Unity.Collections;
 
 namespace ECS.Systems
 {
@@ -16,14 +17,21 @@ namespace ECS.Systems
         // System state is passed in automatically by the ECS framework
         public void OnUpdate(ref SystemState state)
         {
-            // This iterates over all entities with the EnemySpawnerComponent
-            // RefRW is a wrapper which works like the ref keyword
-            // It is faster and means you have direct r/w access to the component
-            foreach (var (spawner, lt) in SystemAPI.Query<RefRW<EnemySpawnerComponent>, RefRW<LocalTransform>>())
-                UpdateSpawner(ref state, spawner, lt);
+            // Using means the ecb is disposed of automatically at the end of the using block
+            using (var ecb = GetECB())
+            {
+                // This iterates over all entities with the EnemySpawnerComponent
+                // RefRW is a wrapper which works like the ref keyword
+                // It is faster and means you have direct r/w access to the component
+                foreach (var (spawner, lt) in SystemAPI.Query<RefRW<EnemySpawnerComponent>, RefRW<LocalTransform>>())
+                    UpdateSpawner(ref state, spawner, lt, ecb);
+                
+                //After updating playback the changes buffered in the ECB
+                ecb.Playback(state.EntityManager);
+            }
         }
 
-        private void UpdateSpawner(ref SystemState state, RefRW<EnemySpawnerComponent> spawner, RefRW<LocalTransform> passedLT)
+        private void UpdateSpawner(ref SystemState state, RefRW<EnemySpawnerComponent> spawner, RefRW<LocalTransform> passedLT, EntityCommandBuffer ecb)
         {
             //Increment the timer by the time since last frame
             spawner.ValueRW.timer += SystemAPI.Time.DeltaTime;
@@ -41,26 +49,37 @@ namespace ECS.Systems
                 return;
             
             // Spawn a new entity using the entity to spawn from the spawner component
-            SpawnEnemy(ref state, spawner, passedLT);
+            SpawnEnemy(ref state, spawner, passedLT, ecb);
             
             // Reset the timer
             spawner.ValueRW.timer = 0.0f;
         }
 
-        private void SpawnEnemy(ref SystemState state, RefRW<EnemySpawnerComponent> spawner, RefRW<LocalTransform> passedLT)
+        private void SpawnEnemy(ref SystemState state, RefRW<EnemySpawnerComponent> spawner, RefRW<LocalTransform> passedLT, EntityCommandBuffer ecb)
         {
             // Instantiates an enemy using the entity prefab stored in the spawner component
-            Entity spawnedEnemy = state.EntityManager.Instantiate(spawner.ValueRO.entityToSpawn);
+            Entity spawnedEnemy = ecb.Instantiate(spawner.ValueRO.entityToSpawn);
+            //used to be state.EntityManager.Instantiate but the ECB is better for performance
             
             // This build a LocalTransform component which holds position, rotation, and scale data
             LocalTransform lt = LocalTransform.FromPosition(passedLT.ValueRO.Position);
             
             // Sets the position of the spawned enemy to the spawner's spawn position
-            state.EntityManager.SetComponentData(spawnedEnemy, lt);
+            ecb.SetComponent(spawnedEnemy, lt);
             // Sets the name of the enemy
-            state.EntityManager.SetName(spawnedEnemy, $"enemy-{spawner.ValueRO.spawnCount} from {spawner.ValueRO.name}");
+            ecb.SetName(spawnedEnemy, $"enemy-{spawner.ValueRO.spawnCount} from {spawner.ValueRO.name}");
             //Increment the spawn count
             spawner.ValueRW.spawnCount++;
+        }
+
+        /// <summary>
+        /// Returns a new EntityCommandBuffer with Temp allocator, meaning the data is automatically cleaned up at the end of the frame.
+        /// </summary>
+        /// <returns></returns>
+        private EntityCommandBuffer GetECB()//ECB buffers actions for later execution - good for multithreading
+        {
+            // This is unmanaged memory. To manually manage the data use Allocator.Persistent or Allocator.TempJob to make the data persist for longer.
+            return new EntityCommandBuffer(Allocator.Temp);
         }
     }
 }
