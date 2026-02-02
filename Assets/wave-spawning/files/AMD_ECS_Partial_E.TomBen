@@ -1,0 +1,1 @@
+wave - 1 (intmain) _Tom C1!? _Ben wave - 1 _Tom C1[5]!? _Ben type - 1 _Tom health=>50!?speed=>1!? _Ben type - 2 (Snoop) _Tom health=>2!?speed=>12!?damage=>1!? _Ben cluster - 2 _Tom 2:5!? _Ben cluster - 1 (scouts) _Tom 2:10!? _Ben cluster - 2 (boss) _Tom 1:1!? _Ben type - 1 (Ythotha) _Tom damage=>100!? _Ben wave - 1 _Tom C2<5>!? _Ben
