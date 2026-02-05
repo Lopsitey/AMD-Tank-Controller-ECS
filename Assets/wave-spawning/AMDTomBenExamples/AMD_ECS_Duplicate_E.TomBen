@@ -1,0 +1,1 @@
+type - 1 (Tom) _Tom health=>10!?speed=>5!?damage=>1!? _Ben type - 1 (Ben) _Tom health=>11!? _Ben wave - 1 (syskey) _Tom T1!?T1!?T1!?T1!? _Ben type - 1 _Tom damage=>2!? _Ben
