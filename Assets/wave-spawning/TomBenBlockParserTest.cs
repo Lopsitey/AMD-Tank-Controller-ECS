@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 #endregion
 
@@ -96,14 +97,14 @@ namespace wave_spawning
         private void HandleInsideHeaderState(char c, ref ParsedBlock tempBlock)
         {
             //If the Tom brace hasn't been hit then you're not at the end of the header yet
-            if(!BufferEndsWith("_Tom")) return;
-            
+            if (!BufferEndsWith("_Tom")) return;
+
             //Otherwise get the entire header, excluding the _Tom at the end
             string header = TrimFromEnd(m_Buffer, "_Tom");
-            
+
             //Set the current block's header to this
             tempBlock.m_Header = header;
-            
+
             //Change to the body state
             ChangeState(BlockParserState.InsideBody);
         }
@@ -117,20 +118,56 @@ namespace wave_spawning
         private bool HandleInsideBodyState(char c, ref ParsedBlock tempBlock)
         {
             //If the Ben brace hasn't been hit then you're not at the end of the body yet
-            if(!BufferEndsWith("_Ben")) return false;
-            
+            if (!BufferEndsWith("_Ben")) return false;
+
             //Otherwise get the entire body, excluding the _ben at the end
             string body = TrimFromEnd(m_Buffer, "_ben");
-            
+
             //Set the current block's body to this
             tempBlock.m_Body = body;
-            
+
             //Change back to the outside block state, ready for the next block
             ChangeState(BlockParserState.OutsideBlock);
-            
+
             return true;
         }
 
+        /// <summary>
+        /// Reads the header of the block and parses it into a ParsedBlockHeader object, which contains variables with the converted data
+        /// </summary>
+        /// <param name="block"></param>
+        /// <returns></returns>
+        /// <exception cref="UnityException"></exception>
+        public ParsedBlockHeader GetBlockHeader(in ParsedBlock block)
+        {
+            //This is the regex pattern to match the header - feel free to look it up at regexer.com
+            string pattern = @"(type|wave|cluster)\s*\-\s*(\d+)\s*(?:\((.+)\))?";
+
+            //Gets all subgroups of the header which match the pattern - e.g. the type, id, and name (if it exists)
+            var matches = Regex.Match(block.m_Header, pattern);
+
+            //If there is no match, then the header is in the wrong format because the regex didn't match
+            if (!matches.Success)
+                throw new UnityException(
+                    "Failed to parse block header! Ensure it is in the format 'type/cluster/wave - id (name)'");
+
+            return null;
+        }
+
+        /// <summary>
+        /// Uses a switch expression to convert the type string from the header into a ParsedBlockType enum.
+        /// </summary>
+        /// <param name="type">The type to be converted</param>
+        /// <returns>The converted type or an error if it could not be converted.</returns>
+        /// <exception cref="UnityException"></exception>
+        public ParsedBlockType GetBlockTypeFromString(string type) => type switch
+        {
+            "wave" => ParsedBlockType.Wave,
+            "cluster" => ParsedBlockType.Cluster,
+            "type" => ParsedBlockType.UnitType,
+            // Runs if none of the above cases are hit thus, the type is invalid - essentially a default case
+            _ => throw new UnityException($"Invalid block type {type} found in header!")
+        };
 
         /// <summary>
         /// This is a very simple block parser which takes in a string of text and parses it into blocks.
@@ -141,6 +178,9 @@ namespace wave_spawning
         /// <returns></returns>
         public List<ParsedBlock> ParseBlocksFromFile(string fileContent)
         {
+            //Moves back into the outside block state and clears the buffer, ready for the new block
+            ResetParser();
+            
             List<ParsedBlock> parsedBlocks = new List<ParsedBlock>();
             ParsedBlock tempBlock = new ParsedBlock();
             foreach (char c in fileContent)
@@ -194,11 +234,26 @@ namespace wave_spawning
             m_ParsedBlocks = parser.ParseBlocksFromFile(fileText);
         }
     }
-
+    
     public enum BlockParserState
     {
         OutsideBlock,
         InsideHeader,
         InsideBody
+    }
+    
+    public enum ParsedBlockType
+    {
+        UnitType,
+        Cluster,
+        Wave
+    }
+
+    public class ParsedBlockHeader
+    {
+        public string m_RawText;
+        public ParsedBlockType m_Type;
+        public int m_ID;
+        public string m_Name;
     }
 }
