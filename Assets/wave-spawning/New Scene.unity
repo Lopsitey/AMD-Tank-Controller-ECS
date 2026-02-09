@@ -620,7 +620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c1c139c97f44af4881fe4e351dafcf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FilePath: Assets/wave-spawning/AMDTomBenExamples/AMD_ECS_Simple_E.TomBen
+  m_FilePath: Assets/wave-spawning/files/AMD_ECS_Simple_E.TomBen
   m_ParsedBlocks: []
 --- !u!4 &882672040
 Transform:

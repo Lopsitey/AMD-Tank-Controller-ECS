@@ -203,7 +203,7 @@ MonoBehaviour:
       triggerPopulationCap: 0
       triggerTimeSinceLastSpawn: -1
       type: 0
-  m_debug: 1
+  m_debug: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
