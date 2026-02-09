@@ -1,14 +1,21 @@
+#region
+
+using System;
+using ECS.wave_spawning;
 using Unity.Entities;
 using UnityEngine;
 
-namespace ECS.wave_spawning
+#endregion
+
+namespace wave_spawning
 {
     #region Units
+
     /// <summary>
     /// Represents a unit to be spawned. This is a serializable
     /// class which is used in WaveSpawnerDataAuthoring.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class UnitAuthoring
     {
         public int id;
@@ -17,12 +24,15 @@ namespace ECS.wave_spawning
         public float speed;
         public float health;
     }
+
     #endregion
+
     #region Clusters
+
     /// <summary>
     /// Represents a cluster to be spawned.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class ClusterAuthoring
     {
         public int id;
@@ -34,18 +44,21 @@ namespace ECS.wave_spawning
     /// Represents a cluster rule for a cluster, specifically
     /// the unit to spawn, and the amount of to spawn of that unit.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class ClusterRuleAuthoring
     {
         public int unitId;
         public int amount;
     }
+
     #endregion
+
     #region Waves
+
     /// <summary>
     /// Represents a wave of clusters/units to be spawned. Essentially a wrapper around many wave rules.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class WaveAuthoring
     {
         public int id;
@@ -58,7 +71,7 @@ namespace ECS.wave_spawning
     /// the conditions in which the wave rule should trigger spawn,
     /// and the type of thing to spawn.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class WaveRuleAuthoring
     {
         public int clusterOrTypeId;
@@ -66,6 +79,7 @@ namespace ECS.wave_spawning
         public float triggerTimeSinceLastSpawn;
         public WaveRuleType type;
     }
+
     #endregion
 
     /// <summary>
@@ -82,7 +96,7 @@ namespace ECS.wave_spawning
     /// </summary>
     public struct SpawnerDataWrapper : IComponentData
     {
-        public UnityObjectRef<WaveSpawnerDataAuthoring> spawnerAuthoring;
+        public UnityObjectRef<TomBenWaveData> waveData;
         public bool debug;
     }
 
@@ -91,20 +105,14 @@ namespace ECS.wave_spawning
     /// the values are editable through the inspector. But you can
     /// imagine how straight-forward it would be to set these
     /// values after parsing a TomBen wave spawning file.
-    /// 
-    /// TODO: Make it so these arrays are populated after
-    /// parsing the format, rather than at edit time.
     /// </summary>
     public class WaveSpawnerDataAuthoring : MonoBehaviour
     {
-        [Header("Wave spawning data")]
-        public UnitAuthoring[] m_units;
-        public ClusterAuthoring[] m_clusters;
-        public WaveAuthoring[] m_waves;
+        [Header("Wave Spawning Data")] [SerializeField]
+        public TomBenWaveData m_TomBenWaveData;
 
-        [Header("Options")]
-        [Tooltip("Whether to print out verbose debug messages")]
-        public bool m_debug;
+        [Header("Options")] [Tooltip("Whether to print out verbose debug messages")]
+        public bool m_Debug;
 
         /// <summary>
         /// Bakes a WaveSpawnerDataAuthoring to a
@@ -115,10 +123,17 @@ namespace ECS.wave_spawning
         {
             public override void Bake(WaveSpawnerDataAuthoring authoring)
             {
+                if (!authoring.m_TomBenWaveData)
+                {
+                    Debug.LogError($"WaveSpawnerDataAuthoring on {authoring.name} is missing the TomBenWaveData ScriptableObject!");
+                    return;
+                }
+
+                // Passes the ScriptableObject directly to the wrapper
                 AddComponent(GetEntity(TransformUsageFlags.None), new SpawnerDataWrapper
                 {
-                    spawnerAuthoring = authoring,
-                    debug = authoring.m_debug
+                    waveData = authoring.m_TomBenWaveData,
+                    debug = authoring.m_Debug
                 });
             }
         }

@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Entities;
+using wave_spawning;
 
 // This namespace contains unmanaged data structures for wave spawning data.
 // These are set by the WaveSpawnerSingletonSystem and are converted from the managed types found in the

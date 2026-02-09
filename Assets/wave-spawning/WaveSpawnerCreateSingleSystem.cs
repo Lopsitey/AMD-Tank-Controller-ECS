@@ -1,8 +1,9 @@
+using ECS.wave_spawning;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace ECS.wave_spawning
+namespace wave_spawning
 {
     /// <summary>
     /// This is a system which has a few main responsibilities:
@@ -45,8 +46,11 @@ namespace ECS.wave_spawning
             var authoringWrapper = SystemAPI.GetSingleton<SpawnerDataWrapper>();
             var spawnerSingleton = SystemAPI.GetSingletonRW<SpawnerDataSingleton>();
 
+            // ReSharper disable once InconsistentNaming
+            var waveDataSO = authoringWrapper.waveData.Value;
+            
             //Allocate and convert all managed to unmanaged data using the authoring data and the spawner singleton
-            SetupSpawnerFromDeferredAuthoringData(authoringWrapper.spawnerAuthoring, ref spawnerSingleton.ValueRW);
+            SetupSpawnerFromDeferredAuthoringData(waveDataSO, ref spawnerSingleton.ValueRW);
 
             //Set debug mode -- everything below this is just debug information that is printed out
             //Uses the var from the authoring wrapper, which is set in the WaveSpawnerDataAuthoring script in the editor
@@ -112,10 +116,10 @@ namespace ECS.wave_spawning
         /// </summary>
         /// <param name="wrapper"></param>
         /// <param name="spawner"></param>
-        private void SetupSpawnerFromDeferredAuthoringData(in UnityObjectRef<WaveSpawnerDataAuthoring> wrapper, ref SpawnerDataSingleton spawner)
+        private void SetupSpawnerFromDeferredAuthoringData(in TomBenWaveData wrapper, ref SpawnerDataSingleton spawner)
         {
             //Convert all units
-            foreach (var unit in wrapper.Value.m_units)
+            foreach (var unit in wrapper.Units)
             {
                 if (spawner.units.ContainsKey(unit.id))
                 {
@@ -134,7 +138,7 @@ namespace ECS.wave_spawning
             }
 
             //Convert all clusters
-            foreach (var cluster in wrapper.Value.m_clusters)
+            foreach (var cluster in wrapper.Clusters)
             {
                 if(spawner.clusters.ContainsKey(cluster.id))
                 {
@@ -146,7 +150,7 @@ namespace ECS.wave_spawning
             }
 
             //Convert all waves
-            foreach(var wave in wrapper.Value.m_waves)
+            foreach(var wave in wrapper.Waves)
             {
                 if (spawner.waves.ContainsKey(wave.id))
                 {

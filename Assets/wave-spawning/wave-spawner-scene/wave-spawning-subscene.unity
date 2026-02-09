@@ -163,47 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42ade37c2b33704184623de7f84cfc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_units:
-  - id: 0
-    name: goblin
-    damage: 25
-    speed: 5
-    health: 100
-  - id: 1
-    name: skeleton
-    damage: 50
-    speed: 10
-    health: 100
-  m_clusters:
-  - id: 0
-    name: goblin-gang
-    clusterRules:
-    - unitId: 0
-      amount: 5
-  m_waves:
-  - id: 0
-    name: first-wave
-    waveRules:
-    - clusterOrTypeId: 1
-      triggerPopulationCap: -1
-      triggerTimeSinceLastSpawn: 5
-      type: 1
-    - clusterOrTypeId: 0
-      triggerPopulationCap: -1
-      triggerTimeSinceLastSpawn: 5
-      type: 0
-  - id: 1
-    name: second-wave
-    waveRules:
-    - clusterOrTypeId: 0
-      triggerPopulationCap: -1
-      triggerTimeSinceLastSpawn: 1
-      type: 1
-    - clusterOrTypeId: 0
-      triggerPopulationCap: 0
-      triggerTimeSinceLastSpawn: -1
-      type: 0
-  m_debug: 0
+  m_TomBenWaveData: {fileID: -755480892457977500, guid: dde5f2cbe63d886419a1e9e1afaca251, type: 3}
+  m_Debug: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
