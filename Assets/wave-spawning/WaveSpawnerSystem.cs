@@ -122,6 +122,12 @@ namespace wave_spawning
                     Debug.Log($"Spawning individual unit {currentUnit.name} as part of wave {currentWaveData.name}");
                     //Entity enemy = ecb.Instantiate(currentUnit);
 
+                    //var config = SystemAPI.GetSingleton<EnemyConfigAuthoring>();
+
+                    //Entity e = ecb.Instantiate(config.m_prefab);
+                    //ecb.SetName(e, currentUnit.name);
+                    //ecb.AddComponent(e, );
+
                     //float3 pos = new float3(0f, 0f, 0f);
 
                     //ecb.SetComponent(enemy, LocalTransform.FromPosition(pos));
@@ -194,3 +200,26 @@ namespace wave_spawning
         #endregion
     }
 }
+
+
+//EnemyConfigAuthoring.cs
+public class EnemyConfigAuthoring : MonoBehaviour
+{
+    public GameObject m_prefab;
+}
+
+public struct EnemyConfigComponent : IComponentData
+{
+    public Entity prefab;
+}
+
+public class EnemyConfigBaker : Baker<EnemyConfigAuthoring>
+{
+    public override void Bake(EnemyConfigAuthoring authoring)
+    {
+        var entity = GetEntity(TransformUsageFlags.None);
+        var prefabEntity = GetEntity(authoring.m_prefab, TransformUsageFlags.Dynamic);
+        AddComponent(entity, new EnemyConfigComponent { prefab = prefabEntity });
+    }
+}
+
