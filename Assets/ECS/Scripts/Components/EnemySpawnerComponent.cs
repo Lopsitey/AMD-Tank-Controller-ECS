@@ -1,8 +1,8 @@
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Collections;
 
-namespace ECS.Components
+namespace ECS.Scripts.Components
 {
     public struct EnemySpawnerComponent : IComponentData
     {

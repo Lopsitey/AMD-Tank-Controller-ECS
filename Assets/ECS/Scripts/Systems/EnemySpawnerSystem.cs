@@ -1,10 +1,10 @@
-using ECS.Components;
+using ECS.Scripts.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Systems
+namespace ECS.Scripts.Systems
 {
     // Partial means this struct can be defined across multiple files
     // This is needed because the ISystem interface has extra code added by Roslyn and source generators

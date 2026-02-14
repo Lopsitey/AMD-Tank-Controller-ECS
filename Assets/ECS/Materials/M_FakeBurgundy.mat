@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4953096243785714711
+--- !u!114 &-6306896001842934508
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -23,7 +23,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DefaultHDMaterial Variant
+  m_Name: M_FakeBurgundy
   m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
   m_Parent: {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
   m_ModifiedSerializedProperties: 0
@@ -52,7 +52,7 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _BaseColor: {r: 0, g: 0.017752647, b: 1, a: 1}
-    - _Color: {r: 0, g: 0.017752647, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 0, b: 0.5193219, a: 1}
+    - _Color: {r: 1, g: 0, b: 0.51932186, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

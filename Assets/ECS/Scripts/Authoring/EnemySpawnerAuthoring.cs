@@ -1,8 +1,8 @@
-using ECS.Components;
+using ECS.Scripts.Components;
 using Unity.Entities;
 using UnityEngine;
 
-namespace ECS.Authoring
+namespace ECS.Scripts.Authoring
 {
     public class EnemySpawnerAuthoring : MonoBehaviour
     {

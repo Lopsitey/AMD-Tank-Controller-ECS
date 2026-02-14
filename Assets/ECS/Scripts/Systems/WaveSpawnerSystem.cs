@@ -1,5 +1,4 @@
-
-using ECS.Components;
+using ECS.Scripts.Components;
 using ECS.wave_spawning;
 using Unity.Collections;
 using Unity.Entities;
@@ -65,8 +64,9 @@ namespace wave_spawning
                 // Return early to avoid trying to access wave data that doesn't exist
                 return;
             }
-
-            var currentWaveData = waves.Values[waves.Keys[waveIndex]];
+            
+            int index = waves.Keys[waveIndex];
+            var currentWaveData = waveSpawnerData.waves[index];
 
             // If all rules have been completed or the wave was empty, move to the next wave.
             if (CompletedWaveRules(currentWaveData))
@@ -159,7 +159,7 @@ namespace wave_spawning
             timer += SystemAPI.Time.DeltaTime;
 
             enemyCount = GetEntityCount(ref state, enemyQuery);
-            Debug.Log($"There are currently {enemyCount} enemies in the world.");
+            //Debug.Log($"There are currently {enemyCount} enemies in the world.");
 
             //And dispose of ECB
             this.ecb.Playback(state.EntityManager);
@@ -205,12 +205,12 @@ namespace wave_spawning
 //EnemyConfigAuthoring.cs
 public class EnemyConfigAuthoring : MonoBehaviour
 {
-    public GameObject m_prefab;
+    public GameObject m_Prefab;
 }
 
 public struct EnemyConfigComponent : IComponentData
 {
-    public Entity prefab;
+    public Entity m_Prefab;
 }
 
 public class EnemyConfigBaker : Baker<EnemyConfigAuthoring>
@@ -218,8 +218,8 @@ public class EnemyConfigBaker : Baker<EnemyConfigAuthoring>
     public override void Bake(EnemyConfigAuthoring authoring)
     {
         var entity = GetEntity(TransformUsageFlags.None);
-        var prefabEntity = GetEntity(authoring.m_prefab, TransformUsageFlags.Dynamic);
-        AddComponent(entity, new EnemyConfigComponent { prefab = prefabEntity });
+        var prefabEntity = GetEntity(authoring.m_Prefab, TransformUsageFlags.Dynamic);
+        AddComponent(entity, new EnemyConfigComponent { m_Prefab = prefabEntity });
     }
 }
 
