@@ -47,22 +47,18 @@ namespace wave_spawning
             //Relevant data for use in this function
             var waves = waveSpawnerData.waves.GetKeyValueArrays(Allocator.Temp);
             float timeSinceSpawn = GetTimeSinceLastSpawn(ref state);
-
-            // 2. Safety Check: If we've run out of waves entirely, mark finished and exit
-            //If completed all waves, set finished to true to skip logic in future updates
+            
+            // If completed all waves, set finished to true to skip logic in future updates
             if (CompletedWaves(waves))
             {
                 waveIndex = 0;
                 waveRuleIndex = 0;
 
-                if (!hasFinished)
-                {
-                    Debug.Log("Completed all waves!");
-                    hasFinished = true;
-                }
-
                 // Return early to avoid trying to access wave data that doesn't exist
-                return;
+                if (hasFinished) return;
+                
+                Debug.Log("Completed all waves!");
+                hasFinished = true;
             }
             
             int index = waves.Keys[waveIndex];

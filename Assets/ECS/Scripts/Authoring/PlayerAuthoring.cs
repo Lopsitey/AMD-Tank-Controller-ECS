@@ -16,6 +16,7 @@ namespace ECS.Scripts.Authoring
                 {
                     moveSpeed = authoring.m_moveSpeed
                 });
+                AddBuffer<DamageBufferComponent>(entity);
             }
         }
     }

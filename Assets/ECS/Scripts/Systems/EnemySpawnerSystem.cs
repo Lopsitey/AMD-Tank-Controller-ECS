@@ -11,6 +11,10 @@ namespace ECS.Scripts.Systems
     [BurstCompile]
     public partial struct EnemySpawnerSystem : ISystem
     {
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<PlayerComponent>();
+        }
         //In Unity Entities, a type that implements `ISystem` is treated as an ECS system.
         //The Entities framework will create it and call its lifecycle methods automatically, including `OnUpdate` every frame (when enabled).
         //It runs because the Entities system discovery picks it up and schedules it in the player loop for the `World` it belongs to.
@@ -27,7 +31,16 @@ namespace ECS.Scripts.Systems
                 ecb = GetECB(ref state)
             };
 
-            spawnerJob.ScheduleParallel();
+            var playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
+            var buffer = SystemAPI.GetBuffer<DamageBufferComponent>(playerEntity);
+            
+            UnityEngine.Debug.Log($"The player has taken {buffer.Length} damage instances so far!");
+            
+            // Schedules the job to run in parallel across all entities with EnemySpawnerComponent
+            // The dependency system ensures that jobs that read/write the same data run in the correct order
+            // This means the main thread waits for them to complete if necessary
+            state.Dependency = spawnerJob.ScheduleParallel(state.Dependency);
+            state.Dependency.Complete();
         }
         
         /// <summary>
@@ -85,6 +98,11 @@ namespace ECS.Scripts.Systems
             // Spawn a new entity using the chunk-index as the key for the ECB
             // Uses the entity prefab to spawn from the spawner component
             Entity spawnedEnemy = ecb.Instantiate(chunkIndex, spawner.entityToSpawn);
+
+            ecb.AddComponent(chunkIndex, spawnedEnemy, new EnemyComponent
+            {
+                m_MoveSpeed = 1f
+            });
             
             // Uses the chunk index as the key again
             // Sets the position of the spawned enemy to the spawner's spawn position
