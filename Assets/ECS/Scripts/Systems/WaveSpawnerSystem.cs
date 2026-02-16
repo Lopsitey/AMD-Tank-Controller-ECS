@@ -109,6 +109,7 @@ namespace wave_spawning
 
                 if (currentRule.type == WaveRuleType.Cluster)
                 {
+                    // clusterOrTypeId contains the cluster ID used as a key in the HashMap
                     var currentCluster = waveSpawnerData.clusters[currentRule.clusterOrTypeId];
                     Debug.Log($"Cluster: {currentCluster.name} as part of wave {currentWaveData.name}.");
 
@@ -140,6 +141,7 @@ namespace wave_spawning
                 }
                 else if (currentRule.type == WaveRuleType.Unit)
                 {
+                    // clusterOrTypeId contains the unit ID used as a key in the HashMap
                     var currentUnit = units[currentRule.clusterOrTypeId];
                     Debug.Log($"Spawning individual unit {currentUnit.name} as part of wave {currentWaveData.name}");
                     
