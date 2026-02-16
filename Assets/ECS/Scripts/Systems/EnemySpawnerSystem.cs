@@ -125,6 +125,8 @@ namespace ECS.Scripts.Systems
             
             // PhysicsMass is required for dynamic physics bodies
             // Using capsule mass properties to match the CapsuleCollider on the prefab
+            // Note: These dimensions (height: 2.0f, radius: 0.5f) match Unity's default CapsuleCollider
+            // If you've modified the collider size on the prefab, adjust these values accordingly
             var capsuleMassProperties = MassProperties.CreateCapsule(
                 center: float3.zero,
                 height: 2.0f,  // Default capsule height
