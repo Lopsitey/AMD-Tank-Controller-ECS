@@ -74,7 +74,11 @@ namespace wave_spawning
     /// </summary>
     [Serializable]
     public class WaveRuleAuthoring
-    {
+    {  
+        /// <summary>
+        /// The ID used to look up either a cluster or unit in the respective HashMap.
+        /// This is a key value, not an array index.
+        /// </summary>
         public int clusterOrTypeId;
         public int triggerPopulationCap;
         public float triggerTimeSinceLastSpawn;

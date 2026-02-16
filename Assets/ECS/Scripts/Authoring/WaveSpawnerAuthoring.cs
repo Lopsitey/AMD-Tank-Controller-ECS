@@ -205,6 +205,11 @@ namespace ECS.wave_spawning
     /// </summary>
     public struct WaveRule
     {
+        /// <summary>
+        /// The ID used to look up either a cluster or unit in the respective HashMap.
+        /// When type == WaveRuleType.Cluster, this is used as a key in waveSpawnerData.clusters[clusterOrTypeId].
+        /// When type == WaveRuleType.Unit, this is used as a key in waveSpawnerData.units[clusterOrTypeId].
+        /// </summary>
         public int clusterOrTypeId;
         public int triggerPopulationCap;
         public float triggerTimeSinceLastSpawn;

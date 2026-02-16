@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 101408852465936026}
   - component: {fileID: 2212849401402209689}
   - component: {fileID: 3719449442177153104}
-  - component: {fileID: 1724133221903267941}
+  - component: {fileID: -7103455439304602974}
   m_Layer: 0
   m_Name: ElitePrefab
   m_TagString: Untagged
@@ -87,8 +87,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &1724133221903267941
-CapsuleCollider:
+--- !u!64 &-7103455439304602974
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -105,8 +105,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}

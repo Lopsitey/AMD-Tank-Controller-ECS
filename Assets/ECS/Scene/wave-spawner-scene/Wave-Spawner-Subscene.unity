@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42ade37c2b33704184623de7f84cfc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TomBenWaveData: {fileID: -755480892457977500, guid: dde5f2cbe63d886419a1e9e1afaca251, type: 3}
+  m_TomBenWaveData: {fileID: -755480892457977500, guid: ef0596de9c941554e9d2f18f47ddb9a6, type: 3}
   m_Prefabs:
   - unitID: 1
     prefab: {fileID: 6045304771716278497, guid: f16e945f1ee4a2b42afac1b92ef8e4bc, type: 3}
@@ -317,7 +317,7 @@ MonoBehaviour:
     prefab: {fileID: 6045304771716278497, guid: 4c1a5fab3ef66f443b0c928a963fa721, type: 3}
   - unitID: 3
     prefab: {fileID: 6045304771716278497, guid: 323778d4599a7214eba1736ffe7901bc, type: 3}
-  m_Debug: 1
+  m_Debug: 0
 --- !u!1 &837246683
 GameObject:
   m_ObjectHideFlags: 0

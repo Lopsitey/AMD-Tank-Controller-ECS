@@ -96,8 +96,14 @@ namespace wave_spawning
             //Checks whether either has been exceeded, triggering the next wave rule
             bool metPopThreshold = enemyCount <= currentRule.triggerPopulationCap;
             bool timerExceeded = timeSinceSpawn >= currentRule.triggerTimeSinceLastSpawn;
-
-            if ((specifiedPopCap && metPopThreshold) || (specifiedTimer && timerExceeded))
+            
+            bool noConditionsSpecified = !specifiedPopCap && !specifiedTimer;
+            bool shouldTrigger = 
+                (noConditionsSpecified) ||
+                (specifiedPopCap && metPopThreshold) ||
+                (specifiedTimer && timerExceeded);
+            
+            if (shouldTrigger)
             {
                 lastWaveSpawnTime = (float)SystemAPI.Time.ElapsedTime; //Now
                 timer = 0.0f;
@@ -109,6 +115,7 @@ namespace wave_spawning
 
                 if (currentRule.type == WaveRuleType.Cluster)
                 {
+                    // clusterOrTypeId is being used here as an ID for either the unit or cluster depending on the "type" property 
                     var currentCluster = waveSpawnerData.clusters[currentRule.clusterOrTypeId];
                     Debug.Log($"Cluster: {currentCluster.name} as part of wave {currentWaveData.name}.");
 
@@ -124,7 +131,7 @@ namespace wave_spawning
                     LookUpPrefab(in clusterRule.unitId, in prefabLookup, out Entity prefabToSpawn);
                     
                     var currentUnit = units[clusterRule.unitId];
-                    Debug.Log($"Spawning {clusterRule.amount} of unit {currentUnit.name} in the cluster.");
+                    Debug.Log($"Spawning {clusterRule.amount} {currentUnit.name} in the cluster.");
                     ecb.SetComponent(spawnerEntity, new EnemySpawnerComponent
                     {
                         //Didn't set the delay or position because the spawner system and job will handle that
@@ -141,7 +148,7 @@ namespace wave_spawning
                 else if (currentRule.type == WaveRuleType.Unit)
                 {
                     var currentUnit = units[currentRule.clusterOrTypeId];
-                    Debug.Log($"Spawning individual unit {currentUnit.name} as part of wave {currentWaveData.name}");
+                    Debug.Log($"Spawning individual {currentUnit.name} unit as part of wave {currentWaveData.name}");
                     
                     LookUpPrefab(in currentUnit.id, in prefabLookup, out Entity prefabToSpawn);
                     ecb.SetComponent(spawnerEntity, new EnemySpawnerComponent
@@ -151,7 +158,7 @@ namespace wave_spawning
                         spawnDelay = spawner.spawnDelay,
                         name = currentUnit.name,
                         spawnedCount = 0,
-                        totalToSpawn = units.Count
+                        totalToSpawn = 1// One unit per wave
                     });
                     
                     waveRuleIndex++;
@@ -163,6 +170,8 @@ namespace wave_spawning
                 else if (metPopThreshold)
                     Debug.Log(
                         $"Wave rule triggered by population cap! Current population: {enemyCount}, required population: {currentRule.triggerPopulationCap}");
+                else if (noConditionsSpecified)
+                    Debug.Log("Wave rule triggered immediately (no conditions specified)");
             }
         }
 
@@ -183,7 +192,6 @@ namespace wave_spawning
             timer += SystemAPI.Time.DeltaTime;
 
             enemyCount = GetEntityCount(ref state, enemyQuery);
-            //Debug.Log($"There are currently {enemyCount} enemies in the world.");
 
             //And dispose of ECB
             this.ecb.Playback(state.EntityManager);
