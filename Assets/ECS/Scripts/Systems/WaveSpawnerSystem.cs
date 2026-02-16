@@ -95,16 +95,15 @@ namespace wave_spawning
             bool noTriggersSpecified = !specifiedPopCap && !specifiedTimer;
 
             //Checks whether either has been exceeded, triggering the next wave rule
-            bool metPopThreshold = enemyCount <= currentRule.triggerPopulationCap;
-            bool timerExceeded = timeSinceSpawn >= currentRule.triggerTimeSinceLastSpawn;
+            // Only evaluate these when the corresponding trigger is specified
+            bool metPopThreshold = specifiedPopCap && enemyCount <= currentRule.triggerPopulationCap;
+            bool timerExceeded = specifiedTimer && timeSinceSpawn >= currentRule.triggerTimeSinceLastSpawn;
 
             // Trigger spawning if:
             // 1. No triggers specified (spawn immediately), OR
             // 2. Population cap trigger specified AND met, OR
             // 3. Timer trigger specified AND exceeded
-            bool shouldTrigger = noTriggersSpecified || 
-                                 (specifiedPopCap && metPopThreshold) || 
-                                 (specifiedTimer && timerExceeded);
+            bool shouldTrigger = noTriggersSpecified || metPopThreshold || timerExceeded;
 
             if (shouldTrigger)
             {
