@@ -3,16 +3,21 @@ using ECS.Scripts.Jobs;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 
 namespace ECS.Scripts.Systems
 {
+    // Ensures it updates in the fixed physics group - like FixedUpdate 
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    // Ensures it runs before the physics engine solves the frame
+    // Ordered like this so the data is ready for the physics system to process it
+    [UpdateBefore(typeof(PhysicsSystemGroup))]
     [BurstCompile]
     // Unmanaged system which moves the player based on the input component and the player component.
     public partial struct PlayerUpdateSystem : ISystem
     {
-        
         public void OnCreate(ref SystemState state)
         {
             // Run only when we have a player and input component.
@@ -24,8 +29,6 @@ namespace ECS.Scripts.Systems
         
         public void OnUpdate(ref SystemState state)
         {
-            // Ensures jos from the prior frame are completed
-            state.Dependency.Complete();
             PlayerMoveJob moveJob = new PlayerMoveJob
             {
                 deltaTime = SystemAPI.Time.DeltaTime,

@@ -8,12 +8,12 @@ using UnityEngine.InputSystem;
 namespace ECS.Scripts.Systems
 {
     // This ensures that the system runs after the physics system so the player will have actually moved by the time the var is set back to false
-    [BurstCompile, UpdateInGroup(typeof(PresentationSystemGroup))] 
+    [UpdateInGroup(typeof(PresentationSystemGroup))]
+    [BurstCompile] 
     // Managed system version of the input system, which uses input action events instead of polling
     public partial class InputUpdateSystem : SystemBase
     {
         private ECSPlayerInputs m_PlayerInputs;
-        private float m_JumpDurationTimer; // Timer to track jump duration
         protected override void OnCreate()
         {
             m_PlayerInputs = new ECSPlayerInputs();
@@ -47,9 +47,7 @@ namespace ECS.Scripts.Systems
             
             // Decrements the cooldown timer if it is active
             if (inputComp.m_JumpCooldownTimer > 0f)
-            {
                 inputComp.m_JumpCooldownTimer -= SystemAPI.Time.DeltaTime;
-            }
 
             // Immediately cancels the jump input after it has been activated
             // This means the jump will only last for one frame.
@@ -88,8 +86,8 @@ namespace ECS.Scripts.Systems
             if (inputComp.m_JumpCooldownTimer <= 0f)
             {
                 inputComp.jumpPressed = true;
+                // Starts the timer
                 inputComp.m_JumpCooldownTimer = inputComp.m_JumpCooldown;
-                m_JumpDurationTimer = 0; 
             }
             SystemAPI.SetSingleton(inputComp);
         }

@@ -2,10 +2,13 @@
 using ECS.Scripts.Jobs;
 using Unity.Burst;
 using Unity.Entities;
+using Unity.Physics.Systems;
 using Unity.Transforms;
 
 namespace ECS.Scripts.Systems
 {
+    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+    [UpdateBefore(typeof(PhysicsSystemGroup))]
     [BurstCompile]
     public partial struct EnemyUpdateSystem : ISystem
     {
@@ -19,9 +22,6 @@ namespace ECS.Scripts.Systems
 
         public void OnUpdate(ref SystemState state)
         {
-            // Checks if the jobs created in the last frame have finished executing before starting new ones
-            state.Dependency.Complete();
-            
             // This assumes thee is one player - gets the entity associated with it, the player and transform comps
             var playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
             var player = SystemAPI.GetComponent<PlayerComponent>(playerEntity);
