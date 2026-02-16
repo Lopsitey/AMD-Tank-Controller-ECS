@@ -153,6 +153,7 @@ namespace wave_spawning
                     });
                     
                     clusterRuleIndex++;
+                    // Don't increment waveRuleIndex here - stay on this cluster wave rule until all cluster rules are complete
                 }
                 else if (currentRule.type == WaveRuleType.Unit)
                 {
@@ -170,6 +171,9 @@ namespace wave_spawning
                     //float3 pos = new float3(0f, 0f, 0f);
 
                     //ecb.SetComponent(enemy, LocalTransform.FromPosition(pos));
+                    
+                    // For Unit type, increment waveRuleIndex since it's a single spawn
+                    waveRuleIndex++;
                 }
 
                 if (timeSinceSpawn < currentRule.triggerTimeSinceLastSpawn)
@@ -178,8 +182,6 @@ namespace wave_spawning
                 else if (metPopThreshold)
                     Debug.Log(
                         $"Wave rule triggered by population cap! Current population: {enemyCount}, required population: {currentRule.triggerPopulationCap}");
-
-                waveRuleIndex++;
             }
         }
 
