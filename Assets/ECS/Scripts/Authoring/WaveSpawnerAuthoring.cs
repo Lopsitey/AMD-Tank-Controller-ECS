@@ -207,8 +207,8 @@ namespace ECS.wave_spawning
     {
         /// <summary>
         /// The ID used to look up either a cluster or unit in the respective HashMap.
-        /// When type == WaveRuleType.Cluster, this is used as a key in waveSpawnerData.clusters[clusterOrTypeId].
-        /// When type == WaveRuleType.Unit, this is used as a key in waveSpawnerData.units[clusterOrTypeId].
+        /// When type == WaveRuleType.Cluster, this is used as a key in the clusters HashMap.
+        /// When type == WaveRuleType.Unit, this is used as a key in the units HashMap.
         /// </summary>
         public int clusterOrTypeId;
         public int triggerPopulationCap;
