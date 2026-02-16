@@ -95,9 +95,9 @@ namespace wave_spawning
 
             //Checks whether either has been exceeded, triggering the next wave rule
             bool metPopThreshold = enemyCount <= currentRule.triggerPopulationCap;
-            bool timerExceeded = timer >= currentRule.triggerTimeSinceLastSpawn;
+            bool timerExceeded = timeSinceSpawn >= currentRule.triggerTimeSinceLastSpawn;
 
-            if ((specifiedPopCap && metPopThreshold) && (specifiedTimer && timerExceeded))
+            if ((specifiedPopCap && metPopThreshold) || (specifiedTimer && timerExceeded))
             {
                 lastWaveSpawnTime = (float)SystemAPI.Time.ElapsedTime; //Now
                 timer = 0.0f;
