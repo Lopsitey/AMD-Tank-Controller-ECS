@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "02Tank",
     "maps": [
         {
@@ -12,13 +13,13 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Steer",
                     "type": "Button",
                     "id": "15d60fdb-2abe-47e0-8bfd-a4b142cce6fe",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -27,7 +28,7 @@
                     "name": "Fire",
                     "type": "Button",
                     "id": "04d4d109-e500-44ed-8e0b-4704fbe16769",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -49,6 +50,42 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "490d1a2e-a898-463a-b418-f76bfc589cde",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Advanced Aim",
+                    "type": "Button",
+                    "id": "8e74c2fb-b34d-4c0c-b011-d166548c7f40",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Camera Mode",
+                    "type": "Button",
+                    "id": "c03a422c-a5e5-4f97-8b03-1fb0bb975537",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Swap Ammo",
+                    "type": "Button",
+                    "id": "b6acb5d6-2dfb-4b36-85fa-6e9a2fcc0dc8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -130,6 +167,17 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "positive",
+                    "id": "225a4aba-e9bd-4dd9-a389-14a1186c2965",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Accelerate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "negative",
                     "id": "0746e14a-25c5-4d6c-9f83-862c16c93d31",
                     "path": "<Keyboard>/s",
@@ -141,13 +189,68 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "225a4aba-e9bd-4dd9-a389-14a1186c2965",
-                    "path": "<Keyboard>/w",
+                    "name": "",
+                    "id": "ae6d39fb-7e0d-43be-8f9f-0c68557575e0",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Accelerate",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bfadb916-beed-4f73-99c9-3583de966730",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Advanced Aim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e9aff0a-d592-4036-b2b6-f4bdb8b81057",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Camera Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "f4314721-74cd-45fc-96a7-cd095a819c32",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Swap Ammo",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "positive",
+                    "id": "c360a13b-aac5-4359-9622-fedcab0c6d31",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Swap Ammo",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "baa4a75d-06f8-4bd5-90c2-8baac2d03f42",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Swap Ammo",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

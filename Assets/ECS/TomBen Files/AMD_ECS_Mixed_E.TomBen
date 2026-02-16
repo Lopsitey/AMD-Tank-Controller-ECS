@@ -1,0 +1,1 @@
+wave - 1 (start) _Tom C1<1>!?C1<5>!?C2<5>!? _Ben type - 1 (small) _Tom health=>10!?speed=>5!?damage=>1!? _Ben wave - 2 (boss) _Tom C2<1>!?C2<1>!?C2<1>!? _Ben cluster - 2 (elite) _Tom 1:1!?2:2!? _Ben type - 2 (big) _Tom health=>20!?speed=>5!?damage=>1!? _Ben cluster - 1 (simple) _Tom 1:3!? _Ben
