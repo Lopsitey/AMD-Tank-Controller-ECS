@@ -6,6 +6,7 @@ namespace ECS.Scripts.Components
     public struct PlayerComponent : IComponentData
     {
         public float m_MoveSpeed;
-        public float m_Health;
+        public float m_CurrentHealth;
+        public float m_MaxHealth;
     }
 }

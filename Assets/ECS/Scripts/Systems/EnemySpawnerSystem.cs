@@ -26,12 +26,6 @@ namespace ECS.Scripts.Systems
             // Checks if the job created in the last frame has finished executing before starting a new one
             state.Dependency.Complete();
             
-            var playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
-            var buffer = SystemAPI.GetBuffer<DamageBufferComponent>(playerEntity);
-
-            //TODO
-            //UnityEngine.Debug.Log($"The player has taken {buffer.Length} damage instances so far!");
-            
             // Instantiating the job using the struct data
             EnemySpawnerJob spawnerJob = new EnemySpawnerJob
             {
@@ -107,8 +101,8 @@ namespace ECS.Scripts.Systems
             ecb.AddComponent(chunkIndex, spawnedEnemy, new EnemyComponent
             {
                 m_MoveSpeed = 5f,
-                m_AttackFreq = 0.25f,
-                m_AttackRange = 2,
+                m_AttackFreq = 1.5f,
+                m_AttackRange = 3f,
                 m_AttackTimer = 0f,
                 m_MinDamage = 1f,
                 m_MaxDamage = 5f
