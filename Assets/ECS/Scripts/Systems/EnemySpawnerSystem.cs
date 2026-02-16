@@ -90,15 +90,15 @@ namespace ECS.Scripts.Systems
             if (spawner.timer <= spawner.spawnDelay) return;
             
             // Calculate new position with sine wave movement
+            // Makes a horizontal elliptical circle
             float x = spawner.spawnPos.x + math.sin(elapsedTime * 2f) * 5f;
-            float y = spawner.spawnPos.y + math.cos(elapsedTime * 2f) * 5f;
-            float z = spawner.spawnPos.z + math.cos(elapsedTime * 2f) * 5f;
+            float z = spawner.spawnPos.z + math.cos(elapsedTime * 2f) * 3f;
             
             //Builds a LocalTransform component which holds position, rotation, and scale data
             LocalTransform lt = LocalTransform.FromPosition(spawner.spawnPos);
             
-            //sets the position of the spawner to a new position
-            lt.Position = new float3(x, y, z);
+            //Sets the position of the spawner to a new position
+            lt.Position = new float3(x, 0, z);
             
             // Spawn a new entity using the chunk-index as the key for the ECB
             // Uses the entity prefab to spawn from the spawner component
@@ -106,7 +106,7 @@ namespace ECS.Scripts.Systems
             
             ecb.AddComponent(chunkIndex, spawnedEnemy, new EnemyComponent
             {
-                m_MoveSpeed = 1f,
+                m_MoveSpeed = 5f,
                 m_AttackFreq = 0.25f,
                 m_AttackRange = 2,
                 m_AttackTimer = 0f,

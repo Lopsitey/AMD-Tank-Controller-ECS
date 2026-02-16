@@ -119,60 +119,41 @@ namespace wave_spawning
                         waveRuleIndex++;// Move to the next wave rule
                         return;
                     }
-
                     var clusterRule = currentCluster.clusterRules[clusterRuleIndex];
-
-                    Entity prefabToSpawn = Entity.Null;
-                    // Look up the prefab entity for the current unit
-                    foreach (var element in prefabLookup)
-                    {
-                        if (element.UnitID == clusterRule.unitId)
-                        {
-                            prefabToSpawn = element.PrefabEntity;
-
-                            // If the relevant prefab is found then stop and continue with spawning
-                            break;
-                        }
-                    }
-
-                    // May not have added a prefab to the master list with that ID
-                    Debug.Assert(prefabToSpawn != Entity.Null,
-                        $"Could not find prefab for Unit ID {clusterRule.unitId} in Registry!");
-
+                    
+                    LookUpPrefab(in clusterRule.unitId, in prefabLookup, out Entity prefabToSpawn);
+                    
                     var currentUnit = units[clusterRule.unitId];
-
                     Debug.Log($"Spawning {clusterRule.amount} of unit {currentUnit.name} in the cluster.");
                     ecb.SetComponent(spawnerEntity, new EnemySpawnerComponent
                     {
                         //Didn't set the delay or position because the spawner system and job will handle that
                         entityToSpawn = prefabToSpawn,
                         timer = 0.0f,
+                        spawnDelay = spawner.spawnDelay,
                         name = currentUnit.name,
                         spawnedCount = 0, //Reset counter
                         totalToSpawn = clusterRule.amount
                     });
                     
                     clusterRuleIndex++;
-                    // Don't increment waveRuleIndex here - stay on this cluster wave rule until all cluster rules are complete
                 }
                 else if (currentRule.type == WaveRuleType.Unit)
                 {
                     var currentUnit = units[currentRule.clusterOrTypeId];
-
                     Debug.Log($"Spawning individual unit {currentUnit.name} as part of wave {currentWaveData.name}");
-                    //Entity enemy = ecb.Instantiate(currentUnit);
-
-                    //var config = SystemAPI.GetSingleton<EnemyConfigAuthoring>();
-
-                    //Entity e = ecb.Instantiate(config.m_prefab);
-                    //ecb.SetName(e, currentUnit.name);
-                    //ecb.AddComponent(e, );
-
-                    //float3 pos = new float3(0f, 0f, 0f);
-
-                    //ecb.SetComponent(enemy, LocalTransform.FromPosition(pos));
                     
-                    // For Unit type, increment waveRuleIndex since it's a single spawn
+                    LookUpPrefab(in currentUnit.id, in prefabLookup, out Entity prefabToSpawn);
+                    ecb.SetComponent(spawnerEntity, new EnemySpawnerComponent
+                    {
+                        entityToSpawn = prefabToSpawn,
+                        timer = 0.0f,
+                        spawnDelay = spawner.spawnDelay,
+                        name = currentUnit.name,
+                        spawnedCount = 0,
+                        totalToSpawn = units.Count
+                    });
+                    
                     waveRuleIndex++;
                 }
 
@@ -244,38 +225,28 @@ namespace wave_spawning
         }
 
         /// <summary>
-        /// Returns the entity associated with a given unit ID. This is used to get the prefab to spawn for a given unit.
+        /// Finds the prefab entity for the current unit.
         /// </summary>
-        /// <param name="unitID"></param>
-        /// <returns></returns>
-        private Entity GetUnitEntity(int unitID) => unitID switch
+        /// <param name="id">The id of the prefab to find.</param>
+        /// <param name="prefabLookup">The lookup table to check.</param>
+        /// <param name="prefabToSpawn">The prefab output - null if none found.</param>
+        private void LookUpPrefab(in int id, in DynamicBuffer<WaveSpawnerDataAuthoring.UnitPrefabElement> prefabLookup, out Entity prefabToSpawn)
         {
-            0 => SystemAPI.GetSingletonEntity<EnemyComponent>(),
-            _ => Entity.Null
-        };
+            prefabToSpawn = Entity.Null;
+            foreach (var element in prefabLookup)
+            {
+                if (element.UnitID == id)
+                {
+                    prefabToSpawn = element.PrefabEntity;
+                    // If the relevant prefab is found then stop and continue with spawning
+                    break;
+                }
+            }
+            // May not have added a prefab to the master list with that ID
+            Debug.Assert(prefabToSpawn != Entity.Null,
+                $"Could not find prefab for Unit ID {id} in Registry!");
+        }
 
         #endregion
-    }
-}
-
-
-//EnemyConfigAuthoring.cs
-public class EnemyConfigAuthoring : MonoBehaviour
-{
-    public GameObject m_Prefab;
-}
-
-public struct EnemyConfigComponent : IComponentData
-{
-    public Entity m_Prefab;
-}
-
-public class EnemyConfigBaker : Baker<EnemyConfigAuthoring>
-{
-    public override void Bake(EnemyConfigAuthoring authoring)
-    {
-        var entity = GetEntity(TransformUsageFlags.None);
-        var prefabEntity = GetEntity(authoring.m_Prefab, TransformUsageFlags.Dynamic);
-        AddComponent(entity, new EnemyConfigComponent { m_Prefab = prefabEntity });
     }
 }
