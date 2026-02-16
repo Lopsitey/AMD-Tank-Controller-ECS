@@ -32,16 +32,15 @@ namespace ECS.Scripts.Systems
                 
                 Debug.Log($"Took {dmg.m_Damage} damage from {dmg.m_Causer}. Current health: {player.m_CurrentHealth}");
             }
-
+            // If all the damage has been applied, clear the buffer for the next frame
+            playerDamageBuffer.Clear();
+            
             if (player.m_CurrentHealth <= 0)
             {
                 Debug.Log("Player is dead!");
                 var ecb = GetECB(ref state);
                 ecb.DestroyEntity(0, playerEntity);
             }
-            
-            // If all the damage has been applied, clear the buffer for the next frame
-            playerDamageBuffer.Clear();
         }
         
         private EntityCommandBuffer.ParallelWriter GetECB(ref SystemState state)

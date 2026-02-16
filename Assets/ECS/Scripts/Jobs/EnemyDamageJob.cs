@@ -40,9 +40,6 @@ namespace ECS.Scripts.Jobs
                 m_Causer = enemyEntity,
                 m_Damage = enemyComp.m_MinDamage
             });
-            
-            // Calculate random damage between min and max
-            float damage = UnityEngine.Random.Range(enemyComp.m_MinDamage, enemyComp.m_MaxDamage);
         }
     }
 }
