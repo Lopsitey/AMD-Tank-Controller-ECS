@@ -92,12 +92,20 @@ namespace wave_spawning
             //Whether a population cap or timer has been specified
             bool specifiedPopCap = currentRule.triggerPopulationCap >= 0;
             bool specifiedTimer = currentRule.triggerTimeSinceLastSpawn >= 0;
+            bool noTriggersSpecified = !specifiedPopCap && !specifiedTimer;
 
             //Checks whether either has been exceeded, triggering the next wave rule
-            bool metPopThreshold = enemyCount <= currentRule.triggerPopulationCap;
-            bool timerExceeded = timeSinceSpawn >= currentRule.triggerTimeSinceLastSpawn;
+            // Only evaluate these when the corresponding trigger is specified
+            bool metPopThreshold = specifiedPopCap && enemyCount <= currentRule.triggerPopulationCap;
+            bool timerExceeded = specifiedTimer && timeSinceSpawn >= currentRule.triggerTimeSinceLastSpawn;
 
-            if ((specifiedPopCap && metPopThreshold) || (specifiedTimer && timerExceeded))
+            // Trigger spawning if:
+            // 1. No triggers specified (spawn immediately), OR
+            // 2. Population cap trigger specified AND met, OR
+            // 3. Timer trigger specified AND exceeded
+            bool shouldTrigger = noTriggersSpecified || metPopThreshold || timerExceeded;
+
+            if (shouldTrigger)
             {
                 lastWaveSpawnTime = (float)SystemAPI.Time.ElapsedTime; //Now
                 timer = 0.0f;
@@ -109,6 +117,7 @@ namespace wave_spawning
 
                 if (currentRule.type == WaveRuleType.Cluster)
                 {
+                    // clusterOrTypeId contains the cluster ID used as a key in the HashMap
                     var currentCluster = waveSpawnerData.clusters[currentRule.clusterOrTypeId];
                     Debug.Log($"Cluster: {currentCluster.name} as part of wave {currentWaveData.name}.");
 
@@ -140,6 +149,7 @@ namespace wave_spawning
                 }
                 else if (currentRule.type == WaveRuleType.Unit)
                 {
+                    // clusterOrTypeId contains the unit ID used as a key in the HashMap
                     var currentUnit = units[currentRule.clusterOrTypeId];
                     Debug.Log($"Spawning individual unit {currentUnit.name} as part of wave {currentWaveData.name}");
                     
@@ -151,7 +161,7 @@ namespace wave_spawning
                         spawnDelay = spawner.spawnDelay,
                         name = currentUnit.name,
                         spawnedCount = 0,
-                        totalToSpawn = units.Count
+                        totalToSpawn = 1 // Spawn exactly one unit per wave rule
                     });
                     
                     waveRuleIndex++;
@@ -163,6 +173,8 @@ namespace wave_spawning
                 else if (metPopThreshold)
                     Debug.Log(
                         $"Wave rule triggered by population cap! Current population: {enemyCount}, required population: {currentRule.triggerPopulationCap}");
+                else if (noTriggersSpecified)
+                    Debug.Log("Wave rule triggered immediately (no conditions specified)");
             }
         }
 

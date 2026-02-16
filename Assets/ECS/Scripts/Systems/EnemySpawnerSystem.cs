@@ -2,6 +2,7 @@ using ECS.Scripts.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 
 namespace ECS.Scripts.Systems
@@ -75,6 +76,12 @@ namespace ECS.Scripts.Systems
         public EntityCommandBuffer.ParallelWriter ecb;
         //Because this can run in parallel you need to pass in the index/key of the entity being processed
         
+        // Capsule collider dimensions for enemy physics mass
+        // Note: These should match the CapsuleCollider dimensions on the enemy prefabs
+        private const float ENEMY_CAPSULE_HEIGHT = 2.0f;
+        private const float ENEMY_CAPSULE_RADIUS = 0.5f;
+        private const float ENEMY_MASS = 1.0f;
+        
         //Execute communicates to the job which components to process similar SystemAPI.Query<RefRW<Component>>() just with different parameters
         //This function converts ref and in keywords to RefRW and RefRO wrappers automatically.
         //This finds all entities with EnemySpawnerComponent
@@ -113,6 +120,29 @@ namespace ECS.Scripts.Systems
                 m_MinDamage = 1f,
                 m_MaxDamage = 5f
             });
+            
+            // Add physics components for collision to work properly
+            // PhysicsVelocity is required for dynamic physics entities
+            ecb.AddComponent(chunkIndex, spawnedEnemy, new PhysicsVelocity
+            {
+                Linear = float3.zero,
+                Angular = float3.zero
+            });
+            
+            // PhysicsMass is required for dynamic physics bodies
+            // Using capsule mass properties to match the CapsuleCollider on the prefab
+            // Note: Adjust constants at top of struct if prefab collider dimensions are modified
+            var capsuleMassProperties = MassProperties.CreateCapsule(
+                center: float3.zero,
+                height: ENEMY_CAPSULE_HEIGHT,
+                radius: ENEMY_CAPSULE_RADIUS,
+                rotation: quaternion.identity
+            );
+            ecb.AddComponent(chunkIndex, spawnedEnemy, PhysicsMass.CreateDynamic(
+                capsuleMassProperties, 
+                mass: ENEMY_MASS
+            ));
+            
             // Uses the chunk index as the key again
             // Sets the position of the spawned enemy to the spawner's spawn position
             ecb.SetComponent(chunkIndex, spawnedEnemy, lt);

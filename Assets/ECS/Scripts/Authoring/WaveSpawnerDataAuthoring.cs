@@ -68,13 +68,17 @@ namespace wave_spawning
     }
 
     /// <summary>
-    /// A single wave rule -- the cluster or type to spawn,
+    /// A single wave rule -- the cluster or unit to spawn,
     /// the conditions in which the wave rule should trigger spawn,
     /// and the type of thing to spawn.
     /// </summary>
     [Serializable]
     public class WaveRuleAuthoring
     {
+        /// <summary>
+        /// The ID used to look up either a cluster or unit in the respective HashMap.
+        /// This is a key value, not an array index.
+        /// </summary>
         public int clusterOrTypeId;
         public int triggerPopulationCap;
         public float triggerTimeSinceLastSpawn;
