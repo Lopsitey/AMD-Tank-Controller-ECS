@@ -10,5 +10,7 @@ namespace ECS.Scripts.Components
         public float m_AttackRange;
         public float m_AttackTimer;
         public float m_AttackFreq;
+        public float m_CurrentHealth;
+        public float m_MaxHealth;
     }
 }

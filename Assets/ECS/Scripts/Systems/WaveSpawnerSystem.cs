@@ -52,10 +52,10 @@ namespace wave_spawning
         private void UpdateWaveSpawner(ref SystemState state, in SpawnerDataSingleton waveSpawnerData)
         {
             Entity spawnerEntity = SystemAPI.GetSingletonEntity<EnemySpawnerComponent>();
-            EnemySpawnerComponent spawner = SystemAPI.GetComponent<EnemySpawnerComponent>(spawnerEntity);
+            EnemySpawnerComponent spawnerComp = SystemAPI.GetComponent<EnemySpawnerComponent>(spawnerEntity);
 
             // Ensures the spawner only iterates through one rule at a time
-            if (spawner.spawnedCount < spawner.totalToSpawn) return;
+            if (spawnerComp.spawnedCount < spawnerComp.totalToSpawn) return;
 
             //Relevant data for use in this function
             var waves = waveSpawnerData.waves.GetKeyValueArrays(Allocator.Temp);
@@ -127,20 +127,31 @@ namespace wave_spawning
                         return;
                     }
                     var clusterRule = currentCluster.clusterRules[clusterRuleIndex];
-                    
-                    LookUpPrefab(in clusterRule.unitId, in prefabLookup, out Entity prefabToSpawn);
-                    
                     var currentUnit = units[clusterRule.unitId];
                     Debug.Log($"Spawning {clusterRule.amount} {currentUnit.name} in the cluster.");
+                    
+                    LookUpPrefab(in clusterRule.unitId, in prefabLookup, out Entity prefabToSpawn);
+                    var enemyComp = new EnemyComponent
+                    {
+                        m_MoveSpeed = currentUnit.speed,
+                        m_AttackFreq = 1.5f, // Defaults to 1.5f
+                        m_AttackRange = 3f, // Defaults to 3f
+                        m_AttackTimer = 0f,
+                        m_MinDamage = 1,
+                        m_MaxDamage = currentUnit.damage,
+                        m_CurrentHealth = currentUnit.health,
+                        m_MaxHealth = currentUnit.health
+                    };
                     ecb.SetComponent(spawnerEntity, new EnemySpawnerComponent
                     {
                         //Didn't set the delay or position because the spawner system and job will handle that
                         entityToSpawn = prefabToSpawn,
                         timer = 0.0f,
-                        spawnDelay = spawner.spawnDelay,
+                        spawnDelay = spawnerComp.spawnDelay,
                         name = currentUnit.name,
                         spawnedCount = 0, //Reset counter
-                        totalToSpawn = clusterRule.amount
+                        totalToSpawn = clusterRule.amount,
+                        enemyData = enemyComp
                     });
                     
                     clusterRuleIndex++;
@@ -151,14 +162,26 @@ namespace wave_spawning
                     Debug.Log($"Spawning individual {currentUnit.name} unit as part of wave {currentWaveData.name}");
                     
                     LookUpPrefab(in currentUnit.id, in prefabLookup, out Entity prefabToSpawn);
+                    var enemyComp = new EnemyComponent
+                    {
+                        m_MoveSpeed = currentUnit.speed,
+                        m_AttackFreq = spawnerComp.enemyData.m_AttackFreq, 
+                        m_AttackRange = spawnerComp.enemyData.m_AttackRange,
+                        m_AttackTimer = 0f,
+                        m_MinDamage = 1,
+                        m_MaxDamage = currentUnit.damage,
+                        m_CurrentHealth = currentUnit.health,
+                        m_MaxHealth = currentUnit.health
+                    };
                     ecb.SetComponent(spawnerEntity, new EnemySpawnerComponent
                     {
                         entityToSpawn = prefabToSpawn,
                         timer = 0.0f,
-                        spawnDelay = spawner.spawnDelay,
+                        spawnDelay = spawnerComp.spawnDelay,
                         name = currentUnit.name,
                         spawnedCount = 0,
-                        totalToSpawn = 1// One unit per wave
+                        totalToSpawn = 1,// One unit per wave
+                        enemyData = enemyComp
                     });
                     
                     waveRuleIndex++;

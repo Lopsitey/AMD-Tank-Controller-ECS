@@ -98,15 +98,8 @@ namespace ECS.Scripts.Systems
             // Uses the entity prefab to spawn from the spawner component
             Entity spawnedEnemy = ecb.Instantiate(chunkIndex, spawner.entityToSpawn);
             
-            ecb.AddComponent(chunkIndex, spawnedEnemy, new EnemyComponent
-            {
-                m_MoveSpeed = 5f,
-                m_AttackFreq = 1.5f,
-                m_AttackRange = 3f,
-                m_AttackTimer = 0f,
-                m_MinDamage = 1f,
-                m_MaxDamage = 5f
-            });
+            // Adds the enemy data component of the spawned enemy to the data from the spawner component
+            ecb.AddComponent(chunkIndex, spawnedEnemy, spawner.enemyData);
             // Uses the chunk index as the key again
             // Sets the position of the spawned enemy to the spawner's spawn position
             ecb.SetComponent(chunkIndex, spawnedEnemy, lt);
