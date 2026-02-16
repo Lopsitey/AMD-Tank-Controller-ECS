@@ -92,6 +92,7 @@ namespace wave_spawning
             //Whether a population cap or timer has been specified
             bool specifiedPopCap = currentRule.triggerPopulationCap >= 0;
             bool specifiedTimer = currentRule.triggerTimeSinceLastSpawn >= 0;
+            bool noTriggersSpecified = !specifiedPopCap && !specifiedTimer;
 
             //Checks whether either has been exceeded, triggering the next wave rule
             bool metPopThreshold = enemyCount <= currentRule.triggerPopulationCap;
@@ -101,7 +102,7 @@ namespace wave_spawning
             // 1. No triggers specified (spawn immediately), OR
             // 2. Population cap trigger specified AND met, OR
             // 3. Timer trigger specified AND exceeded
-            bool shouldTrigger = (!specifiedPopCap && !specifiedTimer) || 
+            bool shouldTrigger = noTriggersSpecified || 
                                  (specifiedPopCap && metPopThreshold) || 
                                  (specifiedTimer && timerExceeded);
 
@@ -173,7 +174,7 @@ namespace wave_spawning
                 else if (metPopThreshold)
                     Debug.Log(
                         $"Wave rule triggered by population cap! Current population: {enemyCount}, required population: {currentRule.triggerPopulationCap}");
-                else if (!specifiedPopCap && !specifiedTimer)
+                else if (noTriggersSpecified)
                     Debug.Log("Wave rule triggered immediately (no conditions specified)");
             }
         }
