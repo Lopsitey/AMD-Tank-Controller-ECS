@@ -2,6 +2,7 @@ using ECS.Scripts.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 
 namespace ECS.Scripts.Systems
@@ -113,6 +114,21 @@ namespace ECS.Scripts.Systems
                 m_MinDamage = 1f,
                 m_MaxDamage = 5f
             });
+            
+            // Add physics components for collision to work properly
+            // PhysicsVelocity is required for dynamic physics entities
+            ecb.AddComponent(chunkIndex, spawnedEnemy, new PhysicsVelocity
+            {
+                Linear = float3.zero,
+                Angular = float3.zero
+            });
+            
+            // PhysicsMass is required for dynamic physics bodies
+            ecb.AddComponent(chunkIndex, spawnedEnemy, PhysicsMass.CreateDynamic(
+                MassProperties.UnitSphere, 
+                mass: 1.0f
+            ));
+            
             // Uses the chunk index as the key again
             // Sets the position of the spawned enemy to the spawner's spawn position
             ecb.SetComponent(chunkIndex, spawnedEnemy, lt);
