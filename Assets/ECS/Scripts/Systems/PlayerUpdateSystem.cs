@@ -1,4 +1,5 @@
 ﻿using ECS.Scripts.Components;
+using ECS.Scripts.Jobs;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -23,7 +24,16 @@ namespace ECS.Scripts.Systems
         
         public void OnUpdate(ref SystemState state)
         {
-            InputComponent input = SystemAPI.GetSingleton<InputComponent>();
+            // Ensures jos from the prior frame are completed
+            state.Dependency.Complete();
+            PlayerMoveJob moveJob = new PlayerMoveJob
+            {
+                deltaTime = SystemAPI.Time.DeltaTime,
+                input = SystemAPI.GetSingleton<InputComponent>()
+            };
+            state.Dependency = moveJob.ScheduleParallel(state.Dependency);
+            
+            /*
             foreach(var (player, transform, entity) in SystemAPI.Query<RefRW<PlayerComponent>, RefRW<LocalTransform>>().WithEntityAccess())
             {
                 // Gets the move vector as a float3 and cancels y so it moves only xz
@@ -41,6 +51,7 @@ namespace ECS.Scripts.Systems
                 LocalTransform newLT = LocalTransform.FromPosition(newPos);
                 state.EntityManager.SetComponentData(entity, newLT);
             }
+            */
         }
     }
 }

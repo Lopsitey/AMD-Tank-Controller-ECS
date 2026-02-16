@@ -7,16 +7,24 @@ using UnityEngine.InputSystem;
 
 namespace ECS.Scripts.Systems
 {
-    [BurstCompile]
+    // This ensures that the system runs after the physics system so the player will have actually moved by the time the var is set back to false
+    [BurstCompile, UpdateInGroup(typeof(PresentationSystemGroup))] 
     // Managed system version of the input system, which uses input action events instead of polling
     public partial class InputUpdateSystem : SystemBase
     {
         private ECSPlayerInputs m_PlayerInputs;
+        private float m_JumpDurationTimer; // Timer to track jump duration
         protected override void OnCreate()
         {
             m_PlayerInputs = new ECSPlayerInputs();
             m_PlayerInputs.player.Move.performed += HandlePlayerMove;
             m_PlayerInputs.player.Move.canceled += HandlePlayerMove;
+            m_PlayerInputs.player.Jump.performed += HandlePlayerJump;
+            m_PlayerInputs.player.Jump.canceled += HandlePlayerJump;
+            m_PlayerInputs.player.Stop.performed += HandlePlayerStop;
+            m_PlayerInputs.player.Stop.canceled += HandlePlayerStop;
+            m_PlayerInputs.player.Attack.performed += HandlePlayerAttack;
+            m_PlayerInputs.player.Attack.canceled += HandlePlayerAttack;
             m_PlayerInputs.Enable();
             
             //Create the singleton entity
@@ -25,20 +33,67 @@ namespace ECS.Scripts.Systems
             //Set the input component to default values
             EntityManager.SetComponentData(singletonEntity, new InputComponent
             {
-                playerMoveDirection = float2.zero
+                playerMoveDirection = float2.zero,
+                jumpPressed = false,
+                spacePressed = false,
+                m_JumpCooldown = 1f,
+                m_JumpCooldownTimer = 0f
             });
         }
-        
-        protected override void OnUpdate() { }
+
+        protected override void OnUpdate()
+        {
+            InputComponent inputComp = SystemAPI.GetSingleton<InputComponent>();
+            
+            // Decrements the cooldown timer if it is active
+            if (inputComp.m_JumpCooldownTimer > 0f)
+            {
+                inputComp.m_JumpCooldownTimer -= SystemAPI.Time.DeltaTime;
+            }
+
+            // Immediately cancels the jump input after it has been activated
+            // This means the jump will only last for one frame.
+            inputComp.jumpPressed = false; 
+            SystemAPI.SetSingleton(inputComp);
+        }
         
         protected override void OnDestroy()
         {
             m_PlayerInputs.player.Move.performed -= HandlePlayerMove;
             m_PlayerInputs.player.Move.canceled -= HandlePlayerMove;
+            m_PlayerInputs.player.Jump.performed -= HandlePlayerJump;
+            m_PlayerInputs.player.Jump.canceled -= HandlePlayerJump;
+            m_PlayerInputs.player.Stop.performed -= HandlePlayerStop;
+            m_PlayerInputs.player.Stop.canceled -= HandlePlayerStop;
+            m_PlayerInputs.player.Attack.performed -= HandlePlayerAttack;
+            m_PlayerInputs.player.Attack.canceled -= HandlePlayerAttack;
             m_PlayerInputs.Disable();
             m_PlayerInputs.Dispose();
         }
-        
+
+        private void HandlePlayerAttack(InputAction.CallbackContext obj)
+        {
+            //
+        }
+
+        private void HandlePlayerStop(InputAction.CallbackContext obj)
+        {
+            //
+        }
+
+        private void HandlePlayerJump(InputAction.CallbackContext ctx)
+        {
+            InputComponent inputComp = SystemAPI.GetSingleton<InputComponent>();
+
+            if (inputComp.m_JumpCooldownTimer <= 0f)
+            {
+                inputComp.jumpPressed = true;
+                inputComp.m_JumpCooldownTimer = inputComp.m_JumpCooldown;
+                m_JumpDurationTimer = 0; 
+            }
+            SystemAPI.SetSingleton(inputComp);
+        }
+
         private void HandlePlayerMove(InputAction.CallbackContext context)
         {
             // Gets the existing input component, and make a copy of it to modify.

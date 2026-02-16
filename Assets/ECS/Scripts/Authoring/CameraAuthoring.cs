@@ -37,6 +37,8 @@ namespace ECS.Scripts.Authoring
         }
     }
     
+    // Forces the camera to update after physics so it doesn't clash with the physics system.
+    [UpdateInGroup(typeof(PresentationSystemGroup))]
     public partial struct CameraControllerSystem : ISystem
     {
         public void OnCreate(ref SystemState state) => state.RequireForUpdate<PlayerComponent>();
@@ -48,7 +50,7 @@ namespace ECS.Scripts.Authoring
             Entity playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
             
             // Get a lookup for LocalTransform so the player's position can be set.
-            ComponentLookup<LocalTransform> lookup = SystemAPI.GetComponentLookup<LocalTransform>();
+            ComponentLookup<LocalTransform> lookup = SystemAPI.GetComponentLookup<LocalTransform>(true);// True means read-only
 
             foreach (var cameraInst in SystemAPI.Query<RefRW<CameraComponent>>())
             {
