@@ -76,6 +76,12 @@ namespace ECS.Scripts.Systems
         public EntityCommandBuffer.ParallelWriter ecb;
         //Because this can run in parallel you need to pass in the index/key of the entity being processed
         
+        // Capsule collider dimensions for enemy physics mass
+        // Note: These should match the CapsuleCollider dimensions on the enemy prefabs
+        private const float ENEMY_CAPSULE_HEIGHT = 2.0f;
+        private const float ENEMY_CAPSULE_RADIUS = 0.5f;
+        private const float ENEMY_MASS = 1.0f;
+        
         //Execute communicates to the job which components to process similar SystemAPI.Query<RefRW<Component>>() just with different parameters
         //This function converts ref and in keywords to RefRW and RefRO wrappers automatically.
         //This finds all entities with EnemySpawnerComponent
@@ -125,17 +131,16 @@ namespace ECS.Scripts.Systems
             
             // PhysicsMass is required for dynamic physics bodies
             // Using capsule mass properties to match the CapsuleCollider on the prefab
-            // Note: These dimensions (height: 2.0f, radius: 0.5f) match Unity's default CapsuleCollider
-            // If you've modified the collider size on the prefab, adjust these values accordingly
+            // Note: Adjust constants at top of struct if prefab collider dimensions are modified
             var capsuleMassProperties = MassProperties.CreateCapsule(
                 center: float3.zero,
-                height: 2.0f,  // Default capsule height
-                radius: 0.5f,  // Default capsule radius
+                height: ENEMY_CAPSULE_HEIGHT,
+                radius: ENEMY_CAPSULE_RADIUS,
                 rotation: quaternion.identity
             );
             ecb.AddComponent(chunkIndex, spawnedEnemy, PhysicsMass.CreateDynamic(
                 capsuleMassProperties, 
-                mass: 1.0f
+                mass: ENEMY_MASS
             ));
             
             // Uses the chunk index as the key again
