@@ -3,6 +3,7 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace ECS.Scripts.Systems
 {
@@ -10,16 +11,17 @@ namespace ECS.Scripts.Systems
     // Unmanaged system which moves the player based on the input component and the player component.
     public partial struct PlayerUpdateSystem : ISystem
     {
-        [BurstCompile]
-        private void OnCreate(ref SystemState state)
+        
+        public void OnCreate(ref SystemState state)
         {
             // Run only when we have a player and input component.
             state.RequireForUpdate<PlayerComponent>();
             state.RequireForUpdate<InputComponent>();
+            // Ensure the game runs at a consistent frame rate to make movement smoother and more consistent across different hardware.
+            Application.targetFrameRate = 120;
         }
-
-        [BurstCompile]
-        private void OnUpdate(ref SystemState state)
+        
+        public void OnUpdate(ref SystemState state)
         {
             InputComponent input = SystemAPI.GetSingleton<InputComponent>();
             foreach(var (player, transform, entity) in SystemAPI.Query<RefRW<PlayerComponent>, RefRW<LocalTransform>>().WithEntityAccess())
@@ -30,7 +32,7 @@ namespace ECS.Scripts.Systems
                 moveVec.y = 0; 
                 
                 // Distance = speed * time
-                float moveDist = player.ValueRO.moveSpeed * SystemAPI.Time.DeltaTime;
+                float moveDist = player.ValueRO.m_MoveSpeed * SystemAPI.Time.DeltaTime;
                 
                 // Gets the new position by adding the movement vector multiplied by the movement amount to the current position
                 float3 newPos = transform.ValueRO.Position + moveVec * moveDist;

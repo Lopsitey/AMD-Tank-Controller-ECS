@@ -218,7 +218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d662cbab4e5411cab36d0e90bd34d22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_moveSpeed: 10
+  m_MoveSpeed: 10
+  m_Health: 100
 --- !u!1 &641283347
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845089b030e09754c9083d218793fd8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Prefab: {fileID: 6045304771716278497, guid: 3e4c15a8170368946b288f530f6ebf6f, type: 3}
   m_SpawnDelay: 0.5
 --- !u!4 &641283351
 Transform:
@@ -365,6 +365,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TomBenWaveData: {fileID: -755480892457977500, guid: dde5f2cbe63d886419a1e9e1afaca251, type: 3}
+  m_Prefabs:
+  - unitID: 1
+    prefab: {fileID: 6045304771716278497, guid: f16e945f1ee4a2b42afac1b92ef8e4bc, type: 3}
+  - unitID: 2
+    prefab: {fileID: 6045304771716278497, guid: 4c1a5fab3ef66f443b0c928a963fa721, type: 3}
+  - unitID: 3
+    prefab: {fileID: 6045304771716278497, guid: 323778d4599a7214eba1736ffe7901bc, type: 3}
   m_Debug: 1
 --- !u!1 &837246683
 GameObject:
@@ -446,7 +453,7 @@ Transform:
   m_GameObject: {fileID: 837246683}
   serializedVersion: 2
   m_LocalRotation: {x: 0.09853762, y: 0, z: 0, w: 0.99513334}
-  m_LocalPosition: {x: 0.8978876, y: 2, z: -6.2432995}
+  m_LocalPosition: {x: 6.8081985, y: 2, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -618,6 +625,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 837246687}
-  - {fileID: 695397718}
   - {fileID: 291123993}
+  - {fileID: 695397718}
   - {fileID: 641283351}

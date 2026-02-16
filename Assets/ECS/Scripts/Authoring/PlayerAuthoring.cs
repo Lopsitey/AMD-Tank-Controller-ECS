@@ -6,7 +6,8 @@ namespace ECS.Scripts.Authoring
 {
     public class PlayerAuthoring : MonoBehaviour
     {
-        public float m_moveSpeed;
+        public float m_MoveSpeed;
+        public float m_Health;
         private class PlayerBaker : Baker<PlayerAuthoring>
         {
             public override void Bake(PlayerAuthoring authoring)
@@ -14,7 +15,8 @@ namespace ECS.Scripts.Authoring
                 Entity entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
                 AddComponent(entity, new PlayerComponent
                 {
-                    moveSpeed = authoring.m_moveSpeed
+                    m_MoveSpeed = authoring.m_MoveSpeed,
+                    m_Health = authoring.m_Health
                 });
                 AddBuffer<DamageBufferComponent>(entity);
             }

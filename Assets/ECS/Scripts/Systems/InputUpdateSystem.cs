@@ -12,8 +12,6 @@ namespace ECS.Scripts.Systems
     public partial class InputUpdateSystem : SystemBase
     {
         private ECSPlayerInputs m_PlayerInputs;
-        
-        [BurstCompile]
         protected override void OnCreate()
         {
             m_PlayerInputs = new ECSPlayerInputs();
@@ -30,14 +28,9 @@ namespace ECS.Scripts.Systems
                 playerMoveDirection = float2.zero
             });
         }
-
-        [BurstCompile]
-        protected override void OnUpdate()
-        {
-            
-        }
-
-        [BurstCompile]
+        
+        protected override void OnUpdate() { }
+        
         protected override void OnDestroy()
         {
             m_PlayerInputs.player.Move.performed -= HandlePlayerMove;
@@ -45,8 +38,7 @@ namespace ECS.Scripts.Systems
             m_PlayerInputs.Disable();
             m_PlayerInputs.Dispose();
         }
-
-        [BurstCompile]
+        
         private void HandlePlayerMove(InputAction.CallbackContext context)
         {
             // Gets the existing input component, and make a copy of it to modify.

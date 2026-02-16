@@ -1,9 +1,11 @@
 using ECS.wave_spawning;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
+using wave_spawning;
 
-namespace wave_spawning
+namespace ECS.Scripts
 {
     /// <summary>
     /// This is a system which has a few main responsibilities:
@@ -15,6 +17,7 @@ namespace wave_spawning
     /// This is the system which makes the singleton access to all the spawner data possible. It is the 
     /// main system which starts all the other managed -> unmanaged conversion processes.
     /// </summary>
+    [BurstCompile]
     public partial struct WaveSpawnerCreateSingletonSystem : ISystem, ISystemStartStop
     {
         /// <summary>

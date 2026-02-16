@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using ECS.wave_spawning;
 using Unity.Entities;
 using UnityEngine;
@@ -110,7 +111,28 @@ namespace wave_spawning
     {
         [Header("Wave Spawning Data")] [SerializeField]
         public TomBenWaveData m_TomBenWaveData;
-
+        
+        // This is a tag component used to identify the entity which holds the unit prefab buffer
+        public struct UnitPrefabRegistryTag : IComponentData { }
+        
+        // This is a single entry in the prefab list
+        public struct UnitPrefabElement : IBufferElementData
+        {
+            public int UnitID;
+            public Entity PrefabEntity;
+        }
+        
+        //Serializable so it can be edited in the list in the inspector
+        [Serializable]
+        public struct PrefabEntry
+        {
+            public int unitID;
+            public GameObject prefab;
+        }
+        
+        [Header("Unit Prefabs")]
+        [SerializeField] public List<PrefabEntry> m_Prefabs;
+        
         [Header("Options")] [Tooltip("Whether to print out verbose debug messages")]
         public bool m_Debug;
 
@@ -125,16 +147,41 @@ namespace wave_spawning
             {
                 if (!authoring.m_TomBenWaveData)
                 {
-                    Debug.LogError($"WaveSpawnerDataAuthoring on {authoring.name} is missing the TomBenWaveData ScriptableObject!");
+                    Debug.LogError(
+                        $"WaveSpawnerDataAuthoring on {authoring.name} is missing the TomBenWaveData ScriptableObject!");
                     return;
                 }
 
+                var entity = GetEntity(TransformUsageFlags.None);
+
                 // Passes the ScriptableObject directly to the wrapper
-                AddComponent(GetEntity(TransformUsageFlags.None), new SpawnerDataWrapper
+                AddComponent(entity, new SpawnerDataWrapper
                 {
                     waveData = authoring.m_TomBenWaveData,
                     debug = authoring.m_Debug
                 });
+
+                if (authoring.m_Prefabs.Count == 0)
+                {
+                    Debug.LogError(
+                        $"WaveSpawnerDataAuthoring on {authoring.name} has no prefabs in the prefab registry!");
+                    return;
+                }
+
+                // Adds the tag to identify the prefab registry entity
+                AddComponent(entity, new UnitPrefabRegistryTag());
+
+                // Creates the buffer to hold the prefabs
+                DynamicBuffer<UnitPrefabElement> buffer = AddBuffer<UnitPrefabElement>(entity);
+
+                foreach (var entry in authoring.m_Prefabs)
+                {
+                    buffer.Add(new UnitPrefabElement
+                    {
+                        UnitID = entry.unitID,
+                        PrefabEntity = GetEntity(entry.prefab, TransformUsageFlags.Dynamic)
+                    });
+                }
             }
         }
     }

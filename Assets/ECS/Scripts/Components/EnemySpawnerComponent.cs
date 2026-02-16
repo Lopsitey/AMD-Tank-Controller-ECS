@@ -12,6 +12,18 @@ namespace ECS.Scripts.Components
         public float spawnDelay;
         
         public FixedString32Bytes name;
-        public int spawnCount;
+        public int spawnedCount;
+        public int totalToSpawn;
+
+        public EnemySpawnerComponent(Entity entityToSpawn, float spawnDelay, float3 spawnPos, float timer, FixedString32Bytes name, int totalToSpawn, int spawnedCount)
+        {
+            this.entityToSpawn = entityToSpawn;
+            this.spawnDelay = spawnDelay;
+            this.spawnPos = spawnPos;
+            this.timer = timer;
+            this.name = name;
+            this.spawnedCount = spawnedCount;
+            this.totalToSpawn = totalToSpawn;
+        }
     }
 }

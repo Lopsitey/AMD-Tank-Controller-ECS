@@ -6,7 +6,6 @@ namespace ECS.Scripts.Authoring
 {
     public class EnemySpawnerAuthoring : MonoBehaviour
     {
-        public GameObject m_Prefab;
         public float m_SpawnDelay;
 
         private class EnemySpawnerBaker : Baker<EnemySpawnerAuthoring>
@@ -23,13 +22,14 @@ namespace ECS.Scripts.Authoring
                 AddComponent(spawnerEntity, new EnemySpawnerComponent
                 {
                     // Params the data from the author to the baker
-                    // Gets the entity associated with the author's prefab field
-                    entityToSpawn = GetEntity(authoring.m_Prefab, TransformUsageFlags.Dynamic),
-                    spawnDelay = authoring.m_SpawnDelay,
-                    spawnPos = authoring.transform.position,
+                    // Sets the entity prefab to spawn as a default value - this will be set by the wave spawner later
+                    entityToSpawn = Entity.Null,
+                    spawnDelay = authoring.m_SpawnDelay,// The only value actually passed through
+                    spawnPos = Vector3.zero,// More defaults to be set later
                     timer = 0.0f,
-                    name = authoring.name,
-                    spawnCount = 0
+                    name = string.Empty,
+                    totalToSpawn = 0,
+                    spawnedCount = 0
                 });
                 Debug.Log($"Baking {authoring.name} to {spawnerEntity.Index}");
             }

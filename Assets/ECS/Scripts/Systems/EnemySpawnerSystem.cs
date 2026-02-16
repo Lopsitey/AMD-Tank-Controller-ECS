@@ -13,6 +13,7 @@ namespace ECS.Scripts.Systems
     {
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<PlayerComponent>();
         }
         //In Unity Entities, a type that implements `ISystem` is treated as an ECS system.
@@ -22,25 +23,27 @@ namespace ECS.Scripts.Systems
         // System state is passed in automatically by the ECS framework
         public void OnUpdate(ref SystemState state)
         {
-            // Instantiating the job using the struct data
+            // Checks if the job created in the last frame has finished executing before starting a new one
+            state.Dependency.Complete();
             
+            var playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
+            var buffer = SystemAPI.GetBuffer<DamageBufferComponent>(playerEntity);
+
+            //TODO
+            //UnityEngine.Debug.Log($"The player has taken {buffer.Length} damage instances so far!");
+            
+            // Instantiating the job using the struct data
             EnemySpawnerJob spawnerJob = new EnemySpawnerJob
             {
                 deltaTime = SystemAPI.Time.DeltaTime,
                 elapsedTime = (float)SystemAPI.Time.ElapsedTime,
                 ecb = GetECB(ref state)
             };
-
-            var playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
-            var buffer = SystemAPI.GetBuffer<DamageBufferComponent>(playerEntity);
-            
-            UnityEngine.Debug.Log($"The player has taken {buffer.Length} damage instances so far!");
             
             // Schedules the job to run in parallel across all entities with EnemySpawnerComponent
             // The dependency system ensures that jobs that read/write the same data run in the correct order
             // This means the main thread waits for them to complete if necessary
             state.Dependency = spawnerJob.ScheduleParallel(state.Dependency);
-            state.Dependency.Complete();
         }
         
         /// <summary>
@@ -73,11 +76,13 @@ namespace ECS.Scripts.Systems
         //Because this can run in parallel you need to pass in the index/key of the entity being processed
         
         //Execute communicates to the job which components to process similar SystemAPI.Query<RefRW<Component>>() just with different parameters
-        //This function converts ref and in keywords to RefRW and RefRO wrappers automatically.   
+        //This function converts ref and in keywords to RefRW and RefRO wrappers automatically.
+        //This finds all entities with EnemySpawnerComponent
+        //The chunk index is used as the key for the ECB parallel writer
         public void Execute([ChunkIndexInQuery] int chunkIndex, ref EnemySpawnerComponent spawner, Entity entity)
-        {
-            //This finds all entities with EnemySpawnerComponent
-            //The chunk index is used as the key for the ECB parallel writer
+        { 
+            // If no more entities to spawn, skip
+            if(spawner.spawnedCount >= spawner.totalToSpawn) return;
             
             spawner.timer += deltaTime;
             
@@ -98,21 +103,25 @@ namespace ECS.Scripts.Systems
             // Spawn a new entity using the chunk-index as the key for the ECB
             // Uses the entity prefab to spawn from the spawner component
             Entity spawnedEnemy = ecb.Instantiate(chunkIndex, spawner.entityToSpawn);
-
+            
             ecb.AddComponent(chunkIndex, spawnedEnemy, new EnemyComponent
             {
-                m_MoveSpeed = 1f
+                m_MoveSpeed = 1f,
+                m_AttackFreq = 0.25f,
+                m_AttackRange = 2,
+                m_AttackTimer = 0f,
+                m_MinDamage = 1f,
+                m_MaxDamage = 5f
             });
-            
             // Uses the chunk index as the key again
             // Sets the position of the spawned enemy to the spawner's spawn position
             ecb.SetComponent(chunkIndex, spawnedEnemy, lt);
             
             // Sets the name of the enemy
-            ecb.SetName(chunkIndex, spawnedEnemy, $"enemy-{spawner.spawnCount} from {spawner.name}");
+            ecb.SetName(chunkIndex, spawnedEnemy, $"enemy-{spawner.totalToSpawn} from {spawner.name}");
             
             //Increment the spawn count
-            spawner.spawnCount++;
+            spawner.spawnedCount++;
             
             // Reset the timer
             spawner.timer = 0.0f;
