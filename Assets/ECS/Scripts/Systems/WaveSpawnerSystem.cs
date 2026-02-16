@@ -41,7 +41,7 @@ namespace wave_spawning
             hasFinished = false;
             clusterRuleIndex = 0;
             //A query which can be used to check the amount of enemies in the world
-            enemyQuery = state.GetEntityQuery((typeof(EnemySpawnerComponent)));
+            enemyQuery = state.GetEntityQuery((typeof(EnemyComponent)));
         }
 
         /// <summary>
@@ -70,8 +70,9 @@ namespace wave_spawning
                 // Return early to avoid trying to access wave data that doesn't exist
                 if (hasFinished) return;
 
-                Debug.Log("Completed all waves!");
+                Debug.Log($"Completed all waves with {enemyCount} enemies left in the world.!");
                 hasFinished = true;
+                return;
             }
 
             int index = waves.Keys[waveIndex];
@@ -83,7 +84,6 @@ namespace wave_spawning
                 // Move to the next wave
                 waveIndex++;
                 waveRuleIndex = 0; // Reset rule index for the new wave
-
                 return;
             }
 
@@ -94,12 +94,12 @@ namespace wave_spawning
             bool specifiedTimer = currentRule.triggerTimeSinceLastSpawn >= 0;
 
             //Checks whether either has been exceeded, triggering the next wave rule
-            bool metPopThreshold = enemyCount <= currentRule.triggerPopulationCap;
+            bool metPopThreshold = enemyCount >= currentRule.triggerPopulationCap;
             bool timerExceeded = timeSinceSpawn >= currentRule.triggerTimeSinceLastSpawn;
             
             bool noConditionsSpecified = !specifiedPopCap && !specifiedTimer;
             bool shouldTrigger = 
-                (noConditionsSpecified) ||
+                noConditionsSpecified ||
                 (specifiedPopCap && metPopThreshold) ||
                 (specifiedTimer && timerExceeded);
             
