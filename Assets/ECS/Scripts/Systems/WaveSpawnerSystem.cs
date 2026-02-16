@@ -176,7 +176,7 @@ namespace wave_spawning
                     waveRuleIndex++;
                 }
 
-                if (timeSinceSpawn < currentRule.triggerTimeSinceLastSpawn)
+                if (timerExceeded)
                     Debug.Log(
                         $"Wave rule triggered by timer! Time since last spawn: {timeSinceSpawn}, required time: {currentRule.triggerTimeSinceLastSpawn}");
                 else if (metPopThreshold)
