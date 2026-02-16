@@ -124,8 +124,15 @@ namespace ECS.Scripts.Systems
             });
             
             // PhysicsMass is required for dynamic physics bodies
+            // Using capsule mass properties to match the CapsuleCollider on the prefab
+            var capsuleMassProperties = MassProperties.CreateCapsule(
+                center: float3.zero,
+                height: 2.0f,  // Default capsule height
+                radius: 0.5f,  // Default capsule radius
+                rotation: quaternion.identity
+            );
             ecb.AddComponent(chunkIndex, spawnedEnemy, PhysicsMass.CreateDynamic(
-                MassProperties.UnitSphere, 
+                capsuleMassProperties, 
                 mass: 1.0f
             ));
             
