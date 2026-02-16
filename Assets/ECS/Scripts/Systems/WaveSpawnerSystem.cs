@@ -153,7 +153,7 @@ namespace wave_spawning
                         spawnDelay = spawner.spawnDelay,
                         name = currentUnit.name,
                         spawnedCount = 0,
-                        totalToSpawn = units.Count
+                        totalToSpawn = 1 // Spawn exactly one unit per wave rule
                     });
                     
                     waveRuleIndex++;
