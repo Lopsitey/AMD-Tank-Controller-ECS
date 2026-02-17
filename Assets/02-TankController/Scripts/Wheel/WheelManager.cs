@@ -196,6 +196,7 @@ namespace _02_TankController.Scripts.Wheel
                     foreach (var wheel in wheels)
                     {
                         wheel.AddBrakingForce(m_Rb, m_BrakingForce, currentTraction);
+                        ForwardSpeed = Vector3.Dot(m_Rb.linearVelocity, transform.forward);
                     }
                 }
             }
