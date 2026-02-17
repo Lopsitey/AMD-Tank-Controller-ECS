@@ -8,5 +8,6 @@ namespace ECS.Scripts.Components
         public float m_MoveSpeed;
         public float m_CurrentHealth;
         public float m_MaxHealth;
+        public bool m_IsStopped;
     }
 }

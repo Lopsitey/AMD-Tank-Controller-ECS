@@ -1,6 +1,7 @@
 ﻿using ECS.Scripts.Components;
 using ECS.Scripts.Jobs;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics.Systems;

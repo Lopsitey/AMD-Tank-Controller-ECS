@@ -22,8 +22,8 @@ namespace ECS.Scripts.Systems
             // Ensures jobs from the prior frame are completed
             // SystemBase's version of state.dependency.complete
             Dependency.Complete();
-            Entity playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
             
+            var playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
             // Get a lookup for LocalTransform so the player's position can be set.
             ComponentLookup<LocalTransform> lookup = SystemAPI.GetComponentLookup<LocalTransform>(true);// True means read-only
             // Exit early if the player wasn't found
@@ -60,8 +60,6 @@ namespace ECS.Scripts.Systems
                 
                 // Smoothly move the target to the player's position
                 proxy.position = math.lerp(currentPos, targetPos, camComp.m_Speed * dt);
-                // Optional: Sync rotation if you are using "3rd Person Follow" mode
-                // proxy.rotation = math.slerp(proxy.rotation, playerLT.Rotation, 15f * dt);
             }
         }
         

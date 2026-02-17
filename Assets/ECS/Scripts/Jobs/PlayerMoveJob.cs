@@ -17,6 +17,9 @@ namespace ECS.Scripts.Jobs
 
         public void Execute(in PlayerComponent playerComp, ref LocalTransform playerLT, ref PhysicsVelocity velocity)
         {
+            // If the player is stopped, don't apply movement or jump input
+            if(playerComp.m_IsStopped) return;
+            
             // Gets the move vector as a float3 and cancels y so it moves only xz
             // The .xyy swizzle is used to convert the 2D move direction into a 3D move vector, with y set to 0. 
             float3 moveDir = input.playerMoveDirection.xyy;

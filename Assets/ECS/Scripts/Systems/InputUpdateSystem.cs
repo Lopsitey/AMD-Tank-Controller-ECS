@@ -21,7 +21,6 @@ namespace ECS.Scripts.Systems
             m_PlayerInputs.player.Move.canceled += HandlePlayerMove;
             m_PlayerInputs.player.Jump.performed += HandlePlayerJump;
             m_PlayerInputs.player.Stop.performed += HandlePlayerStop;
-            m_PlayerInputs.player.Stop.canceled += HandlePlayerStop;
             m_PlayerInputs.player.Attack.performed += HandlePlayerAttack;
             m_PlayerInputs.player.Attack.canceled += HandlePlayerAttack;
             m_PlayerInputs.Enable();
@@ -57,7 +56,6 @@ namespace ECS.Scripts.Systems
             m_PlayerInputs.player.Move.canceled -= HandlePlayerMove;
             m_PlayerInputs.player.Jump.performed -= HandlePlayerJump;
             m_PlayerInputs.player.Stop.performed -= HandlePlayerStop;
-            m_PlayerInputs.player.Stop.canceled -= HandlePlayerStop;
             m_PlayerInputs.player.Attack.performed -= HandlePlayerAttack;
             m_PlayerInputs.player.Attack.canceled -= HandlePlayerAttack;
             m_PlayerInputs.Disable();
@@ -69,14 +67,18 @@ namespace ECS.Scripts.Systems
             //
         }
 
-        private void HandlePlayerStop(InputAction.CallbackContext obj)
+        private void HandlePlayerStop(InputAction.CallbackContext ctx)
         {
-            //
+            // Toggles the player component
+            PlayerComponent playerComp = SystemAPI.GetSingleton<PlayerComponent>();
+            playerComp.m_IsStopped = !playerComp.m_IsStopped;
+            SystemAPI.SetSingleton(playerComp);
         }
 
         private void HandlePlayerJump(InputAction.CallbackContext ctx)
         {
             InputComponent inputComp = SystemAPI.GetSingleton<InputComponent>();
+            //InputComponent inputComp = SystemAPI.GetSingleton<PlayerComponent>();
 
             if (inputComp.m_JumpCooldownTimer <= 0f)
             {

@@ -24,7 +24,6 @@ namespace ECS.Scripts.Systems
         {
             // This assumes thee is one player - gets the entity associated with it, the player and transform comps
             var playerEntity = SystemAPI.GetSingletonEntity<PlayerComponent>();
-            var player = SystemAPI.GetComponent<PlayerComponent>(playerEntity);
             var playerLT = SystemAPI.GetComponent<LocalTransform>(playerEntity);
             var ecb = GetECB(ref state);
             
