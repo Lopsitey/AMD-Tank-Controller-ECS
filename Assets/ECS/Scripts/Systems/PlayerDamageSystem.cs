@@ -9,7 +9,6 @@ namespace ECS.Scripts.Systems
     [BurstCompile]
     public partial struct PlayerDamageSystem : ISystem
     {
-
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
