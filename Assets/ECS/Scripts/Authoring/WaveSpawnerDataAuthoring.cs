@@ -101,6 +101,7 @@ namespace wave_spawning
     /// </summary>
     public struct SpawnerDataWrapper : IComponentData
     {
+        // UnityObjectRef means the camera can be referenced from ECS - managed to unmanaged
         public UnityObjectRef<TomBenWaveData> waveData;
         public bool debug;
     }

@@ -1,12 +1,13 @@
-﻿using Unity.Entities;
+﻿using ECS.Scripts.Components;
+using Unity.Cinemachine;
+using Unity.Entities;
 using UnityEngine;
 
 namespace ECS.Scripts.Authoring
 {
     public class CameraAuthoring : MonoBehaviour
     {
-        public Vector3 offset;
-        public float speed;
+        public float m_Speed;
         private class CameraBaker : Baker<CameraAuthoring>
         {
             public override void Bake(CameraAuthoring authoring)
@@ -14,12 +15,12 @@ namespace ECS.Scripts.Authoring
                 // Gets the entity
                 Entity entity = GetEntity(TransformUsageFlags.Dynamic);
                 
-                // Add a camera component
-                AddComponent(entity, new CameraComponent
+                // Adds a camera component - used the object version of this for the managed system
+                AddComponentObject(entity, new CameraComponent
                 {
-                    m_Camera = GetComponent<Camera>(),
-                    m_Offset = authoring.offset,
-                    m_Speed = authoring.speed
+                    m_VirtualCamera = authoring.GetComponent<CinemachineVirtualCameraBase>(),
+                    m_ProxyTransform = null,
+                    m_Speed = authoring.m_Speed
                 });
             }
         }
