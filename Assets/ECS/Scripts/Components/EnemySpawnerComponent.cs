@@ -1,8 +1,8 @@
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Collections;
 
-namespace ECS.Components
+namespace ECS.Scripts.Components
 {
     public struct EnemySpawnerComponent : IComponentData
     {
@@ -12,6 +12,9 @@ namespace ECS.Components
         public float spawnDelay;
         
         public FixedString32Bytes name;
-        public int spawnCount;
+        public int spawnedCount;
+        public int totalToSpawn;
+        
+        public EnemyComponent enemyData;
     }
 }
