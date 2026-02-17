@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ECS.Scripts.Systems
 {
     [BurstCompile]
-    public partial struct PlayerDamageSystem : ISystem
+    public partial struct PlayerHealthSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {

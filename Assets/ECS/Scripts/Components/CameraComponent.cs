@@ -14,4 +14,13 @@ namespace ECS.Scripts.Components
         public float m_Speed;
         public CinemachineVirtualCameraBase m_VirtualCamera;
     }
+    
+    // A tiny component/tag which
+    // Marked as ICleanup so it can get read before the entity is destroyed
+    // This means the proxy can be destroyed properly when the game ends
+    public struct CameraCleanupComponent : ICleanupComponentData { }
+    
+    // This is managed which allows it to persist after the ecs world is destroyed
+    // It is added directly to the proxy
+    public class CameraProxyTag : MonoBehaviour { }
 }
