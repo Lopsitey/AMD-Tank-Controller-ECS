@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using UnityEditor.AssetImporters;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor.AssetImporters;
+#endif
 
 // The version number is important for Unity to know when to reimport assets.
 // Changing this automatically triggers a reimport of all assets of this type.
 namespace wave_spawning
 {
+#if UNITY_EDITOR
     [ScriptedImporter(1, "TomBen")] 
     public class TomBenImporter : ScriptedImporter
     {
@@ -58,4 +62,5 @@ namespace wave_spawning
             ctx.SetMainObject(waveSO);
         }
     }
+#endif
 }
