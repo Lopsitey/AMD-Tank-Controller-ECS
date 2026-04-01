@@ -248,7 +248,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BulletProfile: {fileID: 11400000, guid: 8a32fd73f3710974aabacaa1f9592a60, type: 2}
   m_ExplosionPrefab: {fileID: 4336857586321300822, guid: e4cf6e1c8dd642345bad6bd268737d19, type: 3}
-  m_ExplosionTime: 5
 --- !u!1 &1870407796682321742
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,7 +313,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: 6ec17ea595184e04fb452c63787451a8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
